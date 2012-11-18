@@ -2,7 +2,7 @@ QuAdmin
 =======
 Version 1.0.0 Created by Cel Ticó Petit
 
-Screenshots
+Screen Shots
 ------------
 
 ![QuDemo example screenshot](http://cenics.cat/quadmin1.png)
