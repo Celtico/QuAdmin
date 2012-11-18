@@ -16,180 +16,197 @@ class QuForm extends Form
     /**
      * @var
      */
-    protected $sm;
+    protected $View;
+    protected $Translator;
 
     /**
-     * @param string $sm
+     * @param int|null|string $View
+     * @param array           $Translator
      */
-    public function __construct($sm = '')
+    public function __construct($View,$Translator)
     {
+        parent::__construct();
+
+        $this->Translator = $Translator;
+        $this->View = $View;
 
         $translator = new Translator;
         $translator->addTranslationFile("phparray",'./vendor/ZF2/resources/languages/es/Zend_Validate.php');
         AbstractValidator::setDefaultTranslator($translator);
 
-        parent::__construct('cms');
-
         $this->setAttribute('method', 'post');
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
-            'name' => 'parametres',
+            'name'    => 'id',
             'options' => array(
-                'label' => 'Parametres',
-                'value_options' => $sm->Sel('parameters','name'),
+                'label' => $this->t('id'),
             ),
-        ));
-
-        //Int
-        $this->add(array(
-            'name'     => 'id',
             'attributes' => array(
                 'type'  => 'hidden',
             ),
         ));
         $this->add(array(
             'name'     => 'id_parent',
+            'options' => array(
+                'label' => $this->t('id_parent'),
+            ),
             'attributes' => array(
                 'type'  => 'hidden',
             ),
         ));
         $this->add(array(
             'name'     => 'id_author',
+            'options' => array(
+                'label' => $this->t('id_author'),
+            ),
             'attributes' => array(
                 'type'  => 'text',
             ),
         ));
         $this->add(array(
             'name'     => 'id_lang',
+            'options' => array(
+                'label' => $this->t('id_lang'),
+            ),
             'attributes' => array(
                 'type'  => 'hidden',
+            ),
+        ));
+
+        $this->add(array(
+            'name'     => 'type',
+            'options' => array(
+                'label' => $this->t('type'),
+            ),
+            'attributes' => array(
+                'type'  => 'text',
+            ),
+        ));
+        $this->add(array(
+            'name'     => 'name',
+            'options' => array(
+                'label' => $this->t('name'),
+            ),
+            'attributes' => array(
+                'type'  => 'text',
+            ),
+        ));
+        $this->add(array(
+            'name'     => 'order',
+            'options' => array(
+                'label' => $this->t('order'),
+            ),
+            'attributes' => array(
+                'type'  => 'hidden',
+            ),
+        ));
+
+        $this->add(array(
+            'name'     => 'date',
+            'options' => array(
+                'label' => $this->t('date'),
+            ),
+            'attributes' => array(
+                'type'  => 'hidden',
+            ),
+        ));
+        $this->add(array(
+            'name'     => 'modified',
+            'options' => array(
+                'label' => $this->t('modified'),
+            ),
+            'attributes' => array(
+                'type'  => 'hidden',
+            ),
+        ));
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name'     => 'status',
+            'options' => array(
+                'label' => $this->t('status'),
+                'value_options' => array(
+                    'Public'    =>'Public',
+                    'Previous'  =>'Previous',
+                    'Private'   =>'Private',
+                ),
+            ),
+            'attributes' => array(
+                'type'  => 'select',
             ),
         ));
         $this->add(array(
             'name'     => 'lang',
-            'attributes' => array(
-                'type'  => 'hidden',
-            ),
-        ));
-
-        $this->add(array(
-            'name'     => 'order',
-            'attributes' => array(
-                'type'  => 'hidden',
-            ),
-        ));
-
-        //Data
-         $this->add(array(
-            'name'     => 'date',
-             'attributes' => array(
-                 'type'  => 'hidden',
-             ),
-        ));
-         $this->add(array(
-            'name'     => 'modified',
-             'attributes' => array(
-                 'type'  => 'hidden',
-             ),
-        ));
-        $this->add(array(
-            'name' => 'title',
             'options' => array(
-                'label' => 'text',
+                'label' => $this->t('lang'),
             ),
             'attributes' => array(
-                'type'  => 'text',
+                'type'  => 'hidden',
             ),
         ));
-         $this->add(array(
-             'type' => 'Zend\Form\Element\Select',
-             'name'     => 'status',
-             'options' => array(
-                 'label' => 'Status',
-                 'value_options' => array(
-                     'Public' =>'Public',
-                     'Prèvia' =>'Prèvia',
-                     'Privat' =>'Privat',
-                 ),
-             ),
-             'attributes' => array(
-                 'type'  => 'select',
-                 'value' => '1' //set selected to '1'
 
-             ),
-         ));
-         $this->add(array(
-            'name'     => 'name',
-             'options' => array(
-                 'label' => 'Url',
-             ),
-             'attributes' => array(
-                 'type'  => 'text',
-             ),
-         ));
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'parameters',
+            'options' => array(
+                'label' => $this->t('parameters'),
+                'value_options' => $this->View->Sel('parameters','name'),
+            ),
+        ));
+
         $this->add(array(
             'name'     => 'title',
             'options' => array(
-                'label' => 'Titól',
+                'label' => $this->t('title'),
             ),
             'attributes' => array(
                 'type'  => 'text',
             ),
         ));
-         $this->add(array(
-            'name'     => 'resum',
-             'options' => array(
-                 'label' => 'Resum',
-             ),
-             'attributes' => array(
-                 'type'  => 'textarea',
-             ),
-         ));
         $this->add(array(
-            'name'     => 'text',
+            'name'     => 'summary',
             'options' => array(
-                'label' => 'Content',
+                'label' => $this->t('summary'),
             ),
             'attributes' => array(
                 'type'  => 'textarea',
             ),
         ));
-         $this->add(array(
-            'name'     => 'type',
-             'options' => array(
-                 'label' => 'text',
-             ),
-             'attributes' => array(
-                 'type'  => 'text',
-             ),
-         ));
         $this->add(array(
-            'name'     => 'imatge',
+            'name'     => 'documents',
             'options' => array(
-                'label' => 'imatge',
+                'label' => $this->t('documents'),
             ),
             'attributes' => array(
                 'type'  => 'text',
+            ),
+        ));
+        $this->add(array(
+            'name'     => 'content',
+            'options' => array(
+                'label' => $this->t('content'),
+            ),
+            'attributes' => array(
+                'type'  => 'textarea',
             ),
         ));
 
         $this->add(array(
-            'name' => 'submit',
-            'attributes' => array(
-                'type'  => 'submit',
-                'value' => 'Guardar',
-                'id' => 'submitbutton',
-            ),
-        ));
-        $this->add(array(
             'name'     => 'notes',
             'options' => array(
-                'label' => 'notes',
+                'label' => $this->t('notes'),
             ),
             'attributes' => array(
-                'type'  => 'text',
+                'type'  => 'textarea',
             ),
         ));
+    }
+
+    /**
+     * @param string $text
+     *
+     * @return mixed
+     */
+    public function t($text = ''){
+        return $this->Translator->Translate($text);
     }
 
 }

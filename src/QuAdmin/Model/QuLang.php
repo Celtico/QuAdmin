@@ -58,7 +58,7 @@ class QuLang extends AbstractTableGateway
         $select = $sql->select();
         $where  = new Where();
 
-        $where->equalTo('type', 'idiom');
+        $where->equalTo('type', 'languages');
         $select->where($where)->order('order desc');
 
         $statement = $sql->prepareStatementForSqlObject($select);
@@ -70,9 +70,8 @@ class QuLang extends AbstractTableGateway
                 $selector[$sel['name']] =  $sel['title'];
             }
         }
-        /** @var $selector TYPE_NAME */
-        if(count($selector) == 0){
-            $selector = array(''=>'-');
+        if(!isset($selector)){
+            $selector = array();
         }
         return $selector;
     }

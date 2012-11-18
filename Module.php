@@ -49,8 +49,10 @@ class Module implements BootstrapListenerInterface
         return array(
             'factories' => array(
                 'QuFlashMessages' => function($sm) {
-                    $plugin = $sm->getServiceLocator()->get('ControllerPluginManager')->get('flashMessenger');
-                    $helper = new View\Helper\QuFlashMessages($plugin);
+                    $Service = $sm->getServiceLocator();
+                    $plugin  = $Service->get('ControllerPluginManager')->get('flashMessenger');
+                    $class   = $Service->get('config');
+                    $helper  = new View\Helper\QuFlashM($plugin,$class['QuAdminConfig']['QuFlashMCss']);
                     return $helper;
                 },
                 'QuUser' => function($sm) {

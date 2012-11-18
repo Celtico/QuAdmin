@@ -33,6 +33,8 @@ class QuThumb
      */
     public function create($file,$data,$type){
 
+        $type = strtolower($type);
+
         //define la rout
         if(count($file) != 0){
             $rout = $this->Config['QuBasePath'].'/'.$type.'/';

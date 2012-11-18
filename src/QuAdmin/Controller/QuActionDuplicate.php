@@ -33,7 +33,7 @@ class QuActionDuplicate
         $Request  = $cont->getRequest();
         $Match    = $cont->getEvent()->getRouteMatch();
         $Redirect = $cont->redirect();
-        $Fm       = $cont->flashMessenger()->setNamespace('Cms');
+        $Fm       = $cont->flashMessenger()->setNamespace('QuAdmin');
 
         //Url
         $lang     =      $Match->getParam('lang');
@@ -48,8 +48,8 @@ class QuActionDuplicate
 
                 $Fm->addMessage(
                     array(
-                        'type'=>'Information',
-                        'message'=>$cont->t('not checked')
+                        'type'      =>$cont->t('DuplicateNotCheckedClassType'),
+                        'message'   =>$cont->t('DuplicateNotCheckedMessage')
                     )
                 );
                 return $Redirect->toRoute($route,array(
@@ -79,8 +79,8 @@ class QuActionDuplicate
                 }
                 $Fm->addMessage(
                     array(
-                        'type'=>'Success',
-                        'message'=>$cont->t('duplicate success')
+                        'type'      =>$cont->t('DuplicateClassType'),
+                        'message'   =>$cont->t('DuplicateMessage')
                     )
                 );
                 return $Redirect->toRoute($route,array(
@@ -93,8 +93,8 @@ class QuActionDuplicate
 
                 $Fm->addMessage(
                     array(
-                        'type'=>'Information',
-                        'message'=>$cont->t('duplicate cancel')
+                        'type'      =>$cont->t('DuplicateCancelClassType'),
+                        'message'   =>$cont->t('DuplicateCancelMessage')
                     )
                 );
                 return $Redirect->toRoute($route,array(
@@ -118,8 +118,8 @@ class QuActionDuplicate
 
             $Fm->addMessage(
                 array(
-                    'type'=>'Information',
-                    'message'=>$cont->t('not checked')
+                    'type'      =>$cont->t('DuplicateNotCheckedClassType'),
+                    'message'   =>$cont->t('DuplicateNotCheckedMessage')
                 )
             );
             return $Redirect->toRoute($route,array(

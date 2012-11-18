@@ -49,12 +49,11 @@ class QuAdminFactory implements FactoryInterface
 
         // Thumbnail in Save and Delete
         $QuPhpThumb      = new QuThumb($PhpThumb,$Config['QuAdminConfig']['QuPhpThumb']);
-
         $Save            ->setQuPhpThumb($QuPhpThumb);
         $Delete          ->setQuPhpThumb($QuPhpThumb);
 
         // Form
-        $Form            = new QuForm  ($View);
+        $Form            = new QuForm  ($View,$translator);
 
         // Actions
         $ViewAction      = new QuActionView         ($View,$Form,$User);
@@ -63,6 +62,7 @@ class QuAdminFactory implements FactoryInterface
         $EditAction      = new QuActionEdit         ($View,$Form,$Save,$User);
         $DuplicateAction = new QuActionDuplicate    ($Duplicate);
         $DeleteAction    = new QuActionDelete       ($Delete);
+        $DeleteDocAction = new QuActionDeleteDoc    ($Delete);
 
         // Controller
         $controller      = new QuAdmin;
@@ -73,6 +73,7 @@ class QuAdminFactory implements FactoryInterface
         $controller->setEditAction      ($EditAction);
         $controller->setDuplicateAction ($DuplicateAction);
         $controller->setDeleteAction    ($DeleteAction);
+        $controller->setDeleteDocAction ($DeleteDocAction);
         $controller->setTranslator      ($translator);
 
         return $controller;

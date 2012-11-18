@@ -52,7 +52,7 @@ class QuActionView
         }else{
             $type       =      $route;
         }
-        $cms        =      $this->View->Paginator($id,$page = 1,$type,$lang,$q = '',$npp = '');
+        $qu_admin        =      $this->View->Paginator($id,$page = 1,$type,$lang,$q = '',$npp = '');
         $date       =      date("Y-m-d H:i:s");
 
         return array(
@@ -69,7 +69,7 @@ class QuActionView
             'npp'       => 10,
             'page'      => 1,
             'q'         => '',
-            'cms'       => $cms,
+            'qu_admin'       => $qu_admin,
         );
     }
 

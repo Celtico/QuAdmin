@@ -102,7 +102,7 @@ class QuDuplicate extends AbstractTableGateway
         //Insert
         unset($Row['id']);
         $Row['id_parent']   = $LastInsertValue;
-        $Row['title']       = $Row['title'].' (duplicat)';
+        $Row['title']       = $Row['title'].' (duplicate)';
         $this->insert($Row);
         $LastInsertValue    = $this->LastInsertValue;
 
@@ -138,7 +138,7 @@ class QuDuplicate extends AbstractTableGateway
         $this->getConfig();
 
         // Duplicate documents
-        $document = array('imatge');
+        $document = array('documents');
         foreach($document as $nd){
 
             $nom = explode('-',$row[$nd]);

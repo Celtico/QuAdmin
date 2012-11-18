@@ -38,7 +38,7 @@ class QuSave extends AbstractTableGateway
      * @return array|\ArrayObject|null
      * @throws \Exception
      */
-    public function getCms($id,$lang)
+    public function getQuAdmin($id,$lang)
     {
         $id  = (int) $id;
         $RowSet = $this->select(array('id_lang' => $id,'lang' => $lang));
@@ -66,7 +66,7 @@ class QuSave extends AbstractTableGateway
     }
 
     /**
-     * @param QuFilter $cms
+     * @param QuFilter $qu_admin
      * @param           $type
      * @param           $lang
      * @param           $file
@@ -74,51 +74,59 @@ class QuSave extends AbstractTableGateway
      * @return int
      * @throws \Exception
      */
-    public function getSave(QuFilter $cms,$type,$lang,$file)
+    public function getSave(QuFilter $qu_admin,$type,$lang,$file)
     {
-        if($cms->name == '') $cms->name = $cms->title;
+        if($qu_admin->name == '') $qu_admin->name = $qu_admin->title;
 
-        $cms->name  = QuUtilities::urlc($cms->name);
-        $cms->text  = stripslashes($cms->text);
-        $cms->resum = stripslashes($cms->resum);
+        $qu_admin->name     = QuUtilities::urlc($qu_admin->name);
+        $qu_admin->summary  = stripslashes($qu_admin->summary);
+        $qu_admin->content  = stripslashes($qu_admin->content);
 
         $data = array(
-            'title'             => $cms->title,
-            'resum'             => $cms->resum,
-            'text'              => $cms->text,
-            'status'            => $cms->status,
-            'id'                => $cms->id,
-            'id_parent'         => $cms->id_parent,
-            'id_author'         => $cms->id_author,
-            'id_lang'           => $cms->id_lang,
-            'lang'              => $cms->lang,
-            'date'              => $cms->date,
-            'modified'          => $cms->modified,
-            'name'              => $cms->name,
+
+            'id'                => $qu_admin->id,
+
+            'id_parent'         => $qu_admin->id_parent,
+            'id_author'         => $qu_admin->id_author,
+            'id_lang'           => $qu_admin->id_lang,
+
             'type'              => $type,
-            'parametres'        => $cms->parametres,
-            'imatge'            => $cms->imatge,
+            'name'              => $qu_admin->name,
+
+            'date'              => $qu_admin->date,
+            'modified'          => $qu_admin->modified,
+            'status'            => $qu_admin->status,
+            'lang'              => $qu_admin->lang,
+
+            'parameters'        => $qu_admin->parameters,
+
+            'title'             => $qu_admin->title,
+            'summary'           => $qu_admin->summary,
+            'documents'         => $qu_admin->documents,
+            'content'           => $qu_admin->content,
+
+            'notes'             => $qu_admin->notes
         );
 
-        if($cms->id_lang === 0){
-            $id = (int)$cms->id;
+        if($qu_admin->id_lang === 0){
+            $id = (int)$qu_admin->id;
         }else{
-            $id = (int)$cms->id_lang;
+            $id = (int)$qu_admin->id_lang;
         }
         if($id != 0){
-            $row = $this->getCms($id,$lang);
+            $row = $this->getQuAdmin($id,$lang);
         }
 
-        if($cms->id_lang === 0)
+        if($qu_admin->id_lang === 0)
         {
             // Add
-            $data['id']      = $this->getLastId($cms->id_parent);
+            $data['id']      = $this->getLastId($qu_admin->id_parent);
             $data            = $this->getQuPhpThumb()->create($file,$data,$type);
             $data['id_lang'] = $data['id'];
             $this->update($data, array('id' => $data['id']));
             return $data['id'];
         }
-        elseif($row->lang === $cms->lang)
+        elseif($row->lang === $qu_admin->lang)
         {
             // Edit
             $data = $this->getQuPhpThumb()->create($file,$data,$type);
@@ -131,11 +139,11 @@ class QuSave extends AbstractTableGateway
             $this->update($data,$Up);
             return $id;
         }
-        elseif($row->lang != $cms->lang)
+        elseif($row->lang != $qu_admin->lang)
         {
             // Translate
             $data['order'] =  $row->order;
-            $data['id_lang'] = $cms->id;
+            $data['id_lang'] = $qu_admin->id;
             unset($data['id']);
             $this->insert($data);
             return $this->LastInsertValue;

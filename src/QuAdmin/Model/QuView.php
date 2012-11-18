@@ -52,7 +52,6 @@ class QuView extends AbstractTableGateway
      */
     public function Paginator($id_parent,$page,$type,$lang,$q,$npp)
     {
-
         $select = $this->getSql()->select();
         $where  = new Where();
 
@@ -65,15 +64,12 @@ class QuView extends AbstractTableGateway
         if($q != ''){
            $where->like('title',  '%'.$q.'%');
            $where->or;
-           $where->like('resum',  '%'.$q.'%');
+           $where->like('summary',  '%'.$q.'%');
            $where->or;
-           $where->like('text',  '%'.$q.'%');
+           $where->like('content',  '%'.$q.'%');
         }
 
-        $select->where($where)
-            ->order('order desc');
-
-        //echo $select->getSqlString();
+        $select->where($where)->order('order desc');
 
         $paginator =  new Paginator(new DbSelect($select, $this->adapter, $this->resultSetPrototype));
 
@@ -101,8 +97,7 @@ class QuView extends AbstractTableGateway
 
         $where  = new Where();
         $where->equalTo('type', $type);
-        $select->where($where)
-            ->order('order desc');
+        $select->where($where)->order('order desc');
 
         $statement = $sql->prepareStatementForSqlObject($select);
         $result = $statement->execute();

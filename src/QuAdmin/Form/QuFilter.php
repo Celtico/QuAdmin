@@ -14,46 +14,60 @@ use Zend\InputFilter\InputFilterInterface;
 
 class QuFilter implements InputFilterAwareInterface
 {
+    protected $inputFilter;
+
     public $id;
+
     public $id_parent;
     public $id_author;
     public $id_lang;
-    public $lang;
+
+    public $type;
+    public $name;
+    public $order;
+
     public $date;
     public $modified;
-    public $order;
     public $status;
-    public $name;
+    public $lang;
+
+    public $parameters;
+
     public $title;
-    public $resum;
-    public $text;
-    public $type;
-    public $imatge;
-    public $parametres;
-    protected $inputFilter;
+    public $summary;
+    public $documents;
+    public $content;
+
+    public $notes;
 
     /**
      * @param $data
      */
     public function exchangeArray($data)
     {
-
         $this->id           = (isset($data['id'])) ? $data['id'] : null;
-        $this->id_parent     = (isset($data['id_parent'])) ? $data['id_parent'] : null;
-        $this->id_author     = (isset($data['id_author'])) ? $data['id_author'] : null;
-        $this->id_lang     = (isset($data['id_lang'])) ? $data['id_lang'] : null;
-        $this->lang     = (isset($data['lang'])) ? $data['lang'] : null;
-        $this->date     = (isset($data['date'])) ? $data['date'] : null;
+
+        $this->id_parent    = (isset($data['id_parent'])) ? $data['id_parent'] : null;
+        $this->id_author    = (isset($data['id_author'])) ? $data['id_author'] : null;
+        $this->id_lang      = (isset($data['id_lang'])) ? $data['id_lang'] : null;
+
+        $this->type         = (isset($data['type'])) ? $data['type'] : null;
+        $this->name         = (isset($data['name'])) ? $data['name'] : null;
+        $this->order        = (isset($data['order'])) ? $data['order'] : null;
+
+        $this->date         = (isset($data['date'])) ? $data['date'] : null;
         $this->modified     = (isset($data['modified'])) ? $data['modified'] : null;
-        $this->order     = (isset($data['order'])) ? $data['order'] : null;
-        $this->status     = (isset($data['status'])) ? $data['status'] : null;
-        $this->name     = (isset($data['name'])) ? $data['name'] : null;
-        $this->title     = (isset($data['title'])) ? $data['title'] : null;
-        $this->resum      = (isset($data['resum'])) ? $data['resum'] : null;
-        $this->text     = (isset($data['text'])) ? $data['text'] : null;
-        $this->type     = (isset($data['type'])) ? $data['type'] : null;
-        $this->imatge        = (isset($data['imatge'])) ? $data['imatge'] : null;
-        $this->parametres     = (isset($data['parametres'])) ? $data['parametres'] : null;
+        $this->status       = (isset($data['status'])) ? $data['status'] : null;
+        $this->lang         = (isset($data['lang'])) ? $data['lang'] : null;
+
+        $this->parameters   = (isset($data['parameters'])) ? $data['parameters'] : null;
+
+        $this->title        = (isset($data['title'])) ? $data['title'] : null;
+        $this->summary      = (isset($data['summary'])) ? $data['summary'] : null;
+        $this->documents    = (isset($data['documents'])) ? $data['documents'] : null;
+        $this->content      = (isset($data['content'])) ? $data['content'] : null;
+
+        $this->notes        = (isset($data['notes'])) ? $data['notes'] : null;
     }
 
     /**
@@ -80,12 +94,12 @@ class QuFilter implements InputFilterAwareInterface
      */
     public function getInputFilter()
     {
-        if (!$this->inputFilter) {
+        if(!$this->inputFilter){
+
             $inputFilter = new InputFilter();
 
             $factory = new InputFactory();
 
-            //Int
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'id',
                 'required' => false,
@@ -114,10 +128,25 @@ class QuFilter implements InputFilterAwareInterface
                     array('name' => 'Int'),
                 ),
             )));
-            $inputFilter->add($factory->createInput(array(
-                'name'     => 'lang',
-                'required' => false,
 
+
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'type',
+                'required' => false,
+                'filters'  => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+                'validators' => array(
+                    array(
+                        'name'    => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8',
+                            'min'      => 1,
+                            'max'      => 200,
+                        ),
+                    ),
+                ),
             )));
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'order',
@@ -125,29 +154,6 @@ class QuFilter implements InputFilterAwareInterface
                 'filters'  => array(
                     array('name' => 'Int'),
                 ),
-            )));
-            //Data
-            $inputFilter->add($factory->createInput(array(
-                'name'     => 'date',
-                'required' => false,
-                'filters'  => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
-                ),
-            )));
-            $inputFilter->add($factory->createInput(array(
-                'name'     => 'modified',
-                'required' => false,
-                'filters'  => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
-                ),
-            )));
-            //text
-            $inputFilter->add($factory->createInput(array(
-                'name'     => 'status',
-                'required' => false,
-
             )));
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'name',
@@ -167,6 +173,28 @@ class QuFilter implements InputFilterAwareInterface
                     ),
                 ),
             )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'date',
+                'required' => false,
+                'filters'  => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+            )));
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'modified',
+                'required' => false,
+                'filters'  => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+            )));
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'status',
+                'required' => false,
+
+            )));
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'lang',
                 'required' => false,
@@ -185,6 +213,12 @@ class QuFilter implements InputFilterAwareInterface
                     ),
                 ),
             )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'parameters',
+                'required' => false,
+            )));
+
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'title',
                 'required' => true,
@@ -203,33 +237,11 @@ class QuFilter implements InputFilterAwareInterface
                 ),
             )));
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'resum',
+                'name'     => 'summary',
                 'required' => false,
             )));
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'text',
-                'required' => false,
-            )));
-            $inputFilter->add($factory->createInput(array(
-                'name'     => 'type',
-                'required' => false,
-                'filters'  => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array(
-                        'name'    => 'StringLength',
-                        'options' => array(
-                            'encoding' => 'UTF-8',
-                            'min'      => 1,
-                            'max'      => 20,
-                        ),
-                    ),
-                ),
-            )));
-            $inputFilter->add($factory->createInput(array(
-                'name'     => 'imatge',
+                'name'     => 'documents',
                 'required' => false,
                 'filters'  => array(
                     array('name' => 'StripTags'),
@@ -247,7 +259,12 @@ class QuFilter implements InputFilterAwareInterface
                 ),
             )));
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'parametres',
+                'name'     => 'content',
+                'required' => false,
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name'     => 'notes',
                 'required' => false,
                 'filters'  => array(
                     array('name' => 'StripTags'),
@@ -264,8 +281,6 @@ class QuFilter implements InputFilterAwareInterface
                     ),
                 ),
             )));
-
-
 
             $this->inputFilter = $inputFilter;        
         }

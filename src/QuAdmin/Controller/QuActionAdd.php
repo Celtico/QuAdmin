@@ -45,7 +45,7 @@ class QuActionAdd
         $Request  = $cont->getRequest();
         $Match    = $cont->getEvent()->getRouteMatch();
         $Redirect = $cont->redirect();
-        $Fm       = $cont->flashMessenger()->setNamespace('Cms');
+        $Fm       = $cont->flashMessenger()->setNamespace('QuAdmin');
 
         $lang     =      $Match->getParam('lang');
         $id       = (int)$Match->getParam('id','0');
@@ -69,8 +69,8 @@ class QuActionAdd
             {
                 $Fm->addMessage(
                     array(
-                        'type'=>'Information',
-                        'message'=>$cont->t('add close')
+                        'type'      =>$cont->t('AddCloseClassType'),
+                        'message'   =>$cont->t('AddCloseMessage')
                     )
                 );
                 return $Redirect->toRoute($route,array(
@@ -80,16 +80,16 @@ class QuActionAdd
             }
 
             //* Parse InputFilter
-            $cms = new QuFilter();
-            $this->Form->setInputFilter($cms->getInputFilter());
+            $qu_admin = new QuFilter();
+            $this->Form->setInputFilter($qu_admin->getInputFilter());
             $this->Form->setData($Request->getPost());
 
             //Action create add
             if($this->Form->isValid())
             {
-                $cms->exchangeArray($this->Form->getData());
+                $qu_admin->exchangeArray($this->Form->getData());
                 $redirect_id = $this->Save->getSave(
-                    $cms,
+                    $qu_admin,
                     $type,
                     $lang,
                     $_FILES
@@ -100,8 +100,8 @@ class QuActionAdd
                     //Action cancel
                     $Fm->addMessage(
                         array(
-                            'type'=>'Information',
-                            'message'=>$cont->t('add save')
+                            'type'      =>$cont->t('AddSaveClassType'),
+                            'message'   =>$cont->t('AddSaveMessage')
                         )
                     );
                     return $Redirect->toRoute($route,array(
@@ -115,8 +115,8 @@ class QuActionAdd
                     //Action cancel
                     $Fm->addMessage(
                         array(
-                            'type'=>'Information',
-                            'message'=>$cont->t('add & close save')
+                            'type'      =>$cont->t('AddSaveCloseClassType'),
+                            'message'   =>$cont->t('AddSaveCloseMessage')
                         )
                     );
                     return $Redirect->toRoute($route,array(
@@ -138,7 +138,7 @@ class QuActionAdd
             'id_parent' => $id,
             'lang'      => $lang,
             'route'     => $route,
-            'cms'       => $this->View->Paginator($id_parent,$page = 1,$type,$lang,$q = '',$npp = '')
+            'qu_admin'       => $this->View->Paginator($id_parent,$page = 1,$type,$lang,$q = '',$npp = '')
         );
     }
 }

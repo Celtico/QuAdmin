@@ -59,7 +59,7 @@ class QuDelete extends AbstractTableGateway
     {
         //Docs
         $info = $this->select(array('id' => $id))->current();
-        $document = array('imatge');
+        $document = array('documents');
         foreach($document as $nd){
             $this->getQuPhpThumb()->Delete($info,$nd);
         }
@@ -87,13 +87,12 @@ class QuDelete extends AbstractTableGateway
     {
         //Docs
         $info = $this->select(array('id' => $id))->current();
-        $document = array('imatge');
+        $document = array('documents');
         foreach($document as $nd){
             $this->getQuPhpThumb()->Delete($info,$nd);
             $data[$nd]= '';
         }
-        $this->update($data, array('id' => $id));
-        return $info;
+        return $this->update($data, array('id' => $id));;
     }
 
     /**

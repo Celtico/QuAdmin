@@ -22,4 +22,15 @@ return array(
             'QuAccordion'  => 'QuAdmin\View\Helper\QuAccordionForm',
         ),
     ),
+    // Config Translator
+    'translator' => array(
+        'locale' => 'en',
+        'translation_file_patterns' => array(
+            array(
+                'type'     => 'phparray',
+                'base_dir' => __DIR__ . '/../lang',
+                'pattern'  => '%s.php',
+            ),
+        ),
+    ),
 );

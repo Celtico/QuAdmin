@@ -12,14 +12,13 @@ use Zend\Mvc\Controller\AbstractActionController;
 class QuAdmin extends AbstractActionController
 {
 
-    public $t;
-
     protected $QuActionView;
     protected $QuActionAjax;
     protected $QuActionAdd;
     protected $QuActionEdit;
     protected $QuActionDuplicate;
     protected $QuActionDelete;
+    protected $QuActionDeleteDoc;
 
     protected $Translator;
 
@@ -129,6 +128,24 @@ class QuAdmin extends AbstractActionController
     public function setDeleteAction($QuActionDelete){
         if(!$this->QuActionDelete){
             return $this->QuActionDelete = $QuActionDelete;
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function deleteDocAction(){
+        return $this->QuActionDeleteDoc->Action($this);
+    }
+
+    /**
+     * @param $QuActionDeleteDoc
+     *
+     * @return mixed
+     */
+    public function setDeleteDocAction($QuActionDeleteDoc){
+        if(!$this->QuActionDeleteDoc){
+            return $this->QuActionDeleteDoc = $QuActionDeleteDoc;
         }
     }
 

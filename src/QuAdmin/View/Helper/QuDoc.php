@@ -35,6 +35,8 @@ class QuDoc extends AbstractHelper
      */
     public function __invoke($type,$name,$style)
     {
+        $type = strtolower($type);
+
         $nom = $type.'/'.$name;
         $img = $this->QuBasePath.'/'.$nom;
         if(is_file($img)){

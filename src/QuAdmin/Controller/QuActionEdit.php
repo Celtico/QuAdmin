@@ -37,7 +37,7 @@ class QuActionEdit
         $Request  = $cont->getRequest();
         $Match    = $cont->getEvent()->getRouteMatch();
         $Redirect = $cont->redirect();
-        $Fm       = $cont->flashMessenger()->setNamespace('Cms');
+        $Fm       = $cont->flashMessenger()->setNamespace('QuAdmin');
 
         $lang     =      $Match->getParam('lang');
         $id       = (int)$Match->getParam('id','0');
@@ -51,9 +51,9 @@ class QuActionEdit
         //From
         $date     = date("Y-m-d H:i:s");
 
-        $cms = $this->Save->getCms($id,$lang);
+        $qu_admin = $this->Save->getQuAdmin($id,$lang);
 
-        $this->Form->bind($cms);
+        $this->Form->bind($qu_admin);
 
         //Action for post Add
         if($Request->isPost()){
@@ -65,12 +65,12 @@ class QuActionEdit
             {
                 $Fm->addMessage(
                     array(
-                        'type'=>'Information',
-                        'message'=> $cont->t('edit close')
+                        'type'      =>$cont->t('EditCloseClassType'),
+                        'message'   =>$cont->t('EditCloseMessage')
                     )
                 );
                 return $Redirect->toRoute($route,array(
-                        'id'  => $cms->id_parent,
+                        'id'  => $qu_admin->id_parent,
                         'lang'=> $lang
                 ));
             }
@@ -81,7 +81,7 @@ class QuActionEdit
             if($this->Form->isValid())
             {
                 $this->Save->getSave(
-                    $cms,
+                    $qu_admin,
                     $type,
                     $lang,
                     $_FILES
@@ -91,8 +91,8 @@ class QuActionEdit
                 {
                     $Fm->addMessage(
                         array(
-                            'type'=>'Information',
-                            'message'=>$cont->t('edit save')
+                            'type'      =>$cont->t('EditSaveClassType'),
+                            'message'   =>$cont->t('EditSaveMessage')
                         )
                     );
                     return $Redirect->toRoute($route,array(
@@ -105,12 +105,12 @@ class QuActionEdit
                 {
                     $Fm->addMessage(
                         array(
-                            'type'=>'Information',
-                            'message'=>$cont->t('edit save & close')
+                            'type'      =>$cont->t('EditSaveCloseClassType'),
+                            'message'   =>$cont->t('EditSaveCloseMessage')
                         )
                     );
                     return $Redirect->toRoute($route,array(
-                        'id' => $cms->id_parent,
+                        'id' => $qu_admin->id_parent,
                         'lang'   => $lang
                     ));
                 }
@@ -125,10 +125,10 @@ class QuActionEdit
             'action'    => 'edit',
             'id_author' => $author,
             'id'        => $id,
-            'id_parent' => $cms->id_parent,
+            'id_parent' => $qu_admin->id_parent,
             'lang'      => $lang,
             'route'     => $route,
-            'cms'       => $this->View->Paginator($id_parent,$page = 1,$type,$lang,$q = '',$npp = '')
+            'qu_admin'       => $this->View->Paginator($id_parent,$page = 1,$type,$lang,$q = '',$npp = '')
         );
     }
 }

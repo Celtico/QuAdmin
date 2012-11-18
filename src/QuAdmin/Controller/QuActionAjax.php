@@ -67,7 +67,7 @@ class  QuActionAjax
         $type         =      $type[1];
 
         //Model
-        $cms          =    $this->View->Paginator($id,$page,$type,$lang,$q,$npp);
+        $qu_admin          =    $this->View->Paginator($id,$page,$type,$lang,$q,$npp);
 
         $Params = array(
 
@@ -82,7 +82,7 @@ class  QuActionAjax
             'ajax'      => 1,
 
             //Model
-            'cms'       => $cms,
+            'qu_admin'       => $qu_admin,
         );
 
         $view = new ViewModel($Params);

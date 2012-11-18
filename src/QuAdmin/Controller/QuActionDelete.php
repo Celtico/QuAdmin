@@ -34,7 +34,7 @@ class QuActionDelete
         $Request  = $cont->getRequest();
         $Match    = $cont->getEvent()->getRouteMatch();
         $Redirect = $cont->redirect();
-        $Fm       = $cont->flashMessenger()->setNamespace('Cms');
+        $Fm       = $cont->flashMessenger()->setNamespace('QuAdmin');
 
         //Url
         $lang     =      $Match->getParam('lang');
@@ -50,8 +50,8 @@ class QuActionDelete
 
                 $Fm->addMessage(
                     array(
-                        'type'=>'Information',
-                        'message'=>$cont->t('not checked')
+                        'type'      =>$cont->t('DeleteNotCheckedClassType'),
+                        'message'   =>$cont->t('DeleteNotCheckedMessage')
                     )
                 );
                 return $Redirect->toRoute($route,array(
@@ -81,12 +81,12 @@ class QuActionDelete
                 }
                 $Fm->addMessage(
                     array(
-                        'type'=>'Success',
-                        'message'=>$cont->t('delete success')
+                        'type'      =>$cont->t('DeleteClass'),
+                        'message'   =>$cont->t('DeleteMessage')
                     )
                 );
                 return $Redirect->toRoute($route,array(
-                    'action'=>'index',
+                    'action'   =>'index',
                     'id'       => $id,
                     'lang'     => $lang
                 ));
@@ -95,12 +95,12 @@ class QuActionDelete
 
                 $Fm->addMessage(
                     array(
-                        'type'=>'Information',
-                        'message'=>$cont->t('delete cancel')
+                        'type'      =>$cont->t('DeleteCancelClassType'),
+                        'message'   =>$cont->t('DeleteCancelMessage')
                     )
                 );
                 return $Redirect->toRoute($route,array(
-                    'action'=>'index',
+                    'action'   =>'index',
                     'id'       => $id,
                     'lang'     => $lang
                 ));
@@ -110,7 +110,7 @@ class QuActionDelete
 
             $Delete = array($this->Delete->setDelete($id_parent));
             return array(
-                'Delete' => $Delete,
+                'Delete'    => $Delete,
                 'id'        => $id,
                 'lang'      => $lang,
                 'route'     => $route,
@@ -120,8 +120,8 @@ class QuActionDelete
             
             $Fm->addMessage(
                 array(
-                    'type'=>'Information',
-                    'message'=>$cont->t('not checked')
+                    'type'      =>$cont->t('DeleteNotCheckedClassType'),
+                    'message'   =>$cont->t('DeleteNotCheckedMessage')
                 )
             );
             return $Redirect->toRoute($route,array(
