@@ -41,7 +41,7 @@ class QuLangUrl extends AbstractHelper
         $router       = $this->Service->get('router');
         $request      = $this->Service->get('request');
         $routeMatch   = $router->match($request);
-        $MatchName    = $routeMatch->getMatchedRouteName();
+        $MatchName    = strtolower($routeMatch->getMatchedRouteName());
         $MatchNameEx  = explode('/',$MatchName);
 
         if(isset($MatchNameEx[1])){
