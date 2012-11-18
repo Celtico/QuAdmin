@@ -81,7 +81,7 @@ class QuActionDelete
                 }
                 $Fm->addMessage(
                     array(
-                        'type'      =>$cont->t('DeleteClass'),
+                        'type'      =>$cont->t('DeleteClassType'),
                         'message'   =>$cont->t('DeleteMessage')
                     )
                 );

@@ -106,7 +106,7 @@ class QuActionDuplicate
 
         }elseif($id_parent != 0){
 
-            $Duplicate = array($this->Duplicate->getDuplicate($id_parent));
+            $Duplicate = array($this->Duplicate->setDuplicate($id_parent));
             return array(
                 'Duplicate' => $Duplicate,
                 'id'        => $id,
