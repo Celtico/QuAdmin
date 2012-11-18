@@ -72,8 +72,6 @@ Example:
                                 'action'    => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'id'        => '[0-9]+',
                                 'id_parent' => '[0-9]+',
-                                'document'  => '[a-zA-Z][a-zA-Z0-9_-]*',
-
                             ),
                             'defaults' => array(
                                 'lang'          => 'es',
@@ -92,8 +90,6 @@ Example:
                                 'action'    => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'id'        => '[0-9]+',
                                 'id_parent' => '[0-9]+',
-                                'document'  => '[a-zA-Z][a-zA-Z0-9_-]*',
-
                             ),
                             'defaults' => array(
                                 'lang'          => 'es',
@@ -111,8 +107,6 @@ Example:
                                 'action'    => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'id'        => '[0-9]+',
                                 'id_parent' => '[0-9]+',
-                                'document'    => '[a-zA-Z][a-zA-Z0-9_-]*',
-
                             ),
                             'defaults' => array(
                                 'controller'    => 'QuAdminFactory',
@@ -129,7 +123,6 @@ Example:
                                 'action'    => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'id'        => '[0-9]+',
                                 'id_parent' => '[0-9]+',
-                                'document'  => '[a-zA-Z][a-zA-Z0-9_-]*',
                             ),
                             'defaults' => array(
                                 'controller'    => 'QuAdminFactory',
