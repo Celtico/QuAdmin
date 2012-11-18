@@ -5,8 +5,8 @@ Version 1.0.0 Created by Cel Ticó Petit
 Screenshots
 ------------
 
-![QuDemo example screenshot](http://cenics.cat/quadmin1.jpg)
-![QuDemo example screenshot](http://cenics.cat/quadmin1.jpg)
+![QuDemo example screenshot](http://cenics.cat/quadmin1.png)
+![QuDemo example screenshot](http://cenics.cat/quadmin2.png)
 
 Requirements
 ------------
