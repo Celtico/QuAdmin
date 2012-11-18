@@ -13,13 +13,11 @@ Requirements
 * [ZendSkeletonApplication](https://github.com/zendframework/ZendSkeletonApplication)
 * [ZfcBase](https://github.com/ZF-Commons/ZfcBase)
 * [ZfcUser](https://github.com/ZF-Commons/ZfcUser)
-
-* [WebinoImageThumb](https://github.com/Celtico/WebinoImageThumb)
-* [CdliUserProfile](https://github.com/Celtico/CdliUserProfile)
-
+* [WebinoImageThumb](https://github.com/webino/WebinoImageThumb)
+* [CdliUserProfile](https://github.com/cdli/CdliUserProfile)
 * [QuElFinder](https://github.com/Celtico/QuElFinder)
 * [QuCKEditor](https://github.com/Celtico/QuCKEditor)
-* [QuDemo](https://github.com/ZF-Commons/ZfcUser)
+* [QuDemo](https://github.com/Celtico/QuDemo)
 
 
 Installation
