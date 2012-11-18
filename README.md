@@ -2,10 +2,11 @@ QuAdmin
 =======
 Version 1.0.0 Created by Cel Ticó Petit
 
-Introduction
+Screenshots
 ------------
 
-![QuDemo example screenshot](http://cenics.cat/quadmin.jpg)
+![QuDemo example screenshot](http://cenics.cat/quadmin1.jpg)
+![QuDemo example screenshot](http://cenics.cat/quadmin1.jpg)
 
 Requirements
 ------------
