@@ -35,10 +35,11 @@ class QuFlashMessages extends AbstractHelper
         if (count($this->flashMessenger)) {
             foreach ($this->flashMessenger as $msg){
 
-                $class = (isset($msg['type'])) ? "n{$msg['type']}" : '';
+                $class = (isset($msg['type'])) ? "{$msg['type']}" : '';
                 $message = '
-                <div class="nNote '. $class .'">
-                    <p>'.$msg['message'].'</p>
+                <div class="alert alert-'. strtolower($class) .'">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    '.$msg['message'].'
                 </div>';
             }
         }
