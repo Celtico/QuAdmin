@@ -47,7 +47,7 @@ class QuLangUrl extends AbstractHelper
         if(isset($MatchNameEx[1])){
             return  $MatchNameEx[0].'/'.$lang.'/'.$MatchNameEx[1];
         }else{
-            //return $MatchName.'/'.$lang;
+            return;
         }
     }
 }

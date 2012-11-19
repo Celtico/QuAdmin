@@ -46,7 +46,7 @@ class QuDoc extends AbstractHelper
                             <img src="'.$this->QuBaseURL.'/'.$type.'/s'.$name.'" '.$style.' />
                         </a>';
             }else{
-                return '<a href="'.$this->QuBaseURL.'/'.$type.'/'.$name.'" '.$style.' class="lightbox">Doc</a>';
+                return '<a href="'.$this->QuBaseURL.'/'.$type.'/'.$name.'" '.$style.'>Doc</a>';
             }
         }else{
             return;

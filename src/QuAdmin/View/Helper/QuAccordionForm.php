@@ -10,9 +10,7 @@
  * @copyright Copyright (c) 2012 Christopher Martin (http://cgmartin.com)
  * @license   New BSD License https://raw.github.com/cgmartin/CgmConfigAdmin/master/LICENSE
  */
-
-
-    namespace QuAdmin\View\Helper;
+namespace QuAdmin\View\Helper;
 
 use CgmConfigAdmin\Form\ConfigOptionsForm;
 use Zend\View\Helper\AbstractHelper;

@@ -52,8 +52,8 @@ class QuActionView
         }else{
             $type       =      $route;
         }
-        $qu_admin        =      $this->View->Paginator($id,$page = 1,$type,$lang,$q = '',$npp = '');
-        $date       =      date("Y-m-d H:i:s");
+        $qu_admin       =      $this->View->Paginator($id,$page = 1,$type,$lang,$q = '',$npp = '');
+        $date           =      date("Y-m-d H:i:s");
 
         return array(
             'date'      => $date,
@@ -69,7 +69,7 @@ class QuActionView
             'npp'       => 10,
             'page'      => 1,
             'q'         => '',
-            'qu_admin'       => $qu_admin,
+            'qu_admin'  => $qu_admin,
         );
     }
 

@@ -16,7 +16,7 @@ class QuActionDeleteDoc
     protected $DeleteDoc;
 
     /**
-     * @param $Delete
+     * @param $DeleteDoc
      */
     public function __construct($DeleteDoc){
 

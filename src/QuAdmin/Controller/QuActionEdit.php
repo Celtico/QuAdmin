@@ -77,7 +77,7 @@ class QuActionEdit
 
             $this->Form->setData($Request->getPost());
 
-            //Action create add
+            //Action edit
             if($this->Form->isValid())
             {
                 $this->Save->getSave(
@@ -128,7 +128,7 @@ class QuActionEdit
             'id_parent' => $qu_admin->id_parent,
             'lang'      => $lang,
             'route'     => $route,
-            'qu_admin'       => $this->View->Paginator($id_parent,$page = 1,$type,$lang,$q = '',$npp = '')
+            'qu_admin'  => $this->View->Paginator($id_parent,$page = 1,$type,$lang,$q = '',$npp = '')
         );
     }
 }

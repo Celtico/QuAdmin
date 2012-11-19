@@ -46,7 +46,7 @@ class QuAdminStrategy implements ListenerAggregateInterface
             $controllerClass = get_class($controller);
             $Namespace       = substr($controllerClass, 0, strpos($controllerClass, '\\'));
 
-            // Template
+            // setTemplate
             if (isset($QuAdmConfig['QuTemplate'][$Namespace]))
             {
                 if($QuAdmConfig['QuTemplate'][$Namespace] == 'RouteMatch')
@@ -57,19 +57,19 @@ class QuAdminStrategy implements ListenerAggregateInterface
                 }
             }
 
-            // Layout
+            // setLayout
             if(isset($QuAdmConfig['QuLayout'][$Namespace]))
             {
                  $controller->layout($QuAdmConfig['QuLayout'][$Namespace]);
             }
 
-            // UrlBase
+            // setUrlBase
             if(isset($QuAdmConfig['QuBasePath'][$Namespace]))
             {
                 $eve->getRequest()->setBaseUrl($QuAdmConfig['QuBasePath'][$Namespace]);
             }
 
-            // Layout login
+            // Redirect Login and setLayout login
             if(isset($QuAdmConfig['QuRedirectLogin'][$Namespace]))
             {
                 if(!$auth->hasIdentity())

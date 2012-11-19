@@ -92,7 +92,7 @@ class QuDelete extends AbstractTableGateway
             $this->getQuPhpThumb()->Delete($info,$nd);
             $data[$nd]= '';
         }
-        return $this->update($data, array('id' => $id));;
+        return $this->update($data, array('id' => $id));
     }
 
     /**

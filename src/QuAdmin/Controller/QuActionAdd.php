@@ -97,7 +97,7 @@ class QuActionAdd
 
                 if($Action['save'] != '')
                 {
-                    //Action cancel
+                    //Action save
                     $Fm->addMessage(
                         array(
                             'type'      =>$cont->t('AddSaveClassType'),
@@ -112,7 +112,7 @@ class QuActionAdd
                 }
                 elseif($Action['saveandclose'] != '')
                 {
-                    //Action cancel
+                    //Action save and close
                     $Fm->addMessage(
                         array(
                             'type'      =>$cont->t('AddSaveCloseClassType'),
@@ -138,7 +138,7 @@ class QuActionAdd
             'id_parent' => $id,
             'lang'      => $lang,
             'route'     => $route,
-            'qu_admin'       => $this->View->Paginator($id_parent,$page = 1,$type,$lang,$q = '',$npp = '')
+            'qu_admin'  => $this->View->Paginator($id_parent,$page = 1,$type,$lang,$q = '',$npp = '')
         );
     }
 }

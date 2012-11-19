@@ -35,7 +35,7 @@ class QuThumb
 
         $type = strtolower($type);
 
-        //define la rout
+        //define route
         if(count($file) != 0){
             $rout = $this->Config['QuBasePath'].'/'.$type.'/';
             if ( ! is_dir($rout)) {
@@ -53,7 +53,7 @@ class QuThumb
 
 
                 if($data['name'] != ''){
-                    //Nom
+                    //Name
                     $nom = $data['name'];
                 }else{
                     //Is not name put name title
@@ -61,17 +61,17 @@ class QuThumb
                     $data['name']  = $nom;
                     $data['title'] = $nom;
                 }
-                //nom am rout
+                //name and route
                 $SubName = $cont.'-'.$data['id'].'-'.$nom.'.'.$extension;
 
-                //key es el nom del camp de on hi va el nom del doc
+                //key is the name column in db
                 $data[$ky] = $SubName;
                 $NameFinal = $rout.$data[$ky];
 
-                //Upload la file
+                //Upload file
                 move_uploaded_file($f['tmp_name'], $NameFinal);
                 @chmod($NameFinal, 0777);
-                //si es una image adapter
+                //is image, generate thumb
                 if($extension == 'jpg' or $extension == 'gif' or $extension == 'png'){
                     $thumb = $this->PhpThumb->create($NameFinal);
 
