@@ -1,6 +1,6 @@
 QuAdmin
 =======
-Version 1.0.0 Created by Cel Ticó Petit
+Version 1.0.0 beta version Created by Cel Ticó Petit
 
 Screen Shots
 ------------
