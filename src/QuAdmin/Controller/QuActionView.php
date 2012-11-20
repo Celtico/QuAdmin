@@ -47,11 +47,14 @@ class QuActionView
         $id_parent  = (int)$Match->getParam('id_parent','0');
         $route      =      $Match->getMatchedRouteName();
         $type       =      explode('/',$route);
+
         if(isset($type[1])){
             $type       =      $type[1];
         }else{
             $type       =      $route;
         }
+        $type           =      strtolower($type);
+
         $qu_admin       =      $this->View->Paginator($id,$page = 1,$type,$lang,$q = '',$npp = '');
         $date           =      date("Y-m-d H:i:s");
 

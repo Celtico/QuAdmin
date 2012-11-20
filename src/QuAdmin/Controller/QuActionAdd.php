@@ -53,6 +53,7 @@ class QuActionAdd
         $route    =      $Match->getMatchedRouteName();
         $type     =      explode('/',$route);
         $type     =      $type[1];
+        $type     = strtolower($type);
 
         $author   =    $this->User->getIdentity()->getId();
 

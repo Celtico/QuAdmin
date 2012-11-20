@@ -65,6 +65,7 @@ class  QuActionAjax
         $route        =      $Match->getMatchedRouteName();
         $type         =      explode('/',$route);
         $type         =      $type[1];
+        $type         =      strtolower($type);
 
         //Model
         $qu_admin          =    $this->View->Paginator($id,$page,$type,$lang,$q,$npp);

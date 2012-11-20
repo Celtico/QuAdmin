@@ -33,8 +33,6 @@ class QuThumb
      */
     public function create($file,$data,$type){
 
-        $type = strtolower($type);
-
         //define route
         if(count($file) != 0){
             $rout = $this->Config['QuBasePath'].'/'.$type.'/';
@@ -72,7 +70,7 @@ class QuThumb
                 move_uploaded_file($f['tmp_name'], $NameFinal);
                 @chmod($NameFinal, 0777);
                 //is image, generate thumb
-                if($extension == 'jpg' or $extension == 'gif' or $extension == 'png'){
+                if($extension == 'jpg' or $extension == 'jpeg' or $extension == 'gif' or $extension == 'png'){
                     $thumb = $this->PhpThumb->create($NameFinal);
 
                     //1300
