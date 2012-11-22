@@ -11,7 +11,7 @@ Look to the full demo application!
 
 Coming soon
 ==================================
-- Installation in Composer
-- Loading the documents in drag and drop, and registered in the data base
-- Configuration size images
-- The small changes and corrections
+- Installation with Composer
+- Loading the documents with drag and drop, and registering them on the data base
+- Image resizing tool
+- Small changes and corrections
