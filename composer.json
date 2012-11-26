@@ -1,13 +1,31 @@
 {
     "name": "quadmin",
-    "description": "QuAdmin",
+    "description": "ZF2 module QuAdmin",
+    "version":"1.0.0-dev",
     "type": "module",
+
     "keywords": [
-        "quadmin"
+        "admin",
+        "zf2",
+        "module"
     ],
+
     "homepage": "https://github.com/Celtico/QuAdmin/",
+
     "require": {
-        "php": ">=5.3.3",
-        "quadmin":"1.0-dev"
+        "php": ">=5.3.3"
+    },
+
+    "authors": [
+        {
+            "name": "Cel Ticó Petit",
+            "email": "cel@cenics.net",
+            "homepage": "http://www.cenics.cat",
+            "role": "Developer"
+        }
+    ],
+
+    "support": {
+        "email": "cel@cenics.net"
     }
 }
