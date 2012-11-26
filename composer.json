@@ -16,6 +16,7 @@
         "zendframework/zendframework": "2.*",
         "zf-commons/zfc-base": "dev-master",
         "zf-commons/zfc-user": "dev-master",
+        
         "webino/webino-image-thumb": "dev-master",
         "cgm/config-admin":"dev-master",
         "qu/ckeditor":"dev-master",
