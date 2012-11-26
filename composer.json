@@ -2,7 +2,7 @@
     "name": "qu/admin",
     "description": "ZF2 module QuAdmin",
     "type": "module",
-
+    "version":"1.0.0-dev",
     "keywords": [
         "admin",
         "zf2",
@@ -26,5 +26,14 @@
 
     "support": {
         "email": "cel@cenics.net"
+    },
+
+    "autoload": {
+        "psr-0": {
+            "QuAdmin": "src/"
+        },
+        "classmap": [
+            "./"
+        ]
     }
 }
