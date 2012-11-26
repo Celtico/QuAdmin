@@ -8,7 +8,6 @@
 namespace QuAdmin\Model;
 
 use Zend\Db\Adapter\Adapter;
-use QuAdmin\Form\QuFilter;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\Sql\Where;
 use Zend\Db\ResultSet\ResultSet;
@@ -17,17 +16,17 @@ use Zend\Paginator\Adapter\DbSelect;
 use Zend\Paginator\Paginator;
 use Zend\Stdlib\Hydrator\ArraySerializable as ArraySerializableHydrator;
 
+use QuAdmin\Form\QuFilter;
 
 class QuView extends AbstractTableGateway
 {
     protected $table     = 'QuAdmin';
-    protected $tableName = 'QuAdmin';
 
     /**
      * @param \Zend\Db\Adapter\Adapter $adapter
-     * @param string                   $tableName
+     * @param string                   $table
      */
-    public function __construct(Adapter $adapter, $tableName = 'QuAdmin')
+    public function __construct(Adapter $adapter, $table = 'QuAdmin')
     {
         $this->adapter = $adapter;
         $this->resultSetPrototype = new ResultSet();
@@ -70,7 +69,7 @@ class QuView extends AbstractTableGateway
         }
 
         $select->where($where)->order('order desc');
-
+        //var_dump($select->getSqlString());
         $paginator =  new Paginator(new DbSelect($select, $this->adapter, $this->resultSetPrototype));
 
         $paginator->setCurrentPageNumber($page);
@@ -81,36 +80,5 @@ class QuView extends AbstractTableGateway
         $paginator->setItemCountPerPage($npp);
 
         return $paginator;
-    }
-
-    /**
-     * @param $type
-     * @param $camp
-     *
-     * @return array
-     */
-    public function Sel($type,$camp)
-    {
-        $sql = $this->getSql();
-        $selector = array();
-        $select = $sql->select();
-
-        $where  = new Where();
-        $where->equalTo('type', $type);
-        $select->where($where)->order('order desc');
-
-        $statement = $sql->prepareStatementForSqlObject($select);
-        $result = $statement->execute();
-        $select = array_values(iterator_to_array($result));
-
-        foreach($select as  $sel){
-            if(isset($sel['title'])){
-                $selector[$sel[$camp]] =  $sel['title'];
-            }
-        }
-        if(count($selector) == 0){
-            $selector = array(''=>'-');
-        }
-        return $selector;
     }
 }

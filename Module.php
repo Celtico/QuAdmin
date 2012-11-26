@@ -89,6 +89,12 @@ class Module implements BootstrapListenerInterface
                     $QuDoc = new View\Helper\QuLangUrl($Service);
                     return $QuDoc;
                 },
+                'QuCount' => function ($sm) {
+                    $db = $sm->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+                    $QuUtilities = new Model\QuUtilities($db);
+                    $QuAdd = new View\Helper\QuCount($QuUtilities);
+                    return $QuAdd;
+                },
             ),
         );
 

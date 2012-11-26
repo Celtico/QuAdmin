@@ -16,19 +16,25 @@ class QuForm extends Form
     /**
      * @var
      */
-    protected $View;
+    protected $Utilities;
     protected $Translator;
+    protected $Id;
+    protected $Type;
 
     /**
-     * @param int|null|string $View
+     * @param int|null|string $Utilities
      * @param array           $Translator
+     * @param                 $Id
+     * @param                 $Type
      */
-    public function __construct($View,$Translator)
+    public function __construct($Utilities,$Translator,$Id,$Type)
     {
         parent::__construct();
 
-        $this->Translator = $Translator;
-        $this->View = $View;
+        $this->Utilities     = $Utilities;
+        $this->Translator   = $Translator;
+        $this->Id           = $Id;
+        $this->Type         = $Type;
 
         $translator = new Translator;
         $translator->addTranslationFile("phparray",'./vendor/ZF2/resources/languages/es/Zend_Validate.php');
@@ -148,7 +154,21 @@ class QuForm extends Form
             'name' => 'parameters',
             'options' => array(
                 'label' => $this->t('parameters'),
-                'value_options' => $this->View->Sel('parameters','name'),
+                'value_options' => $this->Utilities->SelectOptions('parameters','name'),
+            ),
+        ));
+
+        $SelectOptionsIdParent  =  array('0'=>'-');
+        $SelectOptionsIdParent += $this->Utilities->SelectOptions($this->Type,'id');
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Select',
+            'name' => 'id_parent',
+            'options' => array(
+                'label' => $this->t('id_parent'),
+                'value_options' => $SelectOptionsIdParent,
+            ),
+            'attributes' => array(
+                'value' => $this->Id,
             ),
         ));
 

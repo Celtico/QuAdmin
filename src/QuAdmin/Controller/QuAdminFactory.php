@@ -15,6 +15,7 @@ use QuAdmin\Model\QuSave;
 use QuAdmin\Model\QuOrder;
 use QuAdmin\Model\QuDelete;
 use QuAdmin\Model\QuDuplicate;
+use QuAdmin\Model\QuUtilities;
 
 use QuAdmin\Form\QuForm;
 use QuAdmin\Model\QuThumb;
@@ -35,7 +36,18 @@ class QuAdminFactory implements FactoryInterface
         $db              = $sm->get('Zend\Db\Adapter\Adapter');
         $User            = $sm->get('zfcuser_auth_service');
         $PhpThumb        = $sm->get('WebinoImageThumb');
-        $translator      = $sm->get('translator');
+        $Translator      = $sm->get('translator');
+        $Application     = $sm->get('application');
+
+        // March
+        $Match           = $Application->getMvcEvent()->getRouteMatch();
+        $Route           = $Match->getMatchedRouteName();
+        $Id              = (int)$Match->getParam('id','0');
+
+        // Presses Type
+        $Type            = explode('/',$Route);
+        $Type            = $Type[1];
+        $Type            = strtolower($Type);
 
         // Model
         $View            = new QuView        ($db);
@@ -43,6 +55,7 @@ class QuAdminFactory implements FactoryInterface
         $Order           = new QuOrder       ($db);
         $Delete          = new QuDelete      ($db);
         $Duplicate       = new QuDuplicate   ($db);
+        $Utilities       = new QuUtilities   ($db);
 
         // Set Config in Duplicate
         $Duplicate->setConfig($Config['QuAdminConfig']['QuPhpThumb']);
@@ -53,13 +66,13 @@ class QuAdminFactory implements FactoryInterface
         $Delete          ->setQuPhpThumb($QuPhpThumb);
 
         // Form
-        $Form            = new QuForm  ($View,$translator);
+        $Form            = new QuForm  ($Utilities,$Translator,$Id,$Type);
 
         // Actions
         $ViewAction      = new QuActionView         ($View,$Form,$User);
         $AjaxAction      = new QuActionAjax         ($View,$Order);
         $AddAction       = new QuActionAdd          ($View,$Form,$Save,$User);
-        $EditAction      = new QuActionEdit         ($View,$Form,$Save,$User);
+        $EditAction      = new QuActionEdit         ($View,$Form,$Save,$User,$Delete);
         $DuplicateAction = new QuActionDuplicate    ($Duplicate);
         $DeleteAction    = new QuActionDelete       ($Delete);
         $DeleteDocAction = new QuActionDeleteDoc    ($Delete);
@@ -74,7 +87,7 @@ class QuAdminFactory implements FactoryInterface
         $controller->setDuplicateAction ($DuplicateAction);
         $controller->setDeleteAction    ($DeleteAction);
         $controller->setDeleteDocAction ($DeleteDocAction);
-        $controller->setTranslator      ($translator);
+        $controller->setTranslator      ($Translator);
 
         return $controller;
     }

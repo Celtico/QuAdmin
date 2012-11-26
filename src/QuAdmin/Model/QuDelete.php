@@ -31,7 +31,7 @@ class QuDelete extends AbstractTableGateway
      */
     public function setDelete($id)
     {
-        $RowSet = $this->select(array('id_lang' => $id));
+        $RowSet = $this->select(array('id' => $id));
         $Row = $RowSet->current();
         return $Row;
     }

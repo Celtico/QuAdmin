@@ -17,13 +17,22 @@ class QuActionEdit
     protected $Save;
     protected $User;
     protected $Trans;
+    protected $DeleteDoc;
 
-    public function __construct($View,$Form,$Save,$User){
+    /**
+     * @param $View
+     * @param $Form
+     * @param $Save
+     * @param $User
+     * @param $DeleteDoc
+     */
+    public function __construct($View,$Form,$Save,$User,$DeleteDoc){
 
         $this->View = $View;
         $this->Form = $Form;
         $this->Save = $Save;
         $this->User = $User;
+        $this->DeleteDoc = $DeleteDoc;
     }
 
     /**
@@ -94,6 +103,23 @@ class QuActionEdit
                         array(
                             'type'      =>$cont->t('EditSaveClassType'),
                             'message'   =>$cont->t('EditSaveMessage')
+                        )
+                    );
+                    return $Redirect->toRoute($route,array(
+                        'action' => 'edit',
+                        'id'     => $id,
+                        'lang'   => $lang
+                    ));
+                }
+                elseif($Action['delete-doc'] != '')
+                {
+
+                    $this->DeleteDoc->DeleteDocument($qu_admin->id);
+
+                    $Fm->addMessage(
+                        array(
+                            'type'      =>$cont->t('EditSaveDeleteDocClassType'),
+                            'message'   =>$cont->t('EditSaveDeleteDocMessage')
                         )
                     );
                     return $Redirect->toRoute($route,array(
