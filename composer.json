@@ -1,9 +1,8 @@
 {
-    "name": "celtico/quadmin",
+    "name": "quadmin",
     "description": "ZF2 module QuAdmin",
     "type": "module",
     "version":"1.0.0-dev",
-    "dev-master": "1.0.0-dev",
     "keywords": [
         "admin",
         "zf2",
@@ -11,9 +10,14 @@
     ],
 
     "homepage": "https://github.com/Celtico/QuAdmin/",
-
+    "license": "BSD-3-Clause",
     "require": {
-        "php": ">=5.3.3"
+        "php": ">=5.3.3",
+        "zf-commons/zfc-base": "dev-master",
+        "zf-commons/zfc-user": "dev-master",
+        "cdli/user-profile": "0.0.*",
+        "webino/webino-image-thumb":"1.*",
+        "cgm/config-admin":"dev-master"
     },
 
     "authors": [
@@ -27,20 +31,5 @@
 
     "support": {
         "email": "cel@cenics.net"
-    },
-
-    "autoload": {
-        "psr-0": {
-            "QuAdmin": "src/"
-        },
-        "classmap": [
-            "./"
-        ]
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0.0-dev",
-            "dev-develop": "1.0.0-dev"
-        }
     }
 }
