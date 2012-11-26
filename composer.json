@@ -1,7 +1,6 @@
 {
-    "name": "QuAdmin",
+    "name": "quadmin",
     "description": "ZF2 module QuAdmin",
-    "version":"1.0.0-dev",
     "type": "module",
 
     "keywords": [
