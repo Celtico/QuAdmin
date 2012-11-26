@@ -22,6 +22,6 @@ Installation
 
 ### Composer / Packagist
 ```
-% composer.phar require quadmin
-Please provide a version constraint for the quadmin requirement: 1.0.0-dev
+% composer.phar require celtico/quadmin
+Please provide a version constraint for the celtico/quadmin requirement: 1.0.0-dev
 ```
