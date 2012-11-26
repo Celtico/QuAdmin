@@ -13,11 +13,18 @@
     "license": "BSD-3-Clause",
     "require": {
         "php": ">=5.3.3",
+        "zendframework/zendframework": "2.*",
         "zf-commons/zfc-base": "dev-master",
         "zf-commons/zfc-user": "dev-master",
-        "cdli/user-profile": "0.0.*",
-        "webino/webino-image-thumb":"1.*",
-        "cgm/config-admin":"dev-master"
+        "cdli/user-profile": "dev-master",
+        "webino/webino-image-thumb": "dev-master",
+        "cgm/config-admin":"dev-master",
+        "qu/ckeditor":"dev-master",
+        "qu/elfinder":"dev-master",
+        "qu/phpmailer":"dev-master",
+        "qu/tcpdf":"dev-master",
+        "qu/webdemo":"dev-master",
+        "qu/admindemo":"dev-master"
     },
 
     "authors": [
