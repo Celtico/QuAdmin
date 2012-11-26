@@ -1,13 +1,9 @@
 {
-    "name": "qu/admin",
+    "name": "qu-modules/qu-admin",
     "description": "ZF2 module QuAdmin",
     "type": "module",
-    "version":"1.0.0-dev",
-    "keywords": [
-        "admin",
-        "zf2",
-        "module"
-    ],
+    "version":"0.0.1-dev",
+    "keywords": ["admin","zf2","module"],
     "homepage": "https://github.com/Celtico/QuAdmin/",
     "license": "BSD-3-Clause",
     "require": {
@@ -24,5 +20,13 @@
     ],
     "support": {
         "email": "cel@cenics.net"
+    },
+    "autoload": {
+        "psr-0": {
+            "ZfcBase": "src/"
+        },
+        "classmap": [
+            "./Module.php"
+        ]
     }
 }
