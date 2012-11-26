@@ -22,6 +22,6 @@ Installation
 
 ### Composer / Packagist
 ```
-% composer.phar require quadmin
-Please provide a version constraint for the quadmin requirement: dev-master
+% composer.phar require qu/admin
+Please provide a version constraint for the qu/admin requirement: dev-master
 ```
