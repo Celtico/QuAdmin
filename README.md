@@ -1,7 +1,7 @@
 QuAdmin
 =======
 
-Version 0.0.1
+Version 1.0.0-dev
 
 Created by Cel Ticó Petit
 
@@ -22,6 +22,6 @@ Installation
 
 ### Composer / Packagist
 ```
-% composer.phar require qu/admin
-Please provide a version constraint for the qu/admin requirement: 1.0.0-dev
+% composer.phar require quadmin
+Please provide a version constraint for the quadmin requirement: 1.0.0-dev
 ```

@@ -1,8 +1,9 @@
 {
-    "name": "qu/admin",
+    "name": "quadmin",
     "description": "ZF2 module QuAdmin",
     "type": "module",
     "version":"1.0.0-dev",
+    "dev-master": "1.0.0-dev",
     "keywords": [
         "admin",
         "zf2",
