@@ -9,7 +9,7 @@ Look to the full demo application in composer installer!
 
 Coming soon
 ====================================================================
-- Installation with Composer
+- Installation with Composer - OK!
 - Loading the documents with drag and drop, and registering them on the data base
 - Image resizing tool
 - Small changes and corrections
