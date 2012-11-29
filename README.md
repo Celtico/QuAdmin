@@ -13,3 +13,4 @@ Coming soon
 - Loading the documents with drag and drop, and registering them on the data base
 - Image resizing tool
 - Small changes and corrections
+- Test
