@@ -1,0 +1,275 @@
+<?php $cols = 8; ?>
+<form method="post" id="form">
+    <table cellpadding="0" cellspacing="0" width="100%" class="table tMedia  table-bordered table-striped" id="checkAll">
+        <thead>
+        <tr>
+            <td width="30" class="tableArrows"><img src="<?php echo $this->basePath(); ?>/img/tableArrows.png" alt="" /></td>
+            <td width="30" class="tableArrows"><div class="iconb" data-icon="&#xe152;"></div></td>
+
+            <?php if($options->getDocuments()){   $cols += 1; ?>
+                <td width="35">Imatge</td>
+            <?php } ?>
+
+            <?php if($key['Title']){   $cols += 1; ?>
+                <td class="sortCol" ><div>Title<span></span></div></td>
+            <?php } ?>
+
+            <?php if($key['Name']){   $cols += 1; ?>
+                <td class="sortCol" width="100"><div>Name<span></span></div></td>
+            <?php } ?>
+
+            <?php if($key['Modified']){   $cols += 1; ?>
+                <td  width="80"><div>Data<span></span></div></td>
+            <?php } ?>
+
+            <?php if($key['IdAuthor']){ $cols += 1; ?>
+                <td  width="50"><div>Autor<span></span></div></td>
+            <?php } ?>
+
+            <?php if($key['Order']){ $cols += 1; ?>
+                <td  width="30"><div>Or.<span></span></div></td>
+            <?php } ?>
+
+            <?php  if($key['Lang']){ $cols += 1; ?>
+                <td  width="125"><div>Lang<span></span></div></td>
+            <?php } ?>
+
+            <?php if($key['Status']){ $cols += 1; ?>
+                <td  width="47"><div>Status<span></span></div></td>
+            <?php } ?>
+
+            <?php if($options->getLinkerParent()){  $cols += 1; ?>
+                <td  width="45"><div>Pa.<span></span></div></td>
+            <?php } ?>
+
+            <td width="110">Actions</td>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+            <td colspan="13">
+                <div class="pull-left">
+                    <select  name="action" class="btn AjaxOptions" style="width:130px;" id="action" onchange="this.form.submit($('form').attr('action', '<?=$this->url($route,array('lang'=>$lang));?>/' + $(this).val() + '/<?php echo $id?>'))">
+                        <option value="">Select option</option>
+                        <option value="duplicate">Duplicate</option>
+                        <option value="delete">Delete</option>
+                    </select>
+                </div>
+                <? $this->placeholder('urlPage')->set($this->url($route,array('action'=>'qu_admin_table_ajax','lang'=>$lang,'id' => $id))); ?>
+                <?php echo $this->paginationControl($this->list, 'Sliding', 'qu-admin/layout/pagination'); ?>
+
+            </td>
+        </tr>
+        </tfoot>
+        <tbody>
+        <?php
+        if(!0 == count($this->list)){
+            foreach($this->list as $list){
+
+                if($key['IdLangLinker'] and $key['Lang']){
+
+                    $id_list = $list[$key['IdLangLinker']];
+                    $qu_admin_lang_nav_table = $this->qu_admin_lang_nav_table($id_list,$list[$key['Lang']],$options,$route);
+
+                }else{
+
+                    $id_list = $list[$key['Id']];
+                    $qu_admin_lang_nav_table = $this->qu_admin_lang_nav_table($id_list,null,$options,$route);
+                }
+
+                ?>
+                <tr id="item_<?php echo $list[$key['Id']]; ?>" char="<?php echo $list[$key['Order']]; ?>">
+
+                    <td class="center">
+                        <input type="checkbox" name="checkRow[]" value="<?php echo $id_list?>"/>
+                    </td>
+
+                    <td class="handle tableArrows center">
+                        <span class="iconb" data-icon="&#xe152;" style="font-size:17px; color:#999;"></span>
+                    </td>
+
+                    <?php if($options->getDocuments()){  ?>
+                        <td>
+                            <?php echo $this->qu_admin_documents($list[$key['Id']],$options->getTableName()); ?>
+                        </td>
+                    <?php } ?>
+
+                    <?php if($key['Title']){  ?>
+                        <td>
+                            <div  style="height:20px; overflow:hidden;">
+                                <?php echo $list[$key['Title']];?>
+                            </div>
+                        </td>
+                    <?php } ?>
+
+                    <?php if($key['Name']){ ?>
+                        <td>
+                            <div  style="height:20px; overflow:hidden;">
+                                <?php echo $list[$key['Name']];?>
+                            </div>
+                        </td>
+                    <?php } ?>
+
+                    <?php if($key['Modified']){ ?>
+                        <td class="center">
+                            <?php echo strftime("%d/%m/%Y", strtotime($list[$key['Modified']]));?>
+                        </td>
+                    <?php } ?>
+
+                    <?php if($key['IdAuthor']){ $cols += 1; ?>
+                        <td class="center">
+                            <?php echo $this->qu_admin_user_name($list[$key['IdAuthor']]); ?>
+                        </td>
+                    <?php } ?>
+
+                    <?php if($key['Order']){ $cols += 1; ?>
+                        <td class="center">
+                            <?php echo $list[$key['Order']];?>
+                        </td>
+                    <?php } ?>
+
+                    <?php  if($key['Lang']){  ?>
+                        <?php echo $qu_admin_lang_nav_table->getNavMenuTd(); ?>
+                    <?php } ?>
+
+                    <?php if($key['Status']){ ?>
+                        <td class="center">
+                            <a href="<?php echo $this->url($route,array('lang'=>$lang,'action'=>'edit', 'id' => $id_list ));?>">
+                                <?php echo $this->qu_admin_status($list[$key['Status']]); ?>
+                            </a>
+                        </td>
+                    <?php } ?>
+
+                    <?php if($options->getLinkerParent()){ ?>
+                        <td class="center">
+                            <?php echo $qu_admin_lang_nav_table->getCountChild();?>
+                        </td>
+                    <?php } ?>
+
+                    <td class="tableActs">
+                        <div class="btn-group dropup">
+                            <button class="btn btn-small css-dropdown" data-toggle="dropdown">
+                                <span class="icon-cog"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right">
+                                <?php echo $qu_admin_lang_nav_table->getNavMenuLi(); ?>
+                                <li><a href="<?php echo $this->url($route,array('lang'=>$lang,'action'=>'duplicate','id'=>$list[$key['IdParent']],'id_parent'=>$list[$key['Id']]));?>"><span class="icon-copy"></span>Duplicate</a></li>
+                                <li><a href="<?php echo $this->url($route,array('lang'=>$lang,'action'=>'delete','id'=>$list[$key['IdParent']],'id_parent'=>$list[$key['Id']]));?>"><span class="icon-remove-2"></span>Delete</a></li>
+                            </ul>
+
+                            <a href="<?php echo $this->url($route,array('lang'=>$lang,'action'=>'edit', 'id' => $id_list ));?>" class="btn btn-small" title="Edit"><span class="iconb" data-icon="&#xe1db;"></span></a>
+                            <?php if($options->getLinkerParent()){ ?>
+                                <a href="<?php echo $this->url($route,array('lang'=>$lang,'action'=>'add','id' => $id_list ));?>" class="btn btn-small" title="Add"><span class="iconb" data-icon="&#xe14a;"></span></a>
+                            <?php } ?>
+                        </div>
+
+                    </td>
+                </tr>
+            <? } } ?>
+        </tbody>
+    </table>
+</form>
+<? if(isset($ajax)){ ?>
+    <script type="text/javascript">
+        $('table').dataTable({
+            "bPaginate": false,
+            "bLengthChange": false,
+            "bFilter": false,
+            "bSort": true,
+            "bInfo": false,
+            "bAutoWidth": false
+        });
+        $("select").chosen({width:"95%"});
+    </script>
+<? } ?>
+<script type="text/javascript">
+
+
+    var UrlAdmin = '<?php echo $this->url($route,array('action'=>'qu_admin_table_ajax', 'id' => $id,'lang'=>$lang));?>';
+    var NumPerPage = '<?php echo $npp; ?>';
+    var Search = '<?php echo $q?>';
+    var Page = '<?php echo $page ?>';
+    var id = '<?php echo $id ?>';
+    var Lang = '<?php echo $lang ?>';
+    var ajax = $('#ajax');
+
+
+    function NumPage() {
+        $('.headLoad').css('display','block');
+        ajax.load(UrlAdmin + '?npp=' + $("#npp").val() + '&q=' + Search, function(){
+            $('.headLoad').css('display','none');
+            ajax.find('select').uniform();
+            ajax.find('input:checkbox').uniform();
+        });
+    }
+
+    $(".pagination a").click(function(){
+        var href = $(this).attr('href');
+        $('.headLoad').css('display','block');
+        ajax.load(href + '&q=' + Search + '&npp=' + NumPerPage,function(){
+            $('.headLoad').css('display','none');
+            ajax.find('select').uniform();
+            ajax.find('input:checkbox').uniform();
+        });
+        return false;
+    });
+
+
+    function search()
+    {
+        var valor = $('#q').val().replace(' ','+');
+        valor = valor.replace(' ','+');
+        valor = valor.replace(' ','+');
+        valor = valor.replace(' ','+');
+        $('.headLoad').css('display','block');
+        ajax.load(UrlAdmin + '?q=' + valor + '&npp=' + NumPerPage, function(){
+            $('.headLoad').css('display','none');
+            ajax.find('select').uniform();
+            ajax.find('input:checkbox').uniform();
+        });
+    }
+
+    // Sort
+    Sort();
+    function Sort(){
+        var nPage = '&n=' + $('#checkAll').find('tbody tr').attr('char') + '&page=' + Page + '&npp=' + NumPerPage ;
+        var fixHelperModified = function(e, tr) {
+            var $originals = tr.children();
+            var $helper = tr.clone();
+            $helper.children().each(function(index)
+            {
+                $(this).width($originals.eq(index).width())
+            });
+            return $helper;
+        };
+        $("tbody").sortable({
+
+            helper:fixHelperModified,
+            opacity: 0.6,
+            handle: ".handle",
+
+            start: function(e, ui){
+                ui.placeholder.height(ui.item.height()+1);
+            },
+            update:function (e) {
+                var order = $('#checkAll').find('tbody').sortable('serialize');
+                $('.headLoad').css('display','block');
+
+                $.ajax({
+                    url: UrlAdmin + "?" + order + nPage,
+                    cache: true,
+                    dataType: "html",
+                    success: function(data) {
+                        $("#ajax").val(data);
+                        $('.headLoad').css('display','none');
+                        ajax.find('select').uniform();
+                        ajax.find('input:checkbox').uniform();
+                    }
+                });
+
+            }
+        }).disableSelection();
+    }
+
+
+</script>

@@ -1,0 +1,22 @@
+
+
+<?php foreach ($this->registerForm->getElements() as $element) { ?>
+
+<?php $settingsName = $element->getName() == 'passwordVerify' ? 'password' : $element->getName(); ?>
+
+<?php if ( @$this->fieldSettings[$settingsName]['displayed'] ) { ?>
+
+
+<?php   if ($element->getLabel() != null) { ?>
+
+
+             <div class="formRow"> <div class="grid3"><?php echo $this->formLabel($element); ?></div>
+
+        <?php } ?>
+
+    <?php echo ( @$this->fieldSettings[$settingsName]['editable'] === false ? $this->escapeHtml($element->getAttribute('value')) : '  <div class="grid9">'.$this->formInput($element) ) .'<label generated="true" class="error">'. $this->formElementErrors($element).'</span> </div><div class="clear"></div></div>'; ?>
+
+
+
+    <?php }} ?>
+

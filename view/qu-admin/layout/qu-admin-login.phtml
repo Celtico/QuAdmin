@@ -1,0 +1,56 @@
+<?=$this->doctype()?>
+<html lang="<?=$this->placeholder('lang')?>">
+<head>
+    <meta charset="utf-8">
+    <?php
+
+    echo $this->headTitle('QuAdmin')->setSeparator(' - ')->setAutoEscape(false);
+
+    echo  $this->headMeta()
+
+        ->appendName('viewport', 'width=device-width, initial-scale=1.0');
+
+    echo $this->headScript()
+
+        ->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+        ->prependFile($this->basePath() . '/js/jquery-ui.min-1.8.js')
+        ->prependFile($this->basePath() . '/js/bootstrap.min.js')
+        ->prependFile($this->basePath() . '/js/jquery-1.8.1.min.js')
+    ;
+    echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/images/favicon.ico'))
+
+        ->prependStylesheet($this->basePath() . '/css/style.css')
+        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')
+    ;
+    ?>
+</head>
+<body>
+<div class="bg">
+    <div class="container-fluid header">
+        <div class="row-fluid">
+            <div class="span12">
+                <header>
+                    <a href="<?php echo $this->url('quadmin') ?>"  class="logo">
+                        <span class="iconb" data-icon="&#xe055;"></span>QuAdmin
+                    </a>
+                </header>
+            </div>
+        </div>
+    </div>
+    <div class="sidebar"></div>
+    <div class="container-fluid content">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div id="content">
+                            <?php echo $this->content; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

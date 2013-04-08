@@ -6,31 +6,36 @@
  */
 
 return array(
+
     'controllers' => array(
-        'factories' => array(
-            'QuAdminFactory' => 'QuAdmin\Controller\QuAdminFactory',
-        ),
-    ),
-    'service_manager' => array(
-        'factories' => array(
-            'QuNavigation' => 'QuAdmin\Service\QuNavigation',
-        ),
-    ),
-    'view_helpers' => array(
         'invokables' => array(
-            'QuActive'     => 'QuAdmin\View\Helper\QuActive',
-            'QuAccordion'  => 'QuAdmin\View\Helper\QuAccordionForm',
+            'qu_admin_controller' => 'QuAdmin\Controller\DashboardController',
         ),
     ),
-    // Config Translator
-    'translator' => array(
-        'locale' => 'en',
-        'translation_file_patterns' => array(
-            array(
-                'type'     => 'phparray',
-                'base_dir' => __DIR__ . '/../lang',
-                'pattern'  => '%s.php',
+
+    'router' => array(
+        'routes' => array(
+            'quadmin' => array(
+                'type' => 'Literal',
+                'priority' => 1000,
+                'options' => array(
+                    'route' => '/quadmin',
+                    'defaults' => array(
+                        'controller'    => 'qu_admin_controller',
+                        'action'        => 'dashboard',
+                    ),
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(),
+
             ),
         ),
     ),
+    'view_manager' => array(
+        'template_path_stack' => array(
+            __DIR__ . '/../view',
+        ),
+    ),
+
+
 );

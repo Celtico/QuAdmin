@@ -7,11 +7,16 @@
 
 namespace QuAdmin;
 
+use QuAdmin\Db\Adapter\DbAdapterAwareInterface;
 use Zend\EventManager\EventInterface;
-use Zend\Mvc\MvcEvent;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
-use Zend\ModuleManager\ModuleManager;
+use Zend\I18n\Translator\Translator;
+use Zend\Validator\AbstractValidator;
 
+/**
+ * Class Module
+ * @package QuAdmin
+ */
 class Module implements BootstrapListenerInterface
 {
 
@@ -24,19 +29,52 @@ class Module implements BootstrapListenerInterface
     {
         $app        = $e->getApplication();
         $sm         = $app->getServiceManager();
-        $strategy   = $sm->get('QuAdminStrategy');
-
+        $strategy   = $sm->get('qu_admin_strategy');
         $app->getEventManager()->attach($strategy);
+
     }
 
+
+    /**
+     * @return array
+     */
     public function getServiceConfig()
     {
         return array(
-            'factories' => array(
-                'QuAdminStrategy' => function() {
-                    $QuRedirectLogin = new Service\QuAdminStrategy();
-                    return $QuRedirectLogin;
+            'initializers' => array(
+                function($instance, $sm){
+                    if($instance instanceof DbAdapterAwareInterface){
+                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                        $instance->setDbAdapter($dbAdapter);
+                    }
                 },
+            ),
+            'invokables' => array(
+
+                'qu_admin_controller_add'          => 'QuAdmin\Controller\AddController',
+                'qu_admin_controller_delete'       => 'QuAdmin\Controller\DeleteController',
+                'qu_admin_controller_duplicate'    => 'QuAdmin\Controller\DuplicateController',
+                'qu_admin_controller_edit'         => 'QuAdmin\Controller\EditController',
+                'qu_admin_controller_index'        => 'QuAdmin\Controller\IndexController',
+                'qu_admin_controller_index_ajax'   => 'QuAdmin\Controller\IndexAjaxController',
+
+                'qu_admin_model_add'          => 'QuAdmin\Model\AddMapper',
+                'qu_admin_model_delete'       => 'QuAdmin\Model\DeleteMapper',
+                'qu_admin_model_duplicate'    => 'QuAdmin\Model\DuplicateMapper',
+                'qu_admin_model_edit'         => 'QuAdmin\Model\EditMapper',
+                'qu_admin_model_helper'       => 'QuAdmin\Model\HelperMapper',
+                'qu_admin_model_index'        => 'QuAdmin\Model\IndexMapper',
+                'qu_admin_model_index_ajax'   => 'QuAdmin\Model\IndexAjaxMapper',
+                'qu_admin_model_languages'    => 'QuAdmin\Model\LanguagesMapper',
+                'qu_admin_model_form'         => 'QuAdmin\Model\FormMapper',
+
+
+                'qu_admin_service'              => 'QuAdmin\Service\QuAdminService',
+                'qu_admin_strategy'             => 'QuAdmin\Strategy\QuAdminStrategy',
+                'qu_admin_form'                 => 'QuAdmin\Form\QuForm',
+            ),
+            'factories' => array(
+                'qu_admin_navigation' => 'QuAdmin\Navigation\QuAdminNavigation',
             ),
         );
     }
@@ -48,53 +86,45 @@ class Module implements BootstrapListenerInterface
     {
         return array(
             'factories' => array(
-                'QuFlashMessages' => function($sm) {
-                    $Service = $sm->getServiceLocator();
-                    $plugin  = $Service->get('ControllerPluginManager')->get('flashMessenger');
-                    $class   = $Service->get('config');
-                    $helper  = new View\Helper\QuFlashM($plugin,$class['QuAdminConfig']['QuFlashMCss']);
-                    return $helper;
+
+                'qu_admin_user_name' => function($sm) {
+                    return new View\Helper\QuAdminUserName($sm->getServiceLocator());
                 },
-                'QuUser' => function($sm) {
-                    $db = $sm->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
-                    $QuUser = new Model\QuUser($db);
-                    return new View\Helper\QuUser($QuUser);
+                'qu_admin_documents' => function ($sm) {
+                    return new View\Helper\QuAdminDocuments($sm->getServiceLocator());
                 },
-                'QuRout'=>function($sm){
-                    $db = $sm->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
-                    $Rout = new Model\QuRout($db);
-                    return new View\Helper\QuRout($Rout);
+                'qu_admin_messages' => function($sm) {
+                    return new View\Helper\QuAdminFlashMessenger($sm->getServiceLocator());
                 },
-                'QuLangNav'=>function($sm){
-                    $db = $sm->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
-                    $QuLang = new Model\QuLang($db);
-                    return new View\Helper\QuLangNav($QuLang);
+                'qu_admin_title' => function ($sm) {
+                    $page = $sm->getServiceLocator()->get('qu_admin_navigation');
+                    return new View\Helper\QuAdminTitle($page);
                 },
-                'QuLangDetect'=>function($sm){
-                    $db = $sm->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
-                    $QuLang = new Model\QuLang($db);
-                    return new View\Helper\QuLangDetect($QuLang);
+                'qu_admin_lang_nav_table'=>function($sm){
+                    return new View\Helper\QuAdminLangNavTable($sm->getServiceLocator());
                 },
-                'QuNavigation'=>function($sm){
-                    $Page = $sm->getServiceLocator()->get('QuNavigation');
-                    return new View\Helper\QuNavView($Page);
+                'qu_admin_languages' => function ($sm) {
+                    return new View\Helper\QuAdminLanguages($sm->getServiceLocator());
                 },
-                'QuDoc' => function ($sm) {
-                    $config = $sm->getServiceLocator()->get('config');
-                    $QuDoc = new View\Helper\QuDoc($config['QuAdminConfig']['QuPhpThumb']);
-                    return $QuDoc;
+                'qu_admin_bread_crumb' => function ($sm) {
+                    return new View\Helper\QuAdminBreadCrumb($sm->getServiceLocator());
                 },
-                'QuLangUrl' => function ($sm) {
-                    $Service = $sm->getServiceLocator();
-                    $QuDoc = new View\Helper\QuLangUrl($Service);
-                    return $QuDoc;
+                'qu_admin_title_by_db' => function ($sm) {
+                    return new View\Helper\QuAdminTitleByDb($sm->getServiceLocator());
                 },
-                'QuCount' => function ($sm) {
-                    $db = $sm->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
-                    $QuUtilities = new Model\QuUtilities($db);
-                    $QuAdd = new View\Helper\QuCount($QuUtilities);
-                    return $QuAdd;
+                'qu_admin_navigation' => function ($sm) {
+                    return new View\Helper\QuAdminNavigation($sm->getServiceLocator());
                 },
+                'qu_admin_add' => function ($sm) {
+                    return new View\Helper\QuAdminAdd($sm->getServiceLocator());
+                },
+                'qu_admin_status' => function ($sm) {
+                    return new View\Helper\QuAdminStatus($sm->getServiceLocator());
+                },
+                'qu_admin_map' => function ($sm) {
+                    return new View\Helper\QuAdminMap($sm->getServiceLocator());
+                },
+
             ),
         );
 
@@ -104,7 +134,6 @@ class Module implements BootstrapListenerInterface
     {
         return include __DIR__ . '/config/module.config.php';
     }
-
     public function getAutoloaderConfig()
     {
         return array(

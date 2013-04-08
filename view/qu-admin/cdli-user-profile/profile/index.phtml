@@ -1,0 +1,48 @@
+<?php $this->placeholder('titol')->set("<span class=\"icon-user\"></span> Profile de ".$this->zfcUserDisplayName()."") ?>
+
+
+
+
+
+
+<?php if (isset($this->messages) && count($this->messages) > 0 ): ?>
+
+
+<?php foreach ($this->messages as $msg): ?>
+    <div class="nNote <?php echo $this->escapeHtmlAttr($msg['type']); ?>">
+        <p><?php echo $this->escapeHtml($msg['message']); ?></p>
+    </div>
+    <?php endforeach; ?>
+<?php endif; ?>
+
+
+
+<form action="<?php echo $this->url('zfcuser/profile'); ?>" method="POST">
+
+    <fieldset>
+        <div class="widget fluid">
+            <div class="whead"><h6><?=$this->placeholder('titol')?></h6><div class="clear"></div></div>
+
+            <?php
+            $FieldSettings = $this->options->getFieldSettings();
+            foreach ( $this->sections as $name=>$section ) {
+
+
+                $vm = $section->getViewModel();
+                $vm->setVariable('fieldSettings', (array)@$FieldSettings[$name]);
+                $vm->setVariable('user', $this->user);
+
+                echo $this->render($vm);
+            }
+            ?>
+
+
+
+            <div class="formRow">
+                <input type="submit" value="Save Profile" class="buttonL  bGreen  mt5 formSubmit" />
+                <div class="clear"></div>
+            </div>
+
+        </div>
+    </fieldset>
+</form>

@@ -1,0 +1,42 @@
+
+<form action="<?php echo $this->url($route,array('lang'=>$this->lang,'action'=>'duplicate','id'=>$id)); ?>" method="post" id="form">
+
+    <div class="nav-actions">
+        <div class="title-nav">
+            Duplicate records
+        </div>
+        <div class="buttons-nav">
+            <input class="btn  floatR"  data-icon="&#xe0c8;" style="margin:3px 3px 0 0;"   value="Duplicar" name="duplicate"  type="submit">
+            <input class="btn  floatR"  style="margin:3px 3px 0 0;"    value="Cançelar" name="cancel"  type="submit">
+        </div>
+    </div>
+
+    <div class="form row-fluid">
+        <div class="span12 fromIn">
+            <? foreach($Duplicate as $d){ ?>
+                <fieldset class="formBlock">
+
+                    <?php if($d[$key['Title']]){  $title = $d[$key['Title']];
+                    }else{  $title = '<span class="Unnamed">Unnamed</span>'; }  ?>
+
+                    <legend>
+                        <span><?php echo $title; ?></span>
+                    </legend>
+
+                    <? if( $this->qu_admin_map($d[$key['Id']],$options)){ ?>
+
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <?php $this->qu_admin_map($d[$key['Id']],$options); ?>
+                            </div>
+                        </div>
+
+                    <? } ?>
+
+                    <input type="hidden" name="checkRow[]" value="<?php echo $d[$key['Id']]; ?>" />
+
+                </fieldset>
+            <? } ?>
+        </div>
+    </div>
+</form>

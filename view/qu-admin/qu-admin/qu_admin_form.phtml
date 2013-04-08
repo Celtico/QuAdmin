@@ -1,0 +1,149 @@
+<?php
+echo $this->qu_admin_bread_crumb($options,$id,$route,$lang);
+echo $this->qu_admin_messages();
+?>
+
+<?php
+$form = $this->form;
+$form->setAttribute('action',$this->url($route ,array('action' => $action,'id'=>$id,'lang'=>$lang)));
+$form->setAttribute('enctype', 'multipart/form-data');
+$form->prepare();
+echo $this->form()->openTag($form) . PHP_EOL;
+echo $this->formElement($form->get('csrf'));
+?>
+
+
+    <?php if($this->formElementErrors($form->get('csrf'))){ ?>
+    <div class="alert alert-info">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <p><?php echo $this->formElementErrors($form->get('csrf')); ?></p>
+    </div>
+    <?php } ?>
+
+
+    <div class="nav-actions">
+        <?php echo $this->qu_admin_title_by_db($options); ?>
+        <?php echo $this->qu_admin_add($route,$id,$lang,$options,$action); ?>
+        <?php echo $this->qu_admin_languages($options,$route,$lang,$action,$id); ?>
+    </div>
+
+<div class="form row-fluid">
+    <div class="span9 fromIn">
+        <?php
+
+        $grid3 = array();
+        $grid  = '';
+
+
+        foreach ($form->getFieldsets() as $nameField => $FieldSets){
+
+            $FieldGrid  = $FieldSets->getAttribute('span');
+
+            if($FieldGrid != 'span3'){
+
+                if($FieldSets->getLabel()){
+
+                    echo   '<fieldset class="formBlock"><legend><span>';
+                    echo   $FieldSets->getLabel();
+                    echo   '</span></legend>';
+
+                }
+
+                foreach ($FieldSets as $name =>$Element){
+
+                    if($Element->getAttribute('type') == 'select'){
+                        $css = ' searchDrop';
+                    }else{
+                        $css   = false;
+                    }
+
+                    $elemClass = $Element->getAttribute('class');
+                    $elemId    = $Element->getAttribute('id');
+                    $elemGrid  = $Element->getAttribute('span');
+
+                    if($elemClass == 'CkEditor'){
+
+                        echo   '<fieldset class="formBlock"><legend><span>';
+                        echo    $Element->getLabel();
+                        echo   '</span></legend>';
+                        echo   $this->formElement($Element);
+                        echo   $this->formElementErrors($Element).' </fieldset>';
+
+                    }elseif($elemGrid == 'span3'){
+
+                        $grid  = ' <div class="row-fluid"><div class="span3">';
+                        $grid .= $Element->getLabel();
+                        $grid .= ' </div><div class="span9'. $css .'">';
+                        $grid .= $this->formElement($Element);
+                        $grid .= ' </div><label generated="true" class="error">';
+                        $grid .= $this->formElementErrors($Element);
+                        $grid .= ' </label><div class="clear"></div></div>'.' </fieldset>';
+                        $grid3[] =  $grid;
+
+                    }else{
+
+                        echo ' <div class="row-fluid"><div class="span3">';
+                        echo   $Element->getLabel();
+                        echo ' </div><div class="span9'. $css .'">';
+                        echo   $this->formElement($Element);
+                        echo ' <label generated="true" class="error">';
+                        echo   $this->formElementErrors($Element);
+                        echo ' </label></div><div class="clear"></div></div>'.' </fieldset>';
+                    }
+                }
+
+            } else{
+
+                $grid  = '<fieldset class="formBlock"><legend><span>';
+                $grid .= $FieldSets->getLabel();
+                $grid .= '</span></legend>';
+                $grid3[] =  $grid;
+            }
+        }
+        ?>
+
+    </div>
+    <div class="span3 fromIn">
+
+        <?php  foreach($grid3 as $n){ echo $n;  } ?>
+
+        <? /// FILE UPLOAD ///////////// ///////////// ?>
+        <?php if($options->getDocuments()){   ?>
+            <fieldset class="formBlock">
+                <legend>
+                    <span>Multiple files uploader</span>
+                </legend>
+                <div class="PluploadLoad"><?=$this->PluploadHelpLoad($id,$options->getTableName())?></div>
+                <div class="clear"></div>
+                <div id="uploader"></div>
+                <?=$this->PluploadHelp('uploader',$id,$options->getTableName())?>
+            </fieldset>
+        <? } ?>
+        <? /// FILE UPLOAD ///////////// ///////////// ?>
+
+    </div>
+</div>
+
+<?php  echo $this->form()->closeTag($form) . PHP_EOL ?>
+
+<?php $this->QuCKEditor( 'editor', array(
+    'width' => "100%",
+    'height' => "200",
+    'uiColor'=> '#F4F4F4',
+    'toolbarGroups' => false,
+    'toolbar' => array(
+        array( 'name'=> 'basicstyles',
+            'groups' => array( 'basicstyles', 'cleanup' ),
+            'items' => array( 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ),
+        ),
+        array( 'name'=> 'paragraph',
+            'groups' => array( 'list', 'indent', 'blocks', 'align' ),
+            'items' => array( 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ),
+        ),
+    ),
+)); ?>
+<?php $this->QuCKEditor( 'editor2', array(
+    'width' => "100%",
+    'height' => "300",
+    'uiColor'=> '#F4F4F4',
+)); ?>

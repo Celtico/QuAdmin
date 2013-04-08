@@ -7,226 +7,187 @@
 
 namespace QuAdmin\Form;
 
+use QuAdmin\Util;
+
+use Zend\Crypt\Password\Bcrypt;
 use Zend\Form\Form;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\Form\Element\Csrf as CsrfElement;
 use Zend\I18n\Translator\Translator;
 use Zend\Validator\AbstractValidator;
 
 class QuForm extends Form
 {
-    /**
-     * @var
-     */
-    protected $Utilities;
-    protected $Translator;
-    protected $Id;
-    protected $Type;
+    protected $optionsForm;
+    protected $options;
+    protected $subForm;
 
-    /**
-     * @param int|null|string $Utilities
-     * @param array           $Translator
-     * @param                 $Id
-     * @param                 $Type
-     */
-    public function __construct($Utilities,$Translator,$Id,$Type)
+    public function __construct()
     {
         parent::__construct();
+        $this->filter   = new InputFilter;
+        $csrf = new CsrfElement('csrf');
+        $csrf->setCsrfValidatorOptions(array('timeout' => null));
+        $this->add($csrf);
 
-        $this->Utilities     = $Utilities;
-        $this->Translator   = $Translator;
-        $this->Id           = $Id;
-        $this->Type         = $Type;
 
+
+    }
+
+    public function addQuFormOptions($data,$model,$sl)
+    {
+        $tr = $sl->get('translator');
         $translator = new Translator;
-        $translator->addTranslationFile("phparray",'./vendor/ZF2/resources/languages/es/Zend_Validate.php');
+        $translator->addTranslationFile(
+            "phparray",
+            './vendor/zendframework/zendframework/resources/languages/'.$tr->getLocale().'/Zend_Validate.php'
+        );
         AbstractValidator::setDefaultTranslator($translator);
 
-        $this->setAttribute('method', 'post');
-        $this->add(array(
-            'name'    => 'id',
-            'options' => array(
-                'label' => $this->t('id'),
-            ),
-            'attributes' => array(
-                'type'  => 'hidden',
-            ),
-        ));
-        $this->add(array(
-            'name'     => 'id_parent',
-            'options' => array(
-                'label' => $this->t('id_parent'),
-            ),
-            'attributes' => array(
-                'type'  => 'hidden',
-            ),
-        ));
-        $this->add(array(
-            'name'     => 'id_author',
-            'options' => array(
-                'label' => $this->t('id_author'),
-            ),
-            'attributes' => array(
-                'type'  => 'text',
-            ),
-        ));
-        $this->add(array(
-            'name'     => 'id_lang',
-            'options' => array(
-                'label' => $this->t('id_lang'),
-            ),
-            'attributes' => array(
-                'type'  => 'hidden',
-            ),
-        ));
-
-        $this->add(array(
-            'name'     => 'type',
-            'options' => array(
-                'label' => $this->t('type'),
-            ),
-            'attributes' => array(
-                'type'  => 'text',
-            ),
-        ));
-        $this->add(array(
-            'name'     => 'name',
-            'options' => array(
-                'label' => $this->t('name'),
-            ),
-            'attributes' => array(
-                'type'  => 'text',
-            ),
-        ));
-        $this->add(array(
-            'name'     => 'order',
-            'options' => array(
-                'label' => $this->t('order'),
-            ),
-            'attributes' => array(
-                'type'  => 'hidden',
-            ),
-        ));
-
-        $this->add(array(
-            'name'     => 'date',
-            'options' => array(
-                'label' => $this->t('date'),
-            ),
-            'attributes' => array(
-                'type'  => 'hidden',
-            ),
-        ));
-        $this->add(array(
-            'name'     => 'modified',
-            'options' => array(
-                'label' => $this->t('modified'),
-            ),
-            'attributes' => array(
-                'type'  => 'hidden',
-            ),
-        ));
-        $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
-            'name'     => 'status',
-            'options' => array(
-                'label' => $this->t('status'),
-                'value_options' => array(
-                    'Public'    =>'Public',
-                    'Previous'  =>'Previous',
-                    'Private'   =>'Private',
-                ),
-            ),
-            'attributes' => array(
-                'type'  => 'select',
-            ),
-        ));
-        $this->add(array(
-            'name'     => 'lang',
-            'options' => array(
-                'label' => $this->t('lang'),
-            ),
-            'attributes' => array(
-                'type'  => 'hidden',
-            ),
-        ));
-
-        $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
-            'name' => 'parameters',
-            'options' => array(
-                'label' => $this->t('parameters'),
-                'value_options' => $this->Utilities->SelectOptions('parameters','name'),
-            ),
-        ));
-
-        $SelectOptionsIdParent  =  array('0'=>'-');
-        $SelectOptionsIdParent += $this->Utilities->SelectOptions($this->Type,'id');
-        $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
-            'name' => 'id_parent',
-            'options' => array(
-                'label' => $this->t('id_parent'),
-                'value_options' => $SelectOptionsIdParent,
-            ),
-            'attributes' => array(
-                'value' => $this->Id,
-            ),
-        ));
-
-        $this->add(array(
-            'name'     => 'title',
-            'options' => array(
-                'label' => $this->t('title'),
-            ),
-            'attributes' => array(
-                'type'  => 'text',
-            ),
-        ));
-        $this->add(array(
-            'name'     => 'summary',
-            'options' => array(
-                'label' => $this->t('summary'),
-            ),
-            'attributes' => array(
-                'type'  => 'textarea',
-            ),
-        ));
-        $this->add(array(
-            'name'     => 'documents',
-            'options' => array(
-                'label' => $this->t('documents'),
-            ),
-            'attributes' => array(
-                'type'  => 'text',
-            ),
-        ));
-        $this->add(array(
-            'name'     => 'content',
-            'options' => array(
-                'label' => $this->t('content'),
-            ),
-            'attributes' => array(
-                'type'  => 'textarea',
-            ),
-        ));
-
-        $this->add(array(
-            'name'     => 'notes',
-            'options' => array(
-                'label' => $this->t('notes'),
-            ),
-            'attributes' => array(
-                'type'  => 'textarea',
-            ),
-        ));
+        foreach($this->optionsForm as $options){
+            $this->addForm($data,$options,$model,$sl);
+        }
+        return $this;
     }
 
-    /**
-     * @param string $text
-     *
-     * @return mixed
-     */
-    public function t($text = ''){
-        return $this->Translator->Translate($text);
+    public function addForm($data,$forms,$model,$sl)
+    {
+        $factory = new InputFactory();
+
+        $fieldName = $forms['fieldset']['name'];
+        if($forms['serialized']){
+            if(isset($data[$forms['fieldset']['name']])){
+                $data = unserialize($data[$forms['fieldset']['name']]);
+            }
+        }
+
+        $forms['fieldset']['name'] = $forms['fieldset']['name'].'-';
+        $this->setBaseFieldset($this->add($forms['fieldset']));
+
+        $this->add($subForm = new Form(),array('name'=>$fieldName));
+        $subForm->setInputFilter( $subFilter  = new InputFilter() );
+
+        unset($forms['serialized']);
+        unset($forms['fieldset']);
+
+
+        if(isset($forms['database']))
+        {
+            $modelOptions = $sl->get($forms['database']['model']);
+            $formDatabase = $model->options($forms['database'], $modelOptions);
+            foreach($forms as $form){}
+
+            foreach($formDatabase as $name => $label)
+            {
+                $form['form']['name']  = $name;
+                $form['form']['options']['label'] = $label;
+                $subForm->add($form['form']);
+                $subFilter->add($factory->createInput($form['filter']));
+            }
+
+        }else{
+
+            foreach($forms as $key => $form)
+            {
+                if(isset($form['form']))
+                {
+                    if(isset($form['attributes']))
+                    {
+                        $modelOptions = $sl->get($form['attributes']['database']);
+                        $values = $model->options($form['attributes'],$modelOptions);
+                        $subForm->add($form['form']);
+                        $subFilter->add($factory->createInput($form['filter']));
+                        $subForm->get($form['form']['name'])->setAttribute('options',$values);
+
+                    }else{
+
+                        $subForm->add($form['form']);
+                        $subFilter->add($factory->createInput($form['filter']));
+                    }
+                }
+            }
+        }
+
+        $subForm->populateValues($data);
+        $this->subForm = $subForm;
+        return $this->subForm;
     }
 
+    public function prosesDataForm($dataPost)
+    {
+        $dataPostSubForm = $this->dataFilterPost($dataPost);
+        if ($this->subForm->setData($dataPostSubForm)){
+            if ($this->subForm->isValid()){
+                $data = $this->subForm->getData($dataPostSubForm);
+                if(isset($data['password'])){
+                    $bCrypt = new Bcrypt;
+                    $bCrypt->setCost(8);
+                    $data['password'] = $bCrypt->create($data['password']);
+                }
+                return  $data;
+            } else{
+                return  array(
+                    'error'=>$this->subForm->getMessages(),
+                    'filter'=>$this->subForm->filter->getMessages()
+                );
+            }
+        }
+        return false;
+    }
+
+    public function dataFilterPost($dataPost)
+    {
+
+        foreach($this->optionsForm as $options)
+        {
+            if(isset($dataPost[$options['fieldset']['name']]))
+            {
+                if($options['serialized']){
+
+                    $dataPost[$options['fieldset']['name']] = serialize($dataPost[$options['fieldset']['name']]);
+
+                }else{
+
+                    foreach($dataPost[$options['fieldset']['name']] as $name => $value){
+                        $dataPost[$name] = $value;
+                    }
+                    unset($dataPost[$options['fieldset']['name']]);
+                }
+            }
+        }
+
+        $Key = $this->getOptions()->getTableKeyFields();
+
+        if($Key['KeyName']){
+            if($dataPost[$Key['KeyName']] == ''){
+                $dataPost[$Key['KeyName']] = $dataPost[$Key['KeyTitle']];
+            }
+        }
+
+        if($Key['KeyTitle']){
+            $dataPost[$Key['KeyTitle']] = stripslashes($dataPost[$Key['KeyTitle']]);
+        }
+
+        if($Key['KeyName']){
+            $dataPost[$Key['KeyName']] = Util::urlFilter($dataPost[$Key['KeyName']]);
+        }
+
+
+        return  $dataPost;
+    }
+
+    public function setOptionsForm($optionsForm)
+    {
+        $this->options = $optionsForm;
+        $this->optionsForm = $optionsForm->getOptionsForm();
+    }
+    public function getOptions()
+    {
+        return $this->options;
+    }
+    public function getOptionsForm()
+    {
+        return $this->optionsForm;
+    }
 }

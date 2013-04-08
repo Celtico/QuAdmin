@@ -1,0 +1,127 @@
+<?=$this->doctype()?>
+<html lang="<?=$this->placeholder('lang')?>">
+<head>
+    <meta charset="utf-8">
+<?php
+
+    echo $this->headTitle('QuAdmin')->setSeparator(' - ')->setAutoEscape(false);
+
+    echo  $this->headMeta()
+
+        ->appendName('viewport', 'width=device-width, initial-scale=1.0');
+
+    echo $this->headScript()
+        ->prependFile($this->basePath() . '/js/plugins/chosen/chosen/chosen.jquery.min.js', 'text/javascript')
+        ->prependFile($this->basePath() . '/js/plugins/DataTables/media/js/jquery.dataTables.min.js', 'text/javascript')
+        ->prependFile($this->basePath() . '/js/plugins/pixelmatrix/jquery.uniform.min.js', 'text/javascript')
+        ->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+        ->prependFile($this->basePath() . '/js/jquery-ui.min-1.8.js')
+        ->prependFile($this->basePath() . '/js/bootstrap.min.js')
+        ->prependFile($this->basePath() . '/js/jquery-1.8.1.min.js')
+    ;
+    echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/images/favicon.ico'))
+
+        ->prependStylesheet($this->basePath() . '/css/style.css')
+        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')
+    ;
+?>
+</head>
+<body>
+<div class="bg">
+<div class="container-fluid header">
+    <div class="row-fluid">
+        <div class="span12">
+            <header>
+                <a href="<?php echo $this->url('quadmin') ?>"  class="logo">
+                    <span class="iconb" data-icon="&#xe055;"></span>QuAdmin
+                </a>
+                <?php echo $this->qu_admin_navigation('qu_admin_navigation');  ?>
+            </header>
+        </div>
+    </div>
+</div>
+<div class="sidebar">
+
+    <div class="top"></div>
+
+    <?php echo $this->qu_admin_navigation('qu_admin_navigation');  ?>
+
+    <div class="user">
+
+        <a href="http://gravatar.com" target="_blank" class="img" >
+            <?php if($this->zfcUserIdentity()){  echo $this->gravatar($this->zfcUserIdentity()->getEmail()); } ?>
+        </a>
+
+        <div class="name">
+            <?php echo $this->zfcUserDisplayName() ?>
+        </div>
+        <ul>
+            <li><a href="<?=$this->url('zfcuser/profile')?>" class="sProfile" >
+                    <span class="iconb" data-icon="&#xe1e0;"></span>
+                    Profile
+                </a>
+            </li>
+            <li>
+                <a href="<?=$this->url('zfcuser/logout')?>" class="sLogout" >
+                    <span class="iconb" data-icon="&#xe09b;"></span>
+                    Logout
+                </a>
+            </li>
+        </ul>
+
+        <div class="clearfix"></div>
+    </div>
+
+</div>
+
+<div class="container-fluid content">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="row-fluid contentTop">
+                <div class="span12">
+                    <h1><?php $this->qu_admin_title(); echo $this->placeholder('title'); ?></h1>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12 crumb">
+                    <ul class="breadcrumbs">
+                        <?php echo $this->placeholder('bread-crumbs')?>
+                    </ul>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <div id="content">
+                        <?=$this->content?>
+
+
+
+                        <!-- DISQUS -->
+                        <div class="container">
+                            <div class="row">
+                                <div class="span12">
+                                    <br><br>
+                                    <div id="disqus_thread"></div>
+                                    <script type="text/javascript">
+                                        var disqus_shortname = 'qumodules';
+                                        (function() {
+                                            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                                            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                                            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                                        })();
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<?php  echo  $this->inlineScript()->prependFile($this->basePath() . '/js/plugins.js', 'text/javascript'); ?>
+</body>
+</html>
