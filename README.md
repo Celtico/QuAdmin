@@ -1,7 +1,3 @@
-This version has bugs, I'll update soon
-==================================
-
-
 QuAdmin
 ==================================
 
