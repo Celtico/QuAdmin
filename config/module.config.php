@@ -22,7 +22,7 @@ return array(
                     'route' => '/quadmin',
                     'defaults' => array(
                         'controller'    => 'qu_admin_controller',
-                        'action'        => 'dashboard',
+                        'action'        => 'index',
                     ),
                 ),
                 'may_terminate' => true,

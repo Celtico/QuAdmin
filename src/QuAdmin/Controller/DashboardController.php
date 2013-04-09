@@ -13,7 +13,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 class DashboardController extends AbstractActionController
 {
 
-    public function dashboardAction()
+    public function indexAction()
     {
     }
 }
