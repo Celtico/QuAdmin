@@ -1,65 +1,65 @@
-<?php
-echo $this->qu_admin_bread_crumb($options,$id,$route,$lang);
-echo $this->qu_admin_messages();
-?>
+<?php  echo $this->qu_admin_bread_crumb($options,$id,$route,$lang);  ?>
 
+
+<div class="nav-actions-absolute">
     <div class="nav-actions">
-        <?php echo $this->qu_admin_title_by_db($options); ?>
+        <?php echo $this->qu_admin_title_by_db($options,$key,$route); ?>
         <?php echo $this->qu_admin_add($route,$id,$lang,$options,null); ?>
         <?php echo $this->qu_admin_languages($options,$route,$lang,null,$id); ?>
-    </div>
-
-<div class="row-fluid">
-    <div class="span12 fromIn check">
-        <div class="headTable">
-
-
-            <div class="CheckH">
-                <span class="titleIcon tableArrows">
-                    <input type="checkbox" id="titleCheck" name="titleCheck" />
-                </span>
-            </div>
-            <label class="selectNum" for="npp">
-                <input type="text" class="Search" placeholder="Search" id="q" name="q" onKeyUp="return search()">
-                <span class="pull-right">
-                <select id="npp"  class="btn input-mini">
-                    <option value="10" selected="selected">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                </select>
-               </span>
-            </label>
-
-
-            <span class="headLoad">
-                <div id="floatingCirclesG">
-                    <div class="f_circleG" id="frotateG_01">
-                    </div>
-                    <div class="f_circleG" id="frotateG_02">
-                    </div>
-                    <div class="f_circleG" id="frotateG_03">
-                    </div>
-                    <div class="f_circleG" id="frotateG_04">
-                    </div>
-                    <div class="f_circleG" id="frotateG_05">
-                    </div>
-                    <div class="f_circleG" id="frotateG_06">
-                    </div>
-                    <div class="f_circleG" id="frotateG_07">
-                    </div>
-                    <div class="f_circleG" id="frotateG_08">
-                    </div>
-                </div>
-            </span>
-
-
-        </div>
-        <div id="ajax">
-            <?php echo $this->render('qu-admin/qu-admin/qu_admin_table_ajax.phtml'); ?>
-        </div>
+        <div class="clearfix"></div>
     </div>
 </div>
+<div class="nav-actions-height"></div>
+
+    <?php echo $this->qu_admin_messages(); ?>
+
+    <div class="row-fluid">
+        <div class="span12 fromIn check">
+            <div class="headTable">
+                <div class="CheckH">
+                    <span class="titleIcon tableArrows">
+                        <input type="checkbox" id="titleCheck" name="titleCheck" />
+                    </span>
+                </div>
+                <label class="selectNum" for="npp">
+                    <input type="text" class="Search" placeholder="Search" id="q" name="q" onKeyUp="return search()">
+                    <span class="pull-right">
+                    <select id="npp"  class="btn input-mini">
+                        <option value="10" selected="selected">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                   </span>
+                </label>
+                <span class="headLoad">
+                    <div id="floatingCirclesG">
+                        <div class="f_circleG" id="frotateG_01">
+                        </div>
+                        <div class="f_circleG" id="frotateG_02">
+                        </div>
+                        <div class="f_circleG" id="frotateG_03">
+                        </div>
+                        <div class="f_circleG" id="frotateG_04">
+                        </div>
+                        <div class="f_circleG" id="frotateG_05">
+                        </div>
+                        <div class="f_circleG" id="frotateG_06">
+                        </div>
+                        <div class="f_circleG" id="frotateG_07">
+                        </div>
+                        <div class="f_circleG" id="frotateG_08">
+                        </div>
+                    </div>
+                </span>
+            </div>
+            <div id="ajax">
+                <?php echo $this->render('qu-admin/qu-admin/qu_admin_table_ajax.phtml'); ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="test"></div>
 <script type="text/javascript">
     $("#npp").change(function () {
         NumPage();

@@ -13,32 +13,54 @@ class HelperMapper extends AbstractMapper implements Interfaces\HelperMapperInte
         if($id != '0' and $id != ''){
             while((int)$id != 0){
 
-                if($this->KeyIdLangLinker){
-                    $where = array($this->KeyIdLangLinker => $id);
-                }else{
-                    $where = array($this->KeyId => $id);
-                }
-
-                $this->where($where);
-                $this->toArray();
-                $row = $this->row();
-
-                $values = array(
-                    'id' => $row[$this->KeyId],
-                    'title' => $row[$this->KeyTitle],
-                    'level'=> $level
-                );
-
                 if($this->KeyIdParent){
-                    $values += array($this->KeyIdParent => $row[$this->KeyIdParent]);
-                }
 
-                array_unshift($breadCrumb, $values);
-
-                if($this->KeyIdParent){
-                    $id = (int)$row[$this->KeyIdParent];
                     $level++;
+
+                    if($this->KeyIdLangLinker){
+                        $where = array($this->KeyIdLangLinker => $id);
+                    }else{
+                        $where = array($this->KeyId => $id);
+                    }
+
+                    $this->where($where);
+                    $this->toArray();
+                    $row = $this->row();
+
+                    $values = array(
+                        'id' => $row[$this->KeyId],
+                        'title' => $row[$this->KeyTitle],
+                        'level'=> $level
+                    );
+
+                    if($this->KeyIdParent){
+                        $values += array($this->KeyIdParent => $row[$this->KeyIdParent]);
+                    }
+
+                    array_unshift($breadCrumb, $values);
+
+
+                    $id = (int)$row[$this->KeyIdParent];
+
+
                 }else{
+
+                    if($this->KeyIdLangLinker){
+                        $where = array($this->KeyIdLangLinker => $id);
+                    }else{
+                        $where = array($this->KeyId => $id);
+                    }
+
+                    $this->where($where);
+                    $this->toArray();
+                    $row = $this->row();
+
+                    $values = array(
+                        'id' => $row[$this->KeyId],
+                        'title' => $row[$this->KeyTitle],
+                        'level'=> $level
+                    );
+
                     $this->breadCrumb = array($values,$values);
                     return $this->breadCrumb;
                 }
@@ -71,10 +93,11 @@ class HelperMapper extends AbstractMapper implements Interfaces\HelperMapperInte
         return $breadCrumb;
     }
 
-    public function title()
+    public function endBreadCrumb()
     {
         return end($this->breadCrumb);
     }
+
 
     public function countChild($id)
     {

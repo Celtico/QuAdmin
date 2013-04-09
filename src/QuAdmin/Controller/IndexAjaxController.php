@@ -17,12 +17,6 @@ class IndexAjaxController extends AbstractController
         if($this->getNewOrder() != '')
             $this->getModelIndex()->newOrder($this->getNewOrder(),$this->getPageOrder(),$this->getPage(),$this->getNumberPage());
 
-        if($this->getSearch() != null){
-            $list =  $this->getModelIndex()->search($this->getSearch(),$this->getPage(),$this->getNumberPage());
-        }else{
-            $list =  $this->getModelIndex()->findByParent($this->getId(),$this->getLang(),$this->getPage(),$this->getNumberPage());
-        }
-
 
         return array(
             'id'        => $this->getId(),
@@ -33,7 +27,12 @@ class IndexAjaxController extends AbstractController
             'npp'       => $this->getNumberPage(),
             'page'      => $this->getPage(),
             'options'   => $this->getOptions(),
-            'list'      => $list,
+            'list'      => $this->getModelIndex()->findByParent(
+                           $this->getSearch(),
+                           $this->getId(),
+                           $this->getLang(),
+                           $this->getPage(),
+                           $this->getNumberPage()),
             'ajax'      => 1,
             'key'       => $this->key,
             'PathTemplateRender' => $this->getPathTemplateRender()

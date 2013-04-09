@@ -7,20 +7,44 @@ use Zend\Db\Sql\Predicate;
 class IndexMapper extends AbstractMapper implements Interfaces\IndexMapperInterface
 {
 
-    public function search($string, $options = null)
+
+    public function findByParent($string,$id_parent, $lang = null, $page,$numberPage)
     {
-        $fields = $this->getTableFieldsCleanData();
-        $likeField = array();
-        /** @var $fields array config options */
-        foreach($fields as $field){
-            $likeField[] =  new Predicate\Like($field, '%'.$string.'%');
+        $where = array();
+
+        if($string){
+
+            $fields = $this->getTableFieldsCleanData();
+            $likeField = array();
+            /** @var $fields array config options */
+            foreach($fields as $field){
+                $likeField[] =  new Predicate\Like($field, '%'.$string.'%');
+            }
+            $where = array(new Predicate\PredicateSet($likeField,Predicate\PredicateSet::OP_OR));
+
+        }else{
+
+            if($this->KeyIdParent){
+                $where = array($this->KeyIdParent => $id_parent);
+            }
+            if($this->KeyLang and $lang) {
+                $where += array( $this->KeyLang => $lang);
+            }
         }
-        $like = new Predicate\PredicateSet($likeField,Predicate\PredicateSet::OP_OR);
-        $this->where(array($like));
+
+        $this->where($where);
         $this->toArray();
         $this->Order($this->getOptionsOrder());
-        return $this->page();
+
+        $paginator = $this->page();
+
+        $paginator->setItemCountPerPage($numberPage);
+        $paginator->setCurrentPageNumber($page);
+
+        return $paginator;
     }
+
+
 
     public function newOrder($Order, $n, $options = null)
     {
@@ -32,32 +56,5 @@ class IndexMapper extends AbstractMapper implements Interfaces\IndexMapperInterf
             $result = $this->onUpdate($data,array($this->KeyId => $id));
         }
         return $result;
-    }
-
-    public function findByParent($id_parent, $lang = null, $page,$numberPage)
-    {
-
-        $where = array();
-        if($this->KeyIdParent){
-            $where = array($this->KeyIdParent => $id_parent);
-        }
-        if($this->KeyLang and $lang) {
-            $where += array( $this->KeyLang => $lang);
-        }
-
-
-        $this->where($where);
-        $this->toArray();
-        $this->Order($this->getOptionsOrder());
-
-
-
-
-        $paginator = $this->page();
-
-        $paginator->setItemCountPerPage($numberPage);
-        $paginator->setCurrentPageNumber($page);
-
-        return $paginator;
     }
 }

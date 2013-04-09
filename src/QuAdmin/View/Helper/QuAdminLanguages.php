@@ -39,7 +39,7 @@ class QuAdminLanguages extends AbstractHelper
             foreach( $mHelp->languages() as $key => $language ){
                 $menu .= '
             <li>
-                <a href="'.$this->view->url($route,array('lang'=>$key,'action'=>$action,'id'=>$id)).'" style="margin:3px 3px 0 0;" class="btn btn-inverse'.$this->Active($key,$lang,' active').'">
+                <a href="'.$this->view->url($route,array('lang'=>$key,'action'=>$action,'id'=>$id)).'" style="margin:3px 3px 0 0;" class="btn'.$this->Active($key,$lang,' active').'">
                     <i class="icos-flag"></i><span>'.$language.'</span>
                 </a>
 

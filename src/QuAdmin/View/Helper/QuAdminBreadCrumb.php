@@ -33,6 +33,8 @@ class QuAdminBreadCrumb extends AbstractHelper
         $menu = '';
         $count = 0;
 
+        $keys = $options->getTableKeyFields();
+
         if(!count($breadCrumb))
         {
             $menu .= '
@@ -46,7 +48,7 @@ class QuAdminBreadCrumb extends AbstractHelper
             {
                 $count++;
 
-               if(isset($link['id_parent'])){
+               if(isset($link[@$keys['KeyIdParent']])){
                     $idParent =  $link['id'];
                }else{
                    $idParent  = 0;

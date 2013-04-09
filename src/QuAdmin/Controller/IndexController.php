@@ -17,7 +17,7 @@ class IndexController extends AbstractController
         $PagOptions = $modelIndex->getOptionsPaginator();
         $this->setPage($PagOptions['p']);
         $this->setNumberPage($PagOptions['n']);
-        $model = $this->getModelIndex()->findByParent($this->getId(),$this->getLang(),$this->getPage(),$this->getNumberPage());
+        $model = $this->getModelIndex()->findByParent(null,$this->getId(),$this->getLang(),$this->getPage(),$this->getNumberPage());
 
         return  array(
             'id'            => $this->getId(),

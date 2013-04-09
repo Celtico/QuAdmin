@@ -1,15 +1,20 @@
 
 <form action="<?php echo $this->url($route,array('lang'=>$this->lang,'action'=>'delete','id'=>$id))?>" method="post" id="form">
 
-    <div class="nav-actions">
-        <div class="title-nav">
-            Delete records
-        </div>
-        <div class="buttons-nav">
-            <input class="btn  floatR"  data-icon="&#xe0c8;" style="margin:3px 3px 0 0;"   value="Delete" name="delete" type="submit">
-            <input class="btn  floatR"  style="margin:3px 3px 0 0;"    value="Cançelar" name="cancel"  type="submit">
+
+    <div class="nav-actions-absolute">
+        <div class="nav-actions">
+            <div class="title-nav">
+                Delete records
+            </div>
+            <div class="buttons-nav">
+                <input class="btn  btn-danger"  data-icon="&#xe0c8;" style="margin:3px 3px 0 0;"   value="Delete" name="delete" type="submit">
+                <input class="btn  btn-inverse"  style="margin:3px 3px 0 0;"    value="Cançelar" name="cancel"  type="submit">
+            </div>
+            <div class="clearfix"></div>
         </div>
     </div>
+    <div class="nav-actions-height"></div>
 
     <div class="form row-fluid">
         <div class="span12 fromIn">

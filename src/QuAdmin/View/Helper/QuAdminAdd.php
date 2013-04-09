@@ -25,15 +25,15 @@ class QuAdminAdd extends AbstractHelper
 
             $url = $this->view->url($route, array('action'=>'add','id'=>$id,'lang'=>$lang));
             $btn = '
-            <a href="'.$url.'" title="Add" class="btn" style="margin:3px 3px 0 0;"> Add </a>
+            <a href="'.$url.'" title="Add" class="btn btn-inverse" style="margin:3px 3px 0 0;"> Add </a>
             ';
 
         }else{
 
             $btn = '
-            <input class="btn"  data-icon="&#xe0c8;" style="margin:3px 3px 0 0;" value="Save" name="save" type="submit">
-            <input class="btn"  style="margin:3px 3px 0 0;" value="Save & Close" name="saveandclose" type="submit">
             <input class="btn"  style="margin:3px 3px 0 0;" value="Close"  name="close" type="submit">
+            <input class="btn btn-success"  data-icon="&#xe0c8;" style="margin:3px 3px 0 0;" value="Save" name="save" type="submit">
+            <input class="btn btn-inverse"  style="margin:3px 3px 0 0;" value="Save & Close" name="saveandclose" type="submit">
             ';
         }
 

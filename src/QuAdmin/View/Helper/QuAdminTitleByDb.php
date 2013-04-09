@@ -21,12 +21,28 @@ class QuAdminTitleByDb extends AbstractHelper
         $this->serviceLocator = $serviceLocator;
     }
 
-    public function __invoke($options){
+    public function __invoke($options,$key,$route){
 
         $mapperHelper = $this->serviceLocator->get('qu_admin_model_helper');
         $mapperHelper->setQuAdminModelOptions($options);
-        $title = $mapperHelper->title();
-        return '<div class="title-nav">'.$title['title'].'</div>';
+        $endBreadCrumb = $mapperHelper->endBreadCrumb();
 
+        if($endBreadCrumb['level']){
+
+            return '
+            <div class="title-nav">
+                <a href="'.$this->view->url($route, array('action'=>'index','id'=>@$endBreadCrumb[@$key['IdParent']])).'">
+                    <span class="iconb" data-icon="&#xe032;"></span>'
+                    .$endBreadCrumb['title'].
+                '</a>
+            </div>';
+
+        }else{
+
+            return '
+            <div class="title-nav">'
+                .$endBreadCrumb['title'].
+            '</div>';
+        }
     }
 }

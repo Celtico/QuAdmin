@@ -147,20 +147,22 @@
                     <?php } ?>
 
                     <td class="tableActs">
-                        <div class="btn-group dropup">
-                            <button class="btn btn-small css-dropdown" data-toggle="dropdown">
-                                <span class="icon-cog"></span>
+                        <div class="pagination-centered ">
+                       <div class="btn-group dropup">
+                            <button class="btn css-dropdown" data-toggle="dropdown">
+                                <span class="iconb" data-icon="&#xe04d;"></span>
                             </button>
                             <ul class="dropdown-menu pull-right">
                                 <?php echo $qu_admin_lang_nav_table->getNavMenuLi(); ?>
                                 <li><a href="<?php echo $this->url($route,array('lang'=>$lang,'action'=>'duplicate','id'=>$list[$key['IdParent']],'id_parent'=>$list[$key['Id']]));?>"><span class="icon-copy"></span>Duplicate</a></li>
                                 <li><a href="<?php echo $this->url($route,array('lang'=>$lang,'action'=>'delete','id'=>$list[$key['IdParent']],'id_parent'=>$list[$key['Id']]));?>"><span class="icon-remove-2"></span>Delete</a></li>
                             </ul>
-
+                       </div>
                             <a href="<?php echo $this->url($route,array('lang'=>$lang,'action'=>'edit', 'id' => $id_list ));?>" class="btn btn-small" title="Edit"><span class="iconb" data-icon="&#xe1db;"></span></a>
                             <?php if($options->getLinkerParent()){ ?>
                                 <a href="<?php echo $this->url($route,array('lang'=>$lang,'action'=>'add','id' => $id_list ));?>" class="btn btn-small" title="Add"><span class="iconb" data-icon="&#xe14a;"></span></a>
                             <?php } ?>
+
                         </div>
 
                     </td>
@@ -171,14 +173,6 @@
 </form>
 <? if(isset($ajax)){ ?>
     <script type="text/javascript">
-        $('table').dataTable({
-            "bPaginate": false,
-            "bLengthChange": false,
-            "bFilter": false,
-            "bSort": true,
-            "bInfo": false,
-            "bAutoWidth": false
-        });
         $("select").chosen({width:"95%"});
     </script>
 <? } ?>
@@ -229,7 +223,7 @@
         });
     }
 
-    // Sort
+
     Sort();
     function Sort(){
         var nPage = '&n=' + $('#checkAll').find('tbody tr').attr('char') + '&page=' + Page + '&npp=' + NumPerPage ;
@@ -251,22 +245,18 @@
             start: function(e, ui){
                 ui.placeholder.height(ui.item.height()+1);
             },
-            update:function (e) {
+
+            stop:function (e) {
+
                 var order = $('#checkAll').find('tbody').sortable('serialize');
+
                 $('.headLoad').css('display','block');
-
-                $.ajax({
-                    url: UrlAdmin + "?" + order + nPage,
-                    cache: true,
-                    dataType: "html",
-                    success: function(data) {
-                        $("#ajax").val(data);
-                        $('.headLoad').css('display','none');
-                        ajax.find('select').uniform();
-                        ajax.find('input:checkbox').uniform();
-                    }
+                ajax.load( UrlAdmin + "?" + order + nPage, function(){
+                    $('.headLoad').css('display','none');
+                    ajax.find('select').uniform();
+                    ajax.find('input:checkbox').uniform();
+                    initTable();
                 });
-
             }
         }).disableSelection();
     }
