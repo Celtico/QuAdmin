@@ -38,11 +38,12 @@
                 <td  width="47"><div>Status<span></span></div></td>
             <?php } ?>
 
+            <td width="110">Actions</td>
+
             <?php if($options->getLinkerParent()){  $cols += 1; ?>
-                <td  width="45"><div>Pa.<span></span></div></td>
+                <td  width="55"><div>Children<span></span></div></td>
             <?php } ?>
 
-            <td width="110">Actions</td>
         </tr>
         </thead>
         <tfoot>
@@ -140,11 +141,6 @@
                         </td>
                     <?php } ?>
 
-                    <?php if($options->getLinkerParent()){ ?>
-                        <td class="center">
-                            <?php echo $qu_admin_lang_nav_table->getCountChild();?>
-                        </td>
-                    <?php } ?>
 
                     <td class="tableActs">
                         <div class="pagination-centered ">
@@ -166,6 +162,13 @@
                         </div>
 
                     </td>
+
+                    <?php if($options->getLinkerParent()){ ?>
+                        <td class="center td-child">
+                          <?php echo $qu_admin_lang_nav_table->getCountChild();?>
+                        </td>
+                    <?php } ?>
+
                 </tr>
             <? } } ?>
         </tbody>

@@ -97,7 +97,7 @@ class QuAdminLangNavTable extends AbstractHelper
         if($count != 0)
         {
             $count_child= '
-            <a href="'.$this->view->url($route,array('lang'=>$lang,'action'=>'index','id' => $id)).'" class="count-label label label-info">
+            <a href="'.$this->view->url($route,array('lang'=>$lang,'action'=>'index','id' => $id)).'" class="btn btn-success">
                '.$count.'
             </a>';
         }
