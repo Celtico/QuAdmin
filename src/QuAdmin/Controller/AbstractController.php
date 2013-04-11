@@ -7,8 +7,10 @@
 
 namespace QuAdmin\Controller;
 
+use Zend\View\Model\ViewModel;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Filter\Word\CamelCaseToDash as CamelCaseToDashFilter;
+
 
 class AbstractController extends AbstractActionController
 {
@@ -87,6 +89,8 @@ class AbstractController extends AbstractActionController
         }
         return $this->newOrder;
     }
+
+
 
     public function setPageOrder($pageOrder)
     {
@@ -385,6 +389,8 @@ class AbstractController extends AbstractActionController
         return $this->post;
     }
 
+
+
     protected function setRoute($route)
     {
         $this->route = $route;
@@ -448,12 +454,16 @@ class AbstractController extends AbstractActionController
     }
 
 
+
     /* INSERT QuAdminModelOptions  */
 
 
 
     public function getQuAdminModelOptions()
     {
+        if(!$this->quAdminModelOptions){
+            $this->setQuAdminModelOptions($this->Service('qu_admin_service')->getQuAdminModelOptions());
+        }
         return $this->quAdminModelOptions;
     }
     public function setQuAdminModelOptions($quAdminModelOptions)

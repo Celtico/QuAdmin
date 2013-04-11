@@ -13,11 +13,14 @@ class IndexController extends AbstractController
 
     public function variables()
     {
+
         $modelIndex = $this->getModelIndex()->setQuAdminModelOptions($this->getOptions());
         $PagOptions = $modelIndex->getOptionsPaginator();
         $this->setPage($PagOptions['p']);
         $this->setNumberPage($PagOptions['n']);
         $model = $this->getModelIndex()->findByParent(null,$this->getId(),$this->getLang(),$this->getPage(),$this->getNumberPage());
+
+        $this->getEventManager()->trigger(__FUNCTION__, $this, array('model' =>  $model));
 
         return  array(
             'id'            => $this->getId(),

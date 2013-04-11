@@ -36,12 +36,7 @@ class IndexMapper extends AbstractMapper implements Interfaces\IndexMapperInterf
         $this->toArray();
         $this->Order($this->getOptionsOrder());
 
-        $paginator = $this->page();
-
-        $paginator->setItemCountPerPage($numberPage);
-        $paginator->setCurrentPageNumber($page);
-
-        return $paginator;
+        return $this->page($numberPage,$page);
     }
 
 

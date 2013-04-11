@@ -6,11 +6,15 @@
  */
 namespace QuAdmin\Controller;
 
+use QuAdmin\Object\Object;
 use QuAdmin\Util;
+
 use Zend\View\Model\ViewModel;
+
 
 class AddController extends AbstractController
 {
+
 
     public function variables()
     {
@@ -22,7 +26,8 @@ class AddController extends AbstractController
             'options'       => $this->getOptions(),
             'id_parent'     => $this->getIdParent(),
             'key'           => $this->key,
-            'PathTemplateRender' => $this->getPathTemplateRender()
+            'PathTemplateRender' => $this->getPathTemplateRender(),
+            'controller'=>$this
         );
 
 
@@ -40,6 +45,14 @@ class AddController extends AbstractController
         if($this->getIsPost()){
             $dataPost = $this->getPost();
             if($dataPost['close'] != ''){
+
+                $this->getEventManager()->trigger(__FUNCTION__, $this, array(
+                    'close' => true,
+                    'model' => $this->getOptions()->getTableName(),
+                    'options' => $this->getOptions()->getDocuments(),
+                    'service' =>  $this->Service('plupload_service')
+                ));
+
                 $this->getMessage(array('type' =>$this->getTranslate('AddCloseClassType'),'message' =>$this->getTranslate('AddCloseMessage')));
                 return $this->getToRoute($this->getRoute(),array('id' => @$dataController['id_parent'],'lang'=>$this->getLang()));
             }
@@ -59,7 +72,14 @@ class AddController extends AbstractController
             $redirect_id = false;
 
             if(!isset($DataForm['error'])){
+
                $redirect_id = $this->getModelAdd()->insert($DataForm);
+
+               $this->getEventManager()->trigger(__FUNCTION__, $this, array(
+                   'id' => $redirect_id,
+                   'model' => $this->getOptions()->getTableName(),
+                   'service' =>  $this->Service('plupload_service')
+               ));
             }
 
             if($redirect_id){
@@ -88,4 +108,7 @@ class AddController extends AbstractController
         return  $model->setVariables($this->getVariables());
 
     }
+
+
+
 }

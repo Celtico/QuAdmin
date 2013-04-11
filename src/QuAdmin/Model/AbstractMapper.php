@@ -3,8 +3,10 @@
 namespace QuAdmin\Model;
 
 use QuAdmin\Db\Adapter\DbAdapterAwareInterface;
+use QuAdmin\Object\Object;
+use QuAdmin\Object\Mapper;
+
 use Zend\Db\ResultSet\HydratingResultSet;
-use Zend\Db\ResultSet\ResultSetInterface;
 use Zend\Db\Sql\Predicate;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Select;
@@ -15,6 +17,9 @@ use Zend\Paginator\Paginator;
 use Zend\Paginator\Adapter\DbSelect;
 
 
+/**
+ * @property mixed hydrator
+ */
 class AbstractMapper  implements DbAdapterAwareInterface
 {
 
@@ -129,18 +134,70 @@ class AbstractMapper  implements DbAdapterAwareInterface
     {
         $select = $this->selectByWhereByOrder($TableName);
         $stmt   = $this->sql()->prepareStatementForSqlObject($select);
-        return  $this->resultSet()->initialize($stmt->execute());
+        $result = $this->resultSet()->initialize($stmt->execute());
+
+        return  $result;
     }
     protected function row($TableName = null)
     {
         $select = $this->selectByWhereByOrder($TableName);
         $stmt = $this->sql()->prepareStatementForSqlObject($select);
-        return $this->resultSet()->initialize($stmt->execute())->current();
+        $result = $this->resultSet()->initialize($stmt->execute())->current();
+
+        return $result;
     }
-    protected function page($TableName = null)
+
+
+
+    protected function mapperAll($TableName = null)
     {
         $select = $this->selectByWhereByOrder($TableName);
-        return new Paginator(new DbSelect($select, $this->getDbAdapter(), $this->resultSet()));
+        $stmt   = $this->sql()->prepareStatementForSqlObject($select);
+        $result = $this->resultSet()->initialize($stmt->execute());
+        $return = array();
+        foreach ($result as $row) {
+            $Mapper = Mapper::accumulateByMap($row,$row,array_flip($this->getTableKeyFields()));
+                $return[] = $this->entity()->addData($Mapper);
+        }
+        return $return;
+
+    }
+
+    protected function mapperRow($TableName = null)
+    {
+        $select = $this->selectByWhereByOrder($TableName);
+        $stmt   = $this->sql()->prepareStatementForSqlObject($select);
+        $row    = $this->resultSet()->initialize($stmt->execute())->current();
+        $Mapper = Mapper::accumulateByMap($row,$row,array_flip($this->getTableKeyFields()));
+        return $this->entity()->addData($Mapper);
+    }
+
+
+    protected function mapperPage($numberPage,$page,$TableName = null)
+    {
+        $select = $this->selectByWhereByOrder($TableName);
+        $result = new Paginator(new DbSelect($select, $this->getDbAdapter(), $this->resultSet()));
+
+        $result->setItemCountPerPage($numberPage);
+        $result->setCurrentPageNumber($page);
+
+        $return = array();
+        foreach ($result as $row) {
+            $Mapper   = Mapper::accumulateByMap($row,$row,array_flip($this->getTableKeyFields()));
+            $return[] = $this->entity()->addData($Mapper);
+        }
+        return $return;
+
+    }
+
+    protected function page($numberPage,$page,$TableName = null)
+    {
+        $select = $this->selectByWhereByOrder($TableName);
+        $paginator = new Paginator(new DbSelect($select, $this->getDbAdapter(), $this->resultSet()));
+        $paginator->setItemCountPerPage($numberPage);
+        $paginator->setCurrentPageNumber($page);
+        return $paginator;
+
     }
 
     protected function onInsert($data)
@@ -321,7 +378,7 @@ class AbstractMapper  implements DbAdapterAwareInterface
     public function getTableKeyFields()
     {
         if (!$this->tableKeyFields) {
-            $this->setTableKeyFields($this->getQuAdminModelOptions()->getTableKeyFields());
+          $this->setTableKeyFields($this->getQuAdminModelOptions()->getTableKeyFields());
         }
         return $this->tableKeyFields;
     }

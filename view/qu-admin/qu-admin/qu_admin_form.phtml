@@ -4,6 +4,7 @@
     $form = $this->form;
     $form->setAttribute('action',$this->url($route ,array('action' => $action,'id'=>$id,'lang'=>$lang)));
     $form->setAttribute('enctype', 'multipart/form-data');
+    $form->setAttribute('id', $action);
     $form->prepare();
     echo $this->form()->openTag($form) . PHP_EOL;
     echo $this->formElement($form->get('csrf'));
@@ -116,13 +117,15 @@
                     <legend>
                         <span>Multiple files uploader</span>
                     </legend>
-                    <div class="PluploadLoad"><?=$this->PluploadHelpLoad($id,$options->getTableName())?></div>
+                    <div class="PluploadLoad"><?=$this->QuPluploadHelpLoad($id,$route,$options)?></div>
                     <div class="clear"></div>
                     <div id="uploader"></div>
-                    <?=$this->PluploadHelp('uploader',$id,$options->getTableName())?>
+                    <?=$this->QuPluploadHelp('uploader',$id,$options->getTableName(),$route)?>
                 </fieldset>
             <? } ?>
             <? /// FILE UPLOAD ///////////// ///////////// ?>
+
+
 
         </div>
     </div>

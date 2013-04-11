@@ -8,6 +8,7 @@
 namespace QuAdmin;
 
 use QuAdmin\Db\Adapter\DbAdapterAwareInterface;
+use QuPlupload\Service\PluploadService;
 use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\I18n\Translator\Translator;
@@ -29,9 +30,10 @@ class Module implements BootstrapListenerInterface
     {
         $app        = $e->getApplication();
         $sm         = $app->getServiceManager();
-        $strategy   = $sm->get('qu_admin_strategy');
-        $app->getEventManager()->attach($strategy);
+        $em         = $app->getEventManager();
 
+        $em->attach($sm->get('qu_admin_strategy'));
+        $em->attach($sm->get('qu_plupload_strategy'));
     }
 
 
@@ -57,6 +59,7 @@ class Module implements BootstrapListenerInterface
                 'qu_admin_controller_edit'         => 'QuAdmin\Controller\EditController',
                 'qu_admin_controller_index'        => 'QuAdmin\Controller\IndexController',
                 'qu_admin_controller_index_ajax'   => 'QuAdmin\Controller\IndexAjaxController',
+                'qu_admin_controller_upload_ajax'  => 'QuAdmin\Controller\UploadAjaxController',
 
                 'qu_admin_model_add'          => 'QuAdmin\Model\AddMapper',
                 'qu_admin_model_delete'       => 'QuAdmin\Model\DeleteMapper',
@@ -68,13 +71,17 @@ class Module implements BootstrapListenerInterface
                 'qu_admin_model_languages'    => 'QuAdmin\Model\LanguagesMapper',
                 'qu_admin_model_form'         => 'QuAdmin\Model\FormMapper',
 
-
                 'qu_admin_service'              => 'QuAdmin\Service\QuAdminService',
                 'qu_admin_strategy'             => 'QuAdmin\Strategy\QuAdminStrategy',
                 'qu_admin_form'                 => 'QuAdmin\Form\QuForm',
             ),
             'factories' => array(
                 'qu_admin_navigation' => 'QuAdmin\Navigation\QuAdminNavigation',
+                'qu_plupload_strategy' => function($sl) {
+                   $qu_plupload_strategy =  new \QuAdmin\Strategy\QuPluploadStrategy;
+                    $qu_plupload_strategy->setServiceLocator($sl);
+                    return $qu_plupload_strategy;
+                },
             ),
         );
     }
@@ -123,6 +130,20 @@ class Module implements BootstrapListenerInterface
                 },
                 'qu_admin_map' => function ($sm) {
                     return new View\Helper\QuAdminMap($sm->getServiceLocator());
+                },
+
+                'QuPluploadHelp' => function ($sm) {
+                    $config = $sm->getServiceLocator()->get('config');
+                    return new View\Helper\QuPluploadHelp(
+                        isset($config['QuConfig']['QuPlupload']) ? $config['QuConfig']['QuPlupload'] : array()
+                    );
+                },
+                'QuPluploadHelpLoad' => function ($sm) {
+                    $sm = $sm->getServiceLocator();
+                    $plupload_service = $sm->get('plupload_service'); $config = $sm->get('config');
+                    return new View\Helper\QuPluploadHelpLoad($plupload_service,
+                        isset($config['QuConfig']['QuPlupload']) ? $config['QuConfig']['QuPlupload'] : array()
+                    );
                 },
 
             ),

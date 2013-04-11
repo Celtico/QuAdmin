@@ -20,6 +20,24 @@ class QuAdminService implements ServiceLocatorAwareInterface
     protected $delete;
     protected $duplicate;
     protected $ajax;
+    protected $quAdminModelOptions;
+    protected $modelAdd;
+    protected $upload;
+
+    public function getUpload()
+    {
+        if (!$this->upload) {
+            $this->setUpload(
+                $this->getServiceLocator()->get('qu_admin_controller_upload_ajax')
+            );
+        }
+        return $this->upload;
+    }
+    public function setUpload($upload)
+    {
+        $this->upload = $upload;
+        return $this;
+    }
 
     public function getEdit()
     {
@@ -128,6 +146,31 @@ class QuAdminService implements ServiceLocatorAwareInterface
             echo 'error security'; die();
         }
 
+    }
+
+    public  function getModelAdd()
+    {
+        if(!$this->modelAdd){
+            $this->setModelAdd(
+                $this->serviceLocator->get('qu_admin_model_add')
+            );
+        }
+        return $this->modelAdd;
+    }
+
+    public function setModelAdd($modelAdd)
+    {
+        $this->modelAdd = $modelAdd;
+    }
+
+    public function getQuAdminModelOptions()
+    {
+        return $this->quAdminModelOptions;
+    }
+    public function setQuAdminModelOptions($quAdminModelOptions)
+    {
+        $this->quAdminModelOptions = $quAdminModelOptions;
+        return $this;
     }
 
     public function getServiceLocator()

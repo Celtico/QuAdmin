@@ -10,7 +10,7 @@ use Zend\View\Model\ViewModel;
 
 class EditController extends AbstractController
 {
-
+    protected $events = null;
     protected $quProsesDataForm;
 
     public function variables()
@@ -25,6 +25,7 @@ class EditController extends AbstractController
             'key'           => $this->key,
             'PathTemplateRender' => $this->getPathTemplateRender()
         );
+
 
 
         $this->getModelEdit()->setQuAdminModelOptions($this->getOptions());
@@ -109,4 +110,8 @@ class EditController extends AbstractController
             return 0;
         }
     }
+
+
+
+
 }

@@ -35,18 +35,16 @@ class QuAdminDocuments extends AbstractHelper
     public function __invoke($id,$options)
     {
         $plupload = $this->serviceLocator->get('plupload_service');
-        $config   = $this->serviceLocator->get('config');
-        $pluploadConfig = $config['QuConfig']['QuPlupload'];
-
+        $docs = $options->getDocuments();
         $list    = '';
-        $listDb  = $plupload->setPluploadIdAndModelList($id,$options);
+        $listDb  = $plupload->setPluploadIdAndModelList($id,$options->getTableName());
         $listDb  = $listDb->getPluploadIdAndModelList();
         if(count($listDb) > 0){
         foreach($listDb as $a){}
 
-            $file      = $pluploadConfig['DirUploadAbsolute'] . '/' . $a->getName();
-            $url       = $pluploadConfig['DirUpload'] . '/'  . $a->getName();
-            $urlSmall  = $pluploadConfig['DirUpload'] . '/s' . $a->getName();
+            $file      = $docs['DirUploadAbsolute'] . '/' . $a->getName();
+            $url       = $docs['DirUpload'] . '/'  . $a->getName();
+            $urlSmall  = $docs['DirUpload'] . '/s' . $a->getName();
             $ex        = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
             if(is_file($file)){

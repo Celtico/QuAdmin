@@ -91,7 +91,7 @@
 
                     <?php if($options->getDocuments()){  ?>
                         <td>
-                            <?php echo $this->qu_admin_documents($list[$key['Id']],$options->getTableName()); ?>
+                            <?php echo $this->qu_admin_documents($list[$key['Id']],$options); ?>
                         </td>
                     <?php } ?>
 
@@ -113,7 +113,7 @@
 
                     <?php if($key['Modified']){ ?>
                         <td class="center">
-                            <?php echo strftime("%d/%m/%Y", strtotime($list[$key['Modified']]));?>
+                            <?php  echo strftime("%d/%m/%Y", strtotime($list[$key['Modified']]));?>
                         </td>
                     <?php } ?>
 
