@@ -45,13 +45,13 @@ class QuForm extends Form
         );
         AbstractValidator::setDefaultTranslator($translator);
 
-        foreach($this->optionsForm as $options){
-            $this->addForm($data,$options,$model,$sl);
+        foreach($this->optionsForm as $forms){
+            $this->addForm($forms,$data,$model,$sl);
         }
         return $this;
     }
 
-    public function addForm($data,$forms,$model,$sl)
+    public function addForm($forms,$data,$model,$sl)
     {
         $factory = new InputFactory();
 
@@ -71,7 +71,6 @@ class QuForm extends Form
         unset($forms['serialized']);
         unset($forms['fieldset']);
 
-
         if(isset($forms['database']))
         {
             $modelOptions = $sl->get($forms['database']['model']);
@@ -88,7 +87,7 @@ class QuForm extends Form
 
         }else{
 
-            foreach($forms as $key => $form)
+            foreach($forms as $form)
             {
                 if(isset($form['form']))
                 {
@@ -111,7 +110,7 @@ class QuForm extends Form
 
         $subForm->populateValues($data);
         $this->subForm = $subForm;
-        return $this->subForm;
+        return $this;
     }
 
     public function prosesDataForm($dataPost)
@@ -185,14 +184,12 @@ class QuForm extends Form
             $dataPost[$Key['key_name']] = Util::urlFilter($dataPost[$Key['key_name']]);
         }
 
-
-
         return  $dataPost;
     }
 
     public function setOptionsForm($optionsForm)
     {
-        $this->options = $optionsForm;
+        $this->options    = $optionsForm;
         $this->optionsForm = $optionsForm->getOptionsForm();
     }
     public function getOptions()
