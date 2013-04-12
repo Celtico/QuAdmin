@@ -79,7 +79,7 @@ class Module implements BootstrapListenerInterface
                 'qu_admin_navigation' => 'QuAdmin\Navigation\QuAdminNavigation',
                 'qu_plupload_strategy' => function($sl) {
                    $qu_plupload_strategy =  new \QuAdmin\Strategy\QuPluploadStrategy;
-                    $qu_plupload_strategy->setServiceLocator($sl);
+                    $qu_plupload_strategy->setServiceLocator($sl->get('plupload_service'));
                     return $qu_plupload_strategy;
                 },
             ),

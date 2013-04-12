@@ -46,15 +46,11 @@ class AddController extends AbstractController
             $dataPost = $this->getPost();
             if($dataPost['close'] != ''){
 
-                $this->getEventManager()->trigger(__FUNCTION__, $this, array(
-                    'close' => true,
-                    'model' => $this->getOptions()->getTableName(),
-                    'options' => $this->getOptions()->getDocuments(),
-                    'service' =>  $this->Service('plupload_service')
-                ));
+                $this->getEventManager()->trigger(__FUNCTION__.'.pre', $this, array( 'id' => $this->getId(), 'options' => $this->getOptions() ) );
 
                 $this->getMessage(array('type' =>$this->getTranslate('AddCloseClassType'),'message' =>$this->getTranslate('AddCloseMessage')));
                 return $this->getToRoute($this->getRoute(),array('id' => @$dataController['id_parent'],'lang'=>$this->getLang()));
+
             }
             /**
              * Process by Data
@@ -74,12 +70,7 @@ class AddController extends AbstractController
             if(!isset($DataForm['error'])){
 
                $redirect_id = $this->getModelAdd()->insert($DataForm);
-
-               $this->getEventManager()->trigger(__FUNCTION__, $this, array(
-                   'id' => $redirect_id,
-                   'model' => $this->getOptions()->getTableName(),
-                   'service' =>  $this->Service('plupload_service')
-               ));
+               $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array( 'id' => $redirect_id, 'options' => $this->getOptions() ) );
             }
 
             if($redirect_id){
@@ -92,6 +83,7 @@ class AddController extends AbstractController
                     return $this->getToRoute($this->getRoute(),array( 'id' => $this->getId(), 'lang'=>$this->getLang()));
                 }
             }
+
         }
         return $dataController;
     }

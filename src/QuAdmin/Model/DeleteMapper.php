@@ -2,8 +2,12 @@
 
 namespace QuAdmin\Model;
 
+use Zend\EventManager\EventManager;
+
 class DeleteMapper extends AbstractMapper implements Interfaces\DeleteMapperInterface
 {
+
+    public $events;
 
     /**
      * Get checkRow
@@ -39,11 +43,23 @@ class DeleteMapper extends AbstractMapper implements Interfaces\DeleteMapperInte
         $this->removeById($id);
     }
 
+    /**
+     * @param $id
+     * @return \Zend\Db\Adapter\Driver\ResultInterface
+     */
     public function removeById($id)
     {
-        return $this->onRemove(array($this->KeyId => $id));
+        $remove = $this->onRemove(array($this->KeyId => $id));
+
+        $this->postEventRemove($id);
+
+        return $remove;
     }
 
+    /**
+     * @param $id
+     * @return bool|\Zend\Db\ResultSet\ResultSet
+     */
     public function findByParentRemove($id)
     {
         if($this->KeyIdParent){
@@ -54,4 +70,27 @@ class DeleteMapper extends AbstractMapper implements Interfaces\DeleteMapperInte
         return false;
     }
 
+    /**
+     * @param $id
+     */
+    public function postEventRemove($id)
+    {
+        //print_r($this->events()->getIdentifiers());
+        $this->events()->trigger(__FUNCTION__, $this, array(
+            'id' => $id,
+            'options' => $this->getQuAdminModelOptions(),
+        ));
+    }
+
+    /**
+     * @return EventManager
+     */
+    public function events()
+    {
+        if (!$this->events) {
+            $this->events = new EventManager(__CLASS__);
+        }
+
+        return $this->events;
+    }
 }

@@ -11,7 +11,7 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Http\Response as HttpResponse;
 use QuPlupload\Options\PluploadOptions;
-
+use QuPlupload\Service\PluploadService;
 
 /**
  * Class QuAdminStrategy
@@ -19,6 +19,7 @@ use QuPlupload\Options\PluploadOptions;
  */
 class QuPluploadStrategy implements ListenerAggregateInterface
 {
+
     protected $options;
     protected $listeners = array();
     protected $serviceLocator;
@@ -27,39 +28,69 @@ class QuPluploadStrategy implements ListenerAggregateInterface
     public function attach(EventManagerInterface $events)
     {
 
-       $event = $events->getSharedManager();
-       $event->attach('QuAdmin', 'variables', function($e){
+       $event          = $events->getSharedManager();
 
-           $params = $e->getParams();
+       $event->attach('QuAdmin\Controller\AddController', 'variables.pre', function($e) {
 
-           if(isset($params['id'])){
-               $plupload_service =  $params['service'];
-               $id    = $params['id'];
-               $model = $params['model'];
-               $plupload_service->pluploadUpdate($id,$model);
-           }
+           $params    = $e->getParams();
 
-           if(isset($params['close'])){
+           $id_parent = $params['id'];
+           $options   = $params['options'];
 
-               $plupload_service =  $params['service'];
-               $model = $params['model'];
-               $docs  =  $params['options'];
+           $docs      = $options->getDocuments();
+           $model     = $options->getTableName();
 
-               $op = new PluploadOptions;
-               $op->setTableName($docs['tableName']);
-               $op->setDirUploadAbsolute($docs['DirUploadAbsolute']);
-               $op->setThumbResize($docs['ThumbResize']);
-               $op->setResize($docs['Resize']);
-               $op->setDirUpload($docs['DirUpload']);
+           $op = new PluploadOptions;
+           $op->setTableName($docs['tableName']);
+           $op->setDirUploadAbsolute($docs['DirUploadAbsolute']);
+           $op->setThumbResize($docs['ThumbResize']);
+           $op->setResize($docs['Resize']);
+           $op->setDirUpload($docs['DirUpload']);
 
-               $plupload_service->setPluploadOptions($op);
-               $plupload_service->pluploadRemoveAll($model);
-           }
+           $this->serviceLocator->setPluploadOptions($op);
+           $this->serviceLocator->pluploadRemoveAll($model,$id_parent);
 
        }, 1);
 
+        $event->attach('QuAdmin\Controller\AddController', 'variables.post',  function($e)  {
+
+            $params    = $e->getParams();
+
+            $id_parent = $params['id'];
+            $options   = $params['options'];
+
+            $model     = $options->getTableName();
+
+            $this->serviceLocator->pluploadUpdate($model,$id_parent);
+
+        }, 1);
+
+
+        $event->attach('QuAdmin\Model\DeleteMapper', 'postEventRemove', function($e) {
+
+            $params    = $e->getParams();
+
+            $id_parent = $params['id'];
+            $options   = $params['options'];
+
+            $docs      = $options->getDocuments();
+            $model     = $options->getTableName();
+
+            $op = new PluploadOptions;
+            $op->setTableName($docs['tableName']);
+            $op->setDirUploadAbsolute($docs['DirUploadAbsolute']);
+            $op->setThumbResize($docs['ThumbResize']);
+            $op->setResize($docs['Resize']);
+            $op->setDirUpload($docs['DirUpload']);
+
+            $this->serviceLocator->setPluploadOptions($op);
+            $this->serviceLocator->pluploadRemoveAll($model,$id_parent);
+
+        }, 1);
+
 
     }
+
     public function detach(EventManagerInterface $events)
     {
         foreach ($this->listeners as $index => $listener) {
@@ -68,12 +99,6 @@ class QuPluploadStrategy implements ListenerAggregateInterface
             }
         }
     }
-
-    public function inject($e)
-    {
-
-    }
-
 
     public function getServiceLocator()
     {
