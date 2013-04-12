@@ -68,18 +68,9 @@ class AbstractMapper  implements DbAdapterAwareInterface
 
     protected function entity()
     {
-
         $entity =  $this->getEntity();
         $entity =   new $entity;
-
-        if(is_object($entity))
-        {
-           return   $entity;
-
-        } else{
-
-           return  new Object;
-        }
+        return   $entity;
     }
 
     protected function sql()
