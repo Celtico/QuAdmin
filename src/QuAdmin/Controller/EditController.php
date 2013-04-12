@@ -44,7 +44,6 @@ class EditController extends AbstractController
 
             if($dataPost['close'] != '')
             {
-                $this->getMessage(array('type' =>$this->getTranslate('EditCloseClassType'),'message' =>$this->getTranslate('EditCloseMessage')));
                 return $this->getToRoute($this->getRoute(),array('id'=> $this->check($dataDb),'lang'=>$this->getLang()));
             }
             /**

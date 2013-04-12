@@ -31,9 +31,20 @@ class AddController extends AbstractController
         );
 
 
-        $this->getModelAdd()->setQuAdminModelOptions($this->getOptions());
 
+        $this->getModelAdd()->setQuAdminModelOptions($this->getOptions());
         $breadCrumb = $this->getModelAdd()->breadCrumb($this->getId());
+
+        if($breadCrumb->getLevel() == 1){
+
+           // echo $breadCrumb->getLevel();
+
+        }elseif($breadCrumb->getLevel() == 2){
+
+          //  echo $breadCrumb->getLevel();
+
+        }
+
 
         $this->getForm()->setOptionsForm($this->getOptions());
 
@@ -47,8 +58,6 @@ class AddController extends AbstractController
             if($dataPost['close'] != ''){
 
                 $this->getEventManager()->trigger(__FUNCTION__.'.pre', $this, array( 'id' => $this->getId(), 'options' => $this->getOptions() ) );
-
-                $this->getMessage(array('type' =>$this->getTranslate('AddCloseClassType'),'message' =>$this->getTranslate('AddCloseMessage')));
                 return $this->getToRoute($this->getRoute(),array('id' => @$dataController['id_parent'],'lang'=>$this->getLang()));
 
             }

@@ -53,55 +53,58 @@
 
                     }
 
-                    foreach ($FieldSets as $name =>$Element){
-
-                        if($Element->getAttribute('type') == 'select'){
-                            $css = ' searchDrop';
-                        }else{
-                            $css   = false;
-                        }
-
-                        $elemClass = $Element->getAttribute('class');
-                        $elemId    = $Element->getAttribute('id');
-                        $elemGrid  = $Element->getAttribute('span');
-
-                        if($elemClass == 'CkEditor'){
-
-                            echo   '<fieldset class="formBlock"><legend><span>';
-                            echo    $Element->getLabel();
-                            echo   '</span></legend>';
-                            echo   $this->formElement($Element);
-                            echo   $this->formElementErrors($Element).' </fieldset>';
-
-                        }elseif($elemGrid == 'span3'){
-
-                            $grid  = ' <div class="row-fluid"><div class="span3">';
-                            $grid .= $Element->getLabel();
-                            $grid .= ' </div><div class="span9'. $css .'">';
-                            $grid .= $this->formElement($Element);
-                            $grid .= ' </div><label generated="true" class="error">';
-                            $grid .= $this->formElementErrors($Element);
-                            $grid .= ' </label><div class="clear"></div></div>'.' </fieldset>';
-                            $grid3[] =  $grid;
-
-                        }else{
-
-                            echo ' <div class="row-fluid"><div class="span3">';
-                            echo   $Element->getLabel();
-                            echo ' </div><div class="span9'. $css .'">';
-                            echo   $this->formElement($Element);
-                            echo ' <label generated="true" class="error">';
-                            echo   $this->formElementErrors($Element);
-                            echo ' </label></div><div class="clear"></div></div>'.' </fieldset>';
-                        }
-                    }
-
                 } else{
 
-                    $grid  = '<fieldset class="formBlock"><legend><span>';
-                    $grid .= $FieldSets->getLabel();
-                    $grid .= '</span></legend>';
-                    $grid3[] =  $grid;
+                    if($FieldSets->getLabel()){
+
+                        $grid  = '<fieldset class="formBlock"><legend><span>';
+                        $grid .= $FieldSets->getLabel();
+                        $grid .= '</span></legend>';
+                        $grid3[] =  $grid;
+                    }
+                }
+
+                foreach ($FieldSets as $name =>$Element){
+
+                    if($Element->getAttribute('type') == 'select'){
+                        $css = ' searchDrop';
+                    }else{
+                        $css   = false;
+                    }
+
+                    $elemClass = $Element->getAttribute('class');
+                    $elemId    = $Element->getAttribute('id');
+                    $elemGrid  = $Element->getAttribute('span');
+
+                    if($elemClass == 'CkEditor'){
+
+                        echo   '<fieldset class="formBlock"><legend><span>';
+                        echo    $Element->getLabel();
+                        echo   '</span></legend>';
+                        echo   $this->formElement($Element);
+                        echo   $this->formElementErrors($Element).' </fieldset>';
+
+                    }elseif($elemGrid == 'span3'){
+
+                        $grid  = ' <div class="row-fluid"><div class="span3">';
+                        $grid .= $Element->getLabel();
+                        $grid .= ' </div><div class="span9'. $css .'">';
+                        $grid .= $this->formElement($Element);
+                        $grid .= ' </div><label generated="true" class="error">';
+                        $grid .= $this->formElementErrors($Element);
+                        $grid .= ' </label><div class="clear"></div></div>'.' </fieldset>';
+                        $grid3[] =  $grid;
+
+                    }else{
+
+                        echo ' <div class="row-fluid"><div class="span3">';
+                        echo   $Element->getLabel();
+                        echo ' </div><div class="span9'. $css .'">';
+                        echo   $this->formElement($Element);
+                        echo ' <label generated="true" class="error">';
+                        echo   $this->formElementErrors($Element);
+                        echo ' </label></div><div class="clear"></div></div>'.' </fieldset>';
+                    }
                 }
             }
             ?>

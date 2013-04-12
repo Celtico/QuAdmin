@@ -116,17 +116,18 @@ class QuForm extends Form
 
     public function prosesDataForm($dataPost)
     {
-        $dataPostSubForm = $this->dataFilterPost($dataPost);
-        if ($this->subForm->setData($dataPostSubForm)){
-            if ($this->subForm->isValid()){
-                $data = $this->subForm->getData($dataPostSubForm);
-                if(isset($data['password'])){
-                    $bCrypt = new Bcrypt;
-                    $bCrypt->setCost(8);
-                    $data['password'] = $bCrypt->create($data['password']);
-                }
+        if ($this->setData($dataPost))
+        {
+            if ($this->isValid())
+            {
+                $data = $this->getData($dataPost);
+                $data = $this->dataFilterPost($data);
+                $data = $this->prosesPassword($data);
+
                 return  $data;
+
             } else{
+
                 return  array(
                     'error'=>$this->subForm->getMessages(),
                     'filter'=>$this->subForm->filter->getMessages()
@@ -134,6 +135,17 @@ class QuForm extends Form
             }
         }
         return false;
+    }
+
+
+    public function prosesPassword($data)
+    {
+        if(isset($data['password'])){
+            $bCrypt = new Bcrypt;
+            $bCrypt->setCost(8);
+            $data['password'] = $bCrypt->create($data['password']);
+        }
+        return $data;
     }
 
     public function dataFilterPost($dataPost)
