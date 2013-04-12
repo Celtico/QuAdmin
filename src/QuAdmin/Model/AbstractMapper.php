@@ -2,6 +2,8 @@
 
 namespace QuAdmin\Model;
 
+
+
 use QuAdmin\Db\Adapter\DbAdapterAwareInterface;
 use QuAdmin\Object\Object;
 use QuAdmin\Object\Mapper;
@@ -12,6 +14,7 @@ use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Sql;
 use Zend\Db\ResultSet\ResultSet;
+use Zend\Paginator\Adapter\ArrayAdapter;
 use Zend\Stdlib\Hydrator\Reflection as ReflectionHydrator;
 use Zend\Paginator\Paginator;
 use Zend\Paginator\Adapter\DbSelect;
@@ -47,7 +50,7 @@ class AbstractMapper  implements DbAdapterAwareInterface
     public $KeyLang;
     public $KeyName;
     public $KeyTitle;
-    public $KeyIdLangLinker;
+    public $KeyIdLang;
     public $KeyIdAuthor;
     public $KeyDate;
     public $KeyModified;
@@ -65,8 +68,18 @@ class AbstractMapper  implements DbAdapterAwareInterface
 
     protected function entity()
     {
+
         $entity =  $this->getEntity();
-        return  new $entity;
+        $entity =   new $entity;
+
+        if(is_object($entity))
+        {
+           return   $entity;
+
+        } else{
+
+           return  new Object;
+        }
     }
 
     protected function sql()
@@ -176,17 +189,20 @@ class AbstractMapper  implements DbAdapterAwareInterface
     protected function mapperPage($numberPage,$page,$TableName = null)
     {
         $select = $this->selectByWhereByOrder($TableName);
-        $result = new Paginator(new DbSelect($select, $this->getDbAdapter(), $this->resultSet()));
+        $paginator = new Paginator(new DbSelect($select, $this->getDbAdapter(), $this->resultSet()));
 
-        $result->setItemCountPerPage($numberPage);
-        $result->setCurrentPageNumber($page);
 
         $return = array();
-        foreach ($result as $row) {
-            $Mapper   = Mapper::accumulateByMap($row,$row,array_flip($this->getTableKeyFields()));
-            $return[] = $this->entity()->addData($Mapper);
+        foreach ($paginator as $row) {
+          $Mapper   = Mapper::accumulateByMap($row,$row,array_flip($this->getTableKeyFields()));
+           $return[] = $this->entity()->addData($Mapper);
         }
-        return $return;
+
+      //  $paginator = new Paginator(new ArrayAdapter($return));
+        $paginator->setCurrentPageNumber($page);
+        $paginator->setItemCountPerPage($numberPage);
+        //$paginator->setPageRange(5);
+        return $paginator;
 
     }
 
@@ -440,9 +456,10 @@ class AbstractMapper  implements DbAdapterAwareInterface
 
     public function getField()
     {
-
+        $fil = new \Zend\Filter\Word\UnderscoreToCamelCase();
         $TableFields    = $this->getTableKeyFields();
         foreach($TableFields as $k => $e){
+            $k = $fil->filter($k);
             $this->$k = $e;
         }
         return $this;

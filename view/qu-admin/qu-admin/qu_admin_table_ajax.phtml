@@ -67,9 +67,9 @@
         if(!0 == count($this->list)){
             foreach($this->list as $list){
 
-                if($key['IdLangLinker'] and $key['Lang']){
+                if($key['IdLang'] and $key['Lang']){
 
-                    $id_list = $list[$key['IdLangLinker']];
+                    $id_list = $list[$key['IdLang']];
                     $qu_admin_lang_nav_table = $this->qu_admin_lang_nav_table($id_list,$list[$key['Lang']],$options,$route);
 
                 }else{
@@ -184,29 +184,34 @@
 
     var UrlAdmin = '<?php echo $this->url($route,array('action'=>'qu_admin_table_ajax', 'id' => $id,'lang'=>$lang));?>';
     var NumPerPage = '<?php echo $npp; ?>';
-    var Search = '<?php echo $q?>';
+    var Search = encodeURIComponent('<?php echo $q?>');
     var Page = '<?php echo $page ?>';
     var id = '<?php echo $id ?>';
     var Lang = '<?php echo $lang ?>';
     var ajax = $('#ajax');
+    var checkAll =  $('#checkAll').find('tbody tr').attr('char');
 
 
     function NumPage() {
+
         $('.headLoad').css('display','block');
-        ajax.load(UrlAdmin + '?npp=' + $("#npp").val() + '&q=' + Search, function(){
+        ajax.load(UrlAdmin + '?q=' +  Search + '&npp=' + $("#npp").val() + '&page=' + Page, function(){
             $('.headLoad').css('display','none');
             ajax.find('select').uniform();
             ajax.find('input:checkbox').uniform();
+            initTable();
         });
     }
 
     $(".pagination a").click(function(){
+
         var href = $(this).attr('href');
         $('.headLoad').css('display','block');
-        ajax.load(href + '&q=' + Search + '&npp=' + NumPerPage,function(){
+        ajax.load(href  + '&q=' + Search + '&npp=' + NumPerPage   ,function(){
             $('.headLoad').css('display','none');
             ajax.find('select').uniform();
             ajax.find('input:checkbox').uniform();
+            initTable();
         });
         return false;
     });
@@ -214,22 +219,23 @@
 
     function search()
     {
-        var valor = $('#q').val().replace(' ','+');
-        valor = valor.replace(' ','+');
-        valor = valor.replace(' ','+');
-        valor = valor.replace(' ','+');
+
+        var valor = $('#q').val();
+
+
         $('.headLoad').css('display','block');
-        ajax.load(UrlAdmin + '?q=' + valor + '&npp=' + NumPerPage, function(){
+        ajax.load(UrlAdmin + '?q=' + encodeURIComponent(valor) + '&npp=' + NumPerPage + '&page=' + Page , function(){
             $('.headLoad').css('display','none');
             ajax.find('select').uniform();
             ajax.find('input:checkbox').uniform();
+            initTable();
         });
     }
 
 
     Sort();
     function Sort(){
-        var nPage = '&n=' + $('#checkAll').find('tbody tr').attr('char') + '&page=' + Page + '&npp=' + NumPerPage ;
+
         var fixHelperModified = function(e, tr) {
             var $originals = tr.children();
             var $helper = tr.clone();
@@ -254,7 +260,7 @@
                 var order = $('#checkAll').find('tbody').sortable('serialize');
 
                 $('.headLoad').css('display','block');
-                ajax.load( UrlAdmin + "?" + order + nPage, function(){
+                ajax.load( UrlAdmin + "?" + order + '&n=' + checkAll + '&npp=' + NumPerPage + '&page=' + Page, function(){
                     $('.headLoad').css('display','none');
                     ajax.find('select').uniform();
                     ajax.find('input:checkbox').uniform();

@@ -17,8 +17,8 @@ class HelperMapper extends AbstractMapper implements Interfaces\HelperMapperInte
 
                     $level++;
 
-                    if($this->KeyIdLangLinker){
-                        $where = array($this->KeyIdLangLinker => $id);
+                    if($this->KeyIdLang){
+                        $where = array($this->KeyIdLang => $id);
                     }else{
                         $where = array($this->KeyId => $id);
                     }
@@ -45,8 +45,8 @@ class HelperMapper extends AbstractMapper implements Interfaces\HelperMapperInte
 
                 }else{
 
-                    if($this->KeyIdLangLinker){
-                        $where = array($this->KeyIdLangLinker => $id);
+                    if($this->KeyIdLang){
+                        $where = array($this->KeyIdLang => $id);
                     }else{
                         $where = array($this->KeyId => $id);
                     }
@@ -111,8 +111,8 @@ class HelperMapper extends AbstractMapper implements Interfaces\HelperMapperInte
 
     public function langActive($id,$lang)
     {
-        if($this->KeyIdLangLinker){
-            $this->where(array($this->KeyIdLangLinker => $id,$this->KeyLang => $lang));
+        if($this->KeyIdLang){
+            $this->where(array($this->KeyIdLang => $id,$this->KeyLang => $lang));
             $this->toArray();
             return  $this->row();
         }

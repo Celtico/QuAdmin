@@ -108,7 +108,10 @@ class QuAdminLangNavTable extends AbstractHelper
 
     public function getField($TableFields)
     {
+        $fil = new \Zend\Filter\Word\UnderscoreToCamelCase();
         foreach($TableFields as $k => $e){
+            $k = $fil->filter($k);
+
             $this->$k = $e;
         }
         return $this;

@@ -10,7 +10,7 @@ namespace QuAdmin\Controller;
 use Zend\View\Model\ViewModel;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Filter\Word\CamelCaseToDash as CamelCaseToDashFilter;
-
+use Zend\Filter\Word\DashToCamelCase as DashToCamelCaseFilter;
 
 class AbstractController extends AbstractActionController
 {
@@ -47,7 +47,7 @@ class AbstractController extends AbstractActionController
     public $KeyLang;
     public $KeyName;
     public $KeyTitle;
-    public $KeyIdLangLinker;
+    public $KeyIdLang;
     public $KeyIdAuthor;
     public $KeyDate;
     public $KeyModified;
@@ -475,8 +475,12 @@ class AbstractController extends AbstractActionController
     public function getField()
     {
         $TableFields    = $this->getQuAdminModelOptions()->getTableKeyFields();
-        foreach($TableFields as $k => $e){
 
+        $fil = new \Zend\Filter\Word\UnderscoreToCamelCase();
+
+
+        foreach($TableFields as $k => $e){
+            $k = $fil->filter($k);
             $this->$k = $e;
             $kView  = str_replace('Key','',$k);
             $this->key[$kView]  =  $e;

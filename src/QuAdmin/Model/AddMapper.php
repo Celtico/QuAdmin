@@ -19,11 +19,11 @@ class AddMapper extends AbstractMapper implements Interfaces\AddMapperInterface
             $data[$this->KeyOrder] = $this->getNextOrder($data);
         }
 
-        if($this->KeyIdLangLinker) {
+        if($this->KeyIdLang) {
             //add MultiLanguage
             $last = $this->onInsert($data);
             //Update Id Lang Linker
-            $this->onUpdate(array($this->KeyIdLangLinker=>$last),array($this->KeyId => $last));
+            $this->onUpdate(array($this->KeyIdLang=>$last),array($this->KeyId => $last));
         }else{
             $last = $this->onInsert($data);
         }

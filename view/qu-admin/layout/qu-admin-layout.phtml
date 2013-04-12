@@ -49,7 +49,9 @@
     <div class="user">
 
         <a href="http://gravatar.com" target="_blank" class="img" >
-            <?php if($this->zfcUserIdentity()){  echo $this->gravatar($this->zfcUserIdentity()->getEmail()); } ?>
+            <?php if($this->zfcUserIdentity()){
+            echo $this->gravatar($this->zfcUserIdentity()->getEmail());
+            } ?>
         </a>
 
         <div class="name">

@@ -159,19 +159,20 @@ class QuForm extends Form
 
         $Key = $this->getOptions()->getTableKeyFields();
 
-        if($Key['KeyName']){
-            if($dataPost[$Key['KeyName']] == ''){
-                $dataPost[$Key['KeyName']] = $dataPost[$Key['KeyTitle']];
+        if($Key['key_name']){
+            if($dataPost[$Key['key_name']] == ''){
+                $dataPost[$Key['key_name']] = $dataPost[$Key['key_title']];
             }
         }
 
-        if($Key['KeyTitle']){
-            $dataPost[$Key['KeyTitle']] = stripslashes($dataPost[$Key['KeyTitle']]);
+        if($Key['key_title']){
+            $dataPost[$Key['key_title']] = stripslashes($dataPost[$Key['key_title']]);
         }
 
-        if($Key['KeyName']){
-            $dataPost[$Key['KeyName']] = Util::urlFilter($dataPost[$Key['KeyName']]);
+        if($Key['key_name']){
+            $dataPost[$Key['key_name']] = Util::urlFilter($dataPost[$Key['key_name']]);
         }
+
 
 
         return  $dataPost;

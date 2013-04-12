@@ -48,7 +48,7 @@ class QuAdminBreadCrumb extends AbstractHelper
             {
                 $count++;
 
-               if(isset($link[@$keys['KeyIdParent']])){
+               if(isset($link[@$keys['key_id_parent']])){
                     $idParent =  $link['id'];
                }else{
                    $idParent  = 0;
@@ -77,7 +77,10 @@ class QuAdminBreadCrumb extends AbstractHelper
     }
     public function getField($TableFields)
     {
+        $fil = new \Zend\Filter\Word\UnderscoreToCamelCase();
         foreach($TableFields as $k => $e){
+            $k = $fil->filter($k);
+
             $this->$k = $e;
         }
         return $this;

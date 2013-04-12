@@ -14,8 +14,8 @@ class DuplicateMapper extends AbstractMapper implements Interfaces\DuplicateMapp
     public function findByIdLang($id)
     {
         $this->toArray();
-        if($this->KeyIdLangLinker){
-            $this->where(array($this->KeyIdLangLinker => $id));
+        if($this->KeyIdLang){
+            $this->where(array($this->KeyIdLang => $id));
             return $this->row();
         }else {
             $this->where(array($this->KeyId => $id));
@@ -62,7 +62,7 @@ class DuplicateMapper extends AbstractMapper implements Interfaces\DuplicateMapp
         $last = $this->onInsert($data);
         //Update Id Lang Linker
         if($this->getDefaultLanguage()){
-            $data[$this->KeyIdLangLinker] =  $last;
+            $data[$this->KeyIdLang] =  $last;
             $this->onUpdate($data,array($this->KeyId => $last));
         }
         return $last;
@@ -81,8 +81,8 @@ class DuplicateMapper extends AbstractMapper implements Interfaces\DuplicateMapp
         $data[$this->KeyTitle] = $data[$this->KeyTitle] . ' (d)';
         $last = $this->onInsert($data);
         //Update Id Lang Linker
-        if($this->KeyIdLangLinker){
-            $data[$this->KeyIdLangLinker] =  $last;
+        if($this->KeyIdLang){
+            $data[$this->KeyIdLang] =  $last;
             $this->onUpdate($data,array($this->KeyId => $last));
         }
         return $last;

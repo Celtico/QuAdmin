@@ -14,6 +14,8 @@ class IndexMapper extends AbstractMapper implements Interfaces\IndexMapperInterf
 
         if($string){
 
+            $string = str_replace('%20',' ',$string);
+
             $fields = $this->getTableFieldsCleanData();
             $likeField = array();
             /** @var $fields array config options */
@@ -43,10 +45,25 @@ class IndexMapper extends AbstractMapper implements Interfaces\IndexMapperInterf
 
     public function newOrder($Order, $n, $options = null)
     {
+        $order = explode(' ',$this->getOptionsOrder());
+        $order = trim($order[1]);
+
         $result  = false;
-        $count   = $n+1;
+
+        if($order == 'desc'){
+            $count   = $n+1;
+        }else{
+            $count   = $n-1;
+        }
+
         foreach($Order as $id){
-            $count--;
+
+            if($order == 'desc'){
+                $count--;
+            }else{
+                $count++;
+            }
+
             $data[$this->KeyOrder] = $count;
             $result = $this->onUpdate($data,array($this->KeyId => $id));
         }

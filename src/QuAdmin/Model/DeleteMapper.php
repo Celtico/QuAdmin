@@ -18,8 +18,8 @@ class DeleteMapper extends AbstractMapper implements Interfaces\DeleteMapperInte
     public function findByIdLang($id)
     {
         $this->toArray();
-        if($this->KeyIdLangLinker){
-            $this->where(array($this->KeyIdLangLinker => $id));
+        if($this->KeyIdLang){
+            $this->where(array($this->KeyIdLang => $id));
             return $this->row();
         }else {
             $this->where(array($this->KeyId => $id));
