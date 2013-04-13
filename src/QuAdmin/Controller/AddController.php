@@ -37,14 +37,17 @@ class AddController extends AbstractController
 
         if($breadCrumb->getLevel() == 1){
 
-           // echo $breadCrumb->getLevel();
+          /*
+           * @TODO
+          */
 
         }elseif($breadCrumb->getLevel() == 2){
 
-          //  echo $breadCrumb->getLevel();
+            /*
+            * @TODO
+           */
 
         }
-
 
         $this->getForm()->setOptionsForm($this->getOptions());
 
@@ -57,7 +60,17 @@ class AddController extends AbstractController
             $dataPost = $this->getPost();
             if($dataPost['close'] != ''){
 
-                $this->getEventManager()->trigger(__FUNCTION__.'.pre', $this, array( 'id' => $this->getId(), 'options' => $this->getOptions() ) );
+                // @TODO improve!
+                if($this->getOptions()->getDocuments())
+                {
+                    $plupload = $this->Service('plupload_service');
+                    $this->getEventManager()->trigger(__FUNCTION__.'.pre', $this, array(
+                        'id'      => $this->getId(),
+                        'options' => $this->getOptions(),
+                        'plupload'  =>  $plupload
+                    ));
+                }
+
                 return $this->getToRoute($this->getRoute(),array('id' => @$dataController['id_parent'],'lang'=>$this->getLang()));
 
             }
@@ -65,6 +78,7 @@ class AddController extends AbstractController
              * Process by Data
              */
             $DataForm = $this->getForm()->prosesDataForm($dataPost);
+
 
             if($this->KeyDate)      $DataForm[$this->KeyDate] = $this->getDate();
             if($this->KeyModified)  $DataForm[$this->KeyModified] = $this->getDate();
@@ -79,7 +93,17 @@ class AddController extends AbstractController
             if(!isset($DataForm['error'])){
 
                $redirect_id = $this->getModelAdd()->insert($DataForm);
-               $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array( 'id' => $redirect_id, 'options' => $this->getOptions() ) );
+
+                // @TODO improve!
+                if($this->getOptions()->getDocuments())
+                {
+                   $plupload = $this->Service('plupload_service');
+                   $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array(
+                       'id'      => $redirect_id,
+                       'options' => $this->getOptions(),
+                       'plupload'  =>  $plupload
+                   ));
+                }
             }
 
             if($redirect_id){

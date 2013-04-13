@@ -8,6 +8,7 @@ class DeleteMapper extends AbstractMapper implements Interfaces\DeleteMapperInte
 {
 
     public $events;
+    protected $plupload;
 
     /**
      * Get checkRow
@@ -79,6 +80,7 @@ class DeleteMapper extends AbstractMapper implements Interfaces\DeleteMapperInte
         $this->events()->trigger(__FUNCTION__, $this, array(
             'id' => $id,
             'options' => $this->getQuAdminModelOptions(),
+            'plupload'  =>  $this->plupload
         ));
     }
 
@@ -91,6 +93,16 @@ class DeleteMapper extends AbstractMapper implements Interfaces\DeleteMapperInte
             $this->events = new EventManager(__CLASS__);
         }
 
+        return $this->events;
+    }
+
+    public function setPlupload($plupload)
+    {
+        $this->plupload = $plupload;
+        return $this;
+    }
+    public function getPlupload()
+    {
         return $this->events;
     }
 }

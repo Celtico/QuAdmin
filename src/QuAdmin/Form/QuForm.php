@@ -9,19 +9,20 @@ namespace QuAdmin\Form;
 
 use QuAdmin\Util;
 
-use Zend\Crypt\Password\Bcrypt;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\Form\Element\Csrf as CsrfElement;
 use Zend\I18n\Translator\Translator;
 use Zend\Validator\AbstractValidator;
+use Zend\EventManager\EventManager;
 
 class QuForm extends Form
 {
     protected $optionsForm;
     protected $options;
     protected $subForm;
+    public    $events;
 
     public function __construct()
     {
@@ -30,9 +31,6 @@ class QuForm extends Form
         $csrf = new CsrfElement('csrf');
         $csrf->setCsrfValidatorOptions(array('timeout' => null));
         $this->add($csrf);
-
-
-
     }
 
     public function addQuFormOptions($data,$model,$sl)
@@ -121,9 +119,8 @@ class QuForm extends Form
             {
                 $data = $this->getData($dataPost);
                 $data = $this->dataFilterPost($data);
-                $data = $this->prosesPassword($data);
-
-                return  $data;
+                $data = $this->postEventFormFilter($data);
+                return $data;
 
             } else{
 
@@ -136,13 +133,14 @@ class QuForm extends Form
         return false;
     }
 
-
-    public function prosesPassword($data)
+    public function postEventFormFilter($data)
     {
-        if(isset($data['password'])){
-            $bCrypt = new Bcrypt;
-            $bCrypt->setCost(8);
-            $data['password'] = $bCrypt->create($data['password']);
+        //print_r($this->events()->getIdentifiers());
+        foreach($data as $key => $d){
+            $da[$key] = $this->events()->trigger(__FUNCTION__.'.'.$key, $this,array($key => $d))->last();
+            if($da[$key] != ''){
+                $data[$key] = $da[$key];
+            }
         }
         return $data;
     }
@@ -200,4 +198,13 @@ class QuForm extends Form
     {
         return $this->optionsForm;
     }
+    public function events()
+    {
+        if (!$this->events) {
+            $this->events = new EventManager(__CLASS__);
+        }
+
+        return $this->events;
+    }
+
 }

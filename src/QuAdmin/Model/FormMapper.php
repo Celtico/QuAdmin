@@ -46,13 +46,13 @@ class FormMapper extends AbstractMapper implements Interfaces\FormMapperInterfac
                     }
                 }
                 */
-                $selector[$sel[$fieldKeyName]] =  $parent.$sel[$fieldKeyLabel];
+                $selector[$sel[$fieldKeyName]] =  $sel[$fieldKeyLabel];
             }
         }
 
-        if(count($selector) == 0){
-            $selector = array(0 => '-' );
-        }
+
+            $selector += array(0 => '-');
+
 
         return $selector;
 

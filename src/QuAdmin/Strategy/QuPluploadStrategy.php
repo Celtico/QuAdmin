@@ -28,7 +28,7 @@ class QuPluploadStrategy implements ListenerAggregateInterface
     public function attach(EventManagerInterface $events)
     {
 
-       $event          = $events->getSharedManager();
+       $event = $events->getSharedManager();
 
        $event->attach('QuAdmin\Controller\AddController', 'variables.pre', function($e) {
 
@@ -36,6 +36,7 @@ class QuPluploadStrategy implements ListenerAggregateInterface
 
            $id_parent = $params['id'];
            $options   = $params['options'];
+           $plupload  = $params['plupload'];
 
            $docs      = $options->getDocuments();
            $model     = $options->getTableName();
@@ -47,8 +48,9 @@ class QuPluploadStrategy implements ListenerAggregateInterface
            $op->setResize($docs['Resize']);
            $op->setDirUpload($docs['DirUpload']);
 
-           $this->serviceLocator->setPluploadOptions($op);
-           $this->serviceLocator->pluploadRemoveAll($model,$id_parent);
+           $plupload->setPluploadOptions($op);
+           $plupload->pluploadRemoveAll($model,$id_parent);
+
 
        }, 1);
 
@@ -58,10 +60,13 @@ class QuPluploadStrategy implements ListenerAggregateInterface
 
             $id_parent = $params['id'];
             $options   = $params['options'];
+            $plupload  = $params['plupload'];
 
             $model     = $options->getTableName();
+            $docs      = $options->getDocuments();
 
-            $this->serviceLocator->pluploadUpdate($model,$id_parent);
+            $plupload->pluploadUpdate($model,$id_parent);
+
 
         }, 1);
 
@@ -72,6 +77,7 @@ class QuPluploadStrategy implements ListenerAggregateInterface
 
             $id_parent = $params['id'];
             $options   = $params['options'];
+            $plupload  = $params['plupload'];
 
             $docs      = $options->getDocuments();
             $model     = $options->getTableName();
@@ -83,8 +89,9 @@ class QuPluploadStrategy implements ListenerAggregateInterface
             $op->setResize($docs['Resize']);
             $op->setDirUpload($docs['DirUpload']);
 
-            $this->serviceLocator->setPluploadOptions($op);
-            $this->serviceLocator->pluploadRemoveAll($model,$id_parent);
+
+            $plupload->setPluploadOptions($op);
+            $plupload->pluploadRemoveAll($model,$id_parent);
 
         }, 1);
 
@@ -100,6 +107,7 @@ class QuPluploadStrategy implements ListenerAggregateInterface
         }
     }
 
+    /*@TODO  $this in php 5.3 not work :( */
     public function getServiceLocator()
     {
         return $this->serviceLocator;

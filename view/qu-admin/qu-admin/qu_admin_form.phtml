@@ -45,23 +45,16 @@
 
                 if($FieldGrid != 'span3'){
 
-                    if($FieldSets->getLabel()){
-
                         echo   '<fieldset class="formBlock"><legend><span>';
                         echo   $FieldSets->getLabel();
                         echo   '</span></legend>';
 
-                    }
-
                 } else{
-
-                    if($FieldSets->getLabel()){
 
                         $grid  = '<fieldset class="formBlock"><legend><span>';
                         $grid .= $FieldSets->getLabel();
                         $grid .= '</span></legend>';
                         $grid3[] =  $grid;
-                    }
                 }
 
                 foreach ($FieldSets as $name =>$Element){

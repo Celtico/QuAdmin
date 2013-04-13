@@ -8,10 +8,8 @@
 namespace QuAdmin;
 
 use QuAdmin\Db\Adapter\DbAdapterAwareInterface;
-use QuPlupload\Service\PluploadService;
 use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
-use Zend\I18n\Translator\Translator;
 use Zend\Validator\AbstractValidator;
 
 /**
