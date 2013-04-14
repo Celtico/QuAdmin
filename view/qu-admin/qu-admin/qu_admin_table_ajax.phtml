@@ -1,4 +1,4 @@
-<?php $cols = 8; ?>
+<?php $cols = 3; ?>
 <form method="post" id="form">
     <table cellpadding="0" cellspacing="0" width="100%" class="table tMedia  table-bordered table-striped" id="checkAll">
         <thead>
@@ -6,16 +6,20 @@
             <td width="30" class="tableArrows"><img src="<?php echo $this->basePath(); ?>/img/tableArrows.png" alt="" /></td>
             <td width="30" class="tableArrows"><div class="iconb" data-icon="&#xe152;"></div></td>
 
-            <?php if($options->getDocuments()){   $cols += 1; ?>
+            <?php if($key['Icon']){   $cols += 1; ?>
+                <td width="20">Icon</td>
+            <?php } ?>
+
+            <?php if($options->getDocuments()){  $cols += 1; ?>
                 <td width="35">Imatge</td>
             <?php } ?>
 
             <?php if($key['Title']){   $cols += 1; ?>
-                <td class="sortCol" ><div>Title<span></span></div></td>
+                <td><div>Title<span></span></div></td>
             <?php } ?>
 
             <?php if($key['Name']){   $cols += 1; ?>
-                <td class="sortCol" width="100"><div>Name<span></span></div></td>
+                <td width="100"><div>Name<span></span></div></td>
             <?php } ?>
 
             <?php if($key['Modified']){   $cols += 1; ?>
@@ -89,8 +93,14 @@
                         <span class="iconb" data-icon="&#xe152;" style="font-size:17px; color:#999;"></span>
                     </td>
 
+                    <?php if($key['Icon']){ ?>
+                        <td class="center iconb-view">
+                            <?php echo $list[$key['Icon']];?>
+                        </td>
+                    <?php } ?>
+
                     <?php if($options->getDocuments()){  ?>
-                        <td>
+                        <td class="center">
                             <?php echo $this->qu_admin_documents($id_list,$options); ?>
                         </td>
                     <?php } ?>
