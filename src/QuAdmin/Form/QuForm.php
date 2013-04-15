@@ -54,9 +54,15 @@ class QuForm extends Form
         $factory = new InputFactory();
 
         $fieldName = $forms['fieldset']['name'];
-        if($forms['serialized']){
+
+        if(isset($forms['serialized']) and $forms['serialized']){
             if(isset($data[$forms['fieldset']['name']])){
                 $data = unserialize($data[$forms['fieldset']['name']]);
+            }
+        }
+        if(isset($forms['explode']) and $forms['explode']){
+            if(isset($data[$forms['fieldset']['name']])){
+                $data[$forms['fieldset']['name']] = explode(', ',$data[$forms['fieldset']['name']]);
             }
         }
 
@@ -66,21 +72,25 @@ class QuForm extends Form
         $this->add($subForm = new Form(),array('name'=>$fieldName));
         $subForm->setInputFilter( $subFilter  = new InputFilter() );
 
-        unset($forms['serialized']);
+        if(isset($forms['serialized'])){
+            unset($forms['serialized']);
+        }
+        if(isset($forms['explode'])){
+            unset($forms['explode']);
+        }
         unset($forms['fieldset']);
 
         if(isset($forms['database']))
         {
-            $modelOptions = $sl->get($forms['database']['model']);
+            $modelOptions = $sl->get($forms['database']['database']);
             $formDatabase = $model->options($forms['database'], $modelOptions);
-            foreach($forms as $form){}
 
             foreach($formDatabase as $name => $label)
             {
-                $form['form']['name']  = $name;
-                $form['form']['options']['label'] = $label;
-                $subForm->add($form['form']);
-                $subFilter->add($factory->createInput($form['filter']));
+                $forms['form']['name']  = $name;
+                $forms['form']['options']['label'] = $label;
+                $subForm->add($forms['form']);
+                $subFilter->add($factory->createInput($forms['filter']));
             }
 
         }else{
@@ -152,9 +162,13 @@ class QuForm extends Form
         {
             if(isset($dataPost[$options['fieldset']['name']]))
             {
-                if($options['serialized']){
+                if(isset($options['serialized']) and $options['serialized']){
 
                     $dataPost[$options['fieldset']['name']] = serialize($dataPost[$options['fieldset']['name']]);
+
+                }elseif(isset($options['explode']) and $options['explode']){
+
+                    $dataPost[$options['fieldset']['name']] = implode(', ',$dataPost[$options['fieldset']['name']][$options['fieldset']['name']]);
 
                 }else{
 
@@ -203,7 +217,6 @@ class QuForm extends Form
         if (!$this->events) {
             $this->events = new EventManager(__CLASS__);
         }
-
         return $this->events;
     }
 

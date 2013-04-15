@@ -36,28 +36,37 @@
         <div class="span9 fromIn">
             <?php
 
-            $grid3 = array();
-            $grid  = '';
+            $grid3         = array();
+            $grid          = '';
 
             foreach ($form->getFieldsets() as $nameField => $FieldSets){
 
-                $FieldGrid  = $FieldSets->getAttribute('span');
+                $FieldGrid   = $FieldSets->getAttribute('span');
+                $FieldClass  = $FieldSets->getAttribute('class');
+                $Name        = $FieldSets->getName();
 
-                if($FieldGrid != 'span3'){
+                if($FieldSets->getLabel()){
+                    if($FieldGrid != 'span3'){
 
-                        echo   '<fieldset class="formBlock"><legend><span>';
-                        echo   $FieldSets->getLabel();
-                        echo   '</span></legend>';
+                            echo   '<fieldset class="formBlock '.$FieldClass.' '.$FieldSets->getName().'"><legend><span>';
+                            echo   $FieldSets->getLabel();
+                            echo   '</span></legend>';
 
-                } else{
+                    } else{
 
-                        $grid  = '<fieldset class="formBlock"><legend><span>';
-                        $grid .= $FieldSets->getLabel();
-                        $grid .= '</span></legend>';
-                        $grid3[] =  $grid;
+                            $n  = $FieldSets->getName();
+                            $grid  = '<fieldset class="formBlock '.$FieldClass.' '.$FieldSets->getName().'"><legend><span>';
+                            $grid .= $FieldSets->getLabel();
+                            $grid .= '</span></legend>';
+
+                    }
                 }
 
+                $numField = count($FieldSets);
+                $count    = 0;
+
                 foreach ($FieldSets as $name =>$Element){
+                    $count++;
 
                     if($Element->getAttribute('type') == 'select'){
                         $css = ' searchDrop';
@@ -71,22 +80,19 @@
 
                     if($elemClass == 'CkEditor'){
 
-                        echo   '<fieldset class="formBlock"><legend><span>';
-                        echo    $Element->getLabel();
-                        echo   '</span></legend>';
                         echo   $this->formElement($Element);
-                        echo   $this->formElementErrors($Element).' </fieldset>';
+                        echo   $this->formElementErrors($Element);
 
                     }elseif($elemGrid == 'span3'){
 
-                        $grid  = ' <div class="row-fluid"><div class="span3">';
+                        $grid .= ' <div class="row-fluid"><div class="span3">';
                         $grid .= $Element->getLabel();
                         $grid .= ' </div><div class="span9'. $css .'">';
                         $grid .= $this->formElement($Element);
                         $grid .= ' </div><label generated="true" class="error">';
                         $grid .= $this->formElementErrors($Element);
-                        $grid .= ' </label><div class="clear"></div></div>'.' </fieldset>';
-                        $grid3[] =  $grid;
+                        $grid .= ' </label><div class="clear"></div></div>';
+
 
                     }else{
 
@@ -96,8 +102,23 @@
                         echo   $this->formElement($Element);
                         echo ' <label generated="true" class="error">';
                         echo   $this->formElementErrors($Element);
-                        echo ' </label></div><div class="clear"></div></div>'.' </fieldset>';
+                        echo ' </label></div><div class="clear"></div></div>';
                     }
+
+
+                    if($numField  ==  $count)
+                    {
+                        if($elemGrid == 'span3')
+                        {
+                           $grid  .= ' </fieldset>';
+                            $grid3[$n] =  $grid;
+                        }
+                        else
+                        {
+                           echo '</fieldset>';
+                        }
+                    }
+
                 }
             }
             ?>
@@ -108,6 +129,7 @@
             <?php  foreach($grid3 as $n){ echo $n;  } ?>
 
             <? /// FILE UPLOAD ///////////// ///////////// ?>
+
             <?php if($options->getDocuments()){   ?>
                 <fieldset class="formBlock">
                     <legend>
@@ -119,6 +141,7 @@
                     <?=$this->QuPluploadHelp('uploader',$id,$options->getTableName(),$route)?>
                 </fieldset>
             <? } ?>
+
             <? /// FILE UPLOAD ///////////// ///////////// ?>
 
 
@@ -128,7 +151,9 @@
 
     <?php  echo $this->form()->closeTag($form) . PHP_EOL ?>
 
-    <?php $this->QuCKEditor( 'editor', array(
+<?php
+
+$this->QuCKEditor( 'editor', array(
         'width' => "100%",
         'height' => "150",
         'uiColor'=> '#F4F4F4',
@@ -143,11 +168,13 @@
                 'items' => array( 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ),
             ),
         ),
-    )); ?>
-    <?php $this->QuCKEditor( 'editor2', array(
+    ));
+
+$this->QuCKEditor( 'editor2', array(
         'width' => "100%",
         'height' => "300",
         'uiColor'=> '#F4F4F4',
-    )); ?>
+    ));
+?>
 
 
