@@ -58,50 +58,62 @@
             <?php echo $this->zfcUserDisplayName() ?>
         </div>
         <ul>
+            <li>
+                <a class="chat">
+                    <span class="numConnect" data-target="0">0</span>
+                    <span class="iconb" data-icon="&#xe1f0;"></span>
+                    <!-- Chat -->
+                </a>
+            </li>
             <li><a href="<?=$this->url('zfcuser/profile')?>" class="sProfile" >
                     <span class="iconb" data-icon="&#xe1e0;"></span>
-                    Profile
+                   <!-- Profile -->
                 </a>
             </li>
             <li>
                 <a href="<?=$this->url('zfcuser/logout')?>" class="sLogout" >
                     <span class="iconb" data-icon="&#xe09b;"></span>
-                    Logout
+                    <!-- Logout -->
                 </a>
             </li>
+
         </ul>
 
         <div class="clearfix"></div>
     </div>
 
-</div>
 
-<div class="container-fluid content">
-    <div class="row-fluid">
-        <div class="span12">
-            <div class="row-fluid contentTop">
-                <div class="span12">
-                    <h1><?php $this->qu_admin_title(); echo $this->placeholder('title'); ?></h1>
+
+</div>
+    <?php  echo $this->render('qu-admin/layout/chat.phtml'); ?>
+    <div class="container-fluid content">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="row-fluid contentTop">
+                    <div class="span12">
+                        <h1><?php $this->qu_admin_title(); echo $this->placeholder('title'); ?></h1>
+                    </div>
                 </div>
-            </div>
-            <div class="row-fluid">
-                <div class="span12 crumb">
-                    <ul class="breadcrumbs">
-                        <?php echo $this->placeholder('bread-crumbs')?>
-                    </ul>
+                <div class="row-fluid">
+                    <div class="span12 crumb">
+                        <ul class="breadcrumbs">
+                            <?php echo $this->placeholder('bread-crumbs')?>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div class="row-fluid">
-                <div class="span12">
-                    <div id="content">
-                        <?=$this->content?>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div id="content">
+
+                            <?=$this->content?>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-</div>
+
 <?php  echo  $this->inlineScript()->prependFile($this->basePath() . '/js/plugins.js', 'text/javascript'); ?>
 </body>
 </html>

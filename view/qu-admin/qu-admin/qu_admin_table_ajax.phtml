@@ -1,10 +1,13 @@
-<?php $cols = 3; ?>
+<?php $cols = 2; ?>
 <form method="post" id="form">
     <table cellpadding="0" cellspacing="0" width="100%" class="table tMedia  table-bordered table-striped" id="checkAll">
         <thead>
         <tr>
             <td width="30" class="tableArrows"><img src="<?php echo $this->basePath(); ?>/img/tableArrows.png" alt="" /></td>
-            <td width="30" class="tableArrows"><div class="iconb" data-icon="&#xe152;"></div></td>
+
+            <?php if($key['Order']){ $cols += 1; ?>
+                <td width="30" class="tableArrows"><div class="iconb" data-icon="&#xe152;"></div></td>
+            <?php } ?>
 
             <?php if($key['Icon']){   $cols += 1; ?>
                 <td width="20">Icon</td>
@@ -89,9 +92,11 @@
                         <input type="checkbox" name="checkRow[]" value="<?php echo $id_list?>"/>
                     </td>
 
-                    <td class="handle tableArrows center">
-                        <span class="iconb" data-icon="&#xe152;" style="font-size:17px; color:#999;"></span>
-                    </td>
+                    <?php if($key['Order']){  ?>
+                        <td class="handle tableArrows center">
+                            <span class="iconb" data-icon="&#xe152;" style="font-size:17px; color:#999;"></span>
+                        </td>
+                    <?php } ?>
 
                     <?php if($key['Icon']){ ?>
                         <td class="center iconb-view">

@@ -82,16 +82,20 @@ class QuPluploadStrategy implements ListenerAggregateInterface
             $docs      = $options->getDocuments();
             $model     = $options->getTableName();
 
-            $op = new PluploadOptions;
-            $op->setTableName($docs['tableName']);
-            $op->setDirUploadAbsolute($docs['DirUploadAbsolute']);
-            $op->setThumbResize($docs['ThumbResize']);
-            $op->setResize($docs['Resize']);
-            $op->setDirUpload($docs['DirUpload']);
+            if($docs){
+
+                $op = new PluploadOptions;
+                $op->setTableName($docs['tableName']);
+                $op->setDirUploadAbsolute($docs['DirUploadAbsolute']);
+                $op->setThumbResize($docs['ThumbResize']);
+                $op->setResize($docs['Resize']);
+                $op->setDirUpload($docs['DirUpload']);
 
 
-            $plupload->setPluploadOptions($op);
-            $plupload->pluploadRemoveAll($model,$id_parent);
+                $plupload->setPluploadOptions($op);
+                $plupload->pluploadRemoveAll($model,$id_parent);
+
+            }
 
         }, 1);
 

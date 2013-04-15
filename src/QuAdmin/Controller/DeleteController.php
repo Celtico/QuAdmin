@@ -16,8 +16,11 @@ class DeleteController extends AbstractController
         $this->getModelDelete()->setQuAdminModelOptions($this->getOptions());
 
         // @TODO improve!
-        $plupload = $this->Service('plupload_service');
-        $this->getModelDelete()->setPlupload($plupload);
+        if($this->getOptions()->getDocuments())
+        {
+            $plupload = $this->Service('plupload_service');
+            $this->getModelDelete()->setPlupload($plupload);
+        }
 
         $redirectBack =  array('action'=>'index','id'=>$this->getId(),'lang'=>$this->getLang());
         if($this->getIsPost()){

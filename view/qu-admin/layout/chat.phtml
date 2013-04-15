@@ -1,0 +1,18 @@
+<div class="chat-pos">
+
+    <div  id="resizable" class="ui-widget-content chat-windows" data-name="<?php echo $this->zfcUserDisplayName() ?>">
+        <button type="button" class="close-chat">×</button>
+        <h5 class="ui-widget-header">
+            Chat
+
+        </h5>
+        <div class="mCaht">
+            <div></div>
+        </div>
+        <label class="label-textCaht">
+            <input type="text" value="" class="textCaht" style="float:left;">
+            <a class="btn chat-btn" style="float:left;"><span class="iconb" data-icon="&#xe241;"></span></a>
+        </label>
+    </div>
+</div>
+<?php  $this->inlineScript()->prependFile($this->basePath() . '/js/chat.js', 'text/javascript'); ?>
