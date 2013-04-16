@@ -61,9 +61,7 @@ class EditController extends AbstractController
             if(!isset($DataForm['error'])){
 
                 $data = $this->getModelEdit()->update($DataForm,$this->getLang());
-            }
 
-            if(!isset($DataForm['error'])){
                 if($dataPost['save'] != '')
                 {
                     $this->getMessage(array('type'=>$this->getTranslate('EditSaveClassType'),'message' =>$this->getTranslate('EditSaveMessage')));
@@ -74,7 +72,12 @@ class EditController extends AbstractController
                     $this->getMessage(array('type'=>$this->getTranslate('EditSaveCloseClassType'),'message'=>$this->getTranslate('EditSaveCloseMessage')));
                     return $this->getToRoute($this->getRoute(),array('id' =>  $this->check($dataDb),'lang'=>$this->getLang()));
                 }
+
+            }elseif(isset($DataForm['error']) and $DataForm['error']){
+
+                $dataController['error'] = $DataForm;
             }
+
         }
         return $dataController;
     }

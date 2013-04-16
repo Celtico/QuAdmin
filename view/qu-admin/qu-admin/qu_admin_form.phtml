@@ -30,6 +30,10 @@
         </div>
     <?php } ?>
 
+    <?php /* if(isset($error)){ ?>
+        <pre> <?php $t = "var_dump($error)"; ?>  </pre>
+    <?php } */ ?>
+
     <?php echo $this->qu_admin_messages(); ?>
 
     <div class="form row-fluid">
@@ -37,6 +41,7 @@
             <?php
 
             $grid3         = array();
+            $ckEditor      = array();
             $grid          = '';
 
             foreach ($form->getFieldsets() as $nameField => $FieldSets){
@@ -77,11 +82,15 @@
                     $elemClass = $Element->getAttribute('class');
                     $elemId    = $Element->getAttribute('id');
                     $elemGrid  = $Element->getAttribute('span');
+                    $elemCk    = $Element->getAttribute('ck-editor');
 
-                    if($elemClass == 'CkEditor'){
+                    if($elemCk){
 
+                        echo ' <div class="row-fluid">';
                         echo   $this->formElement($Element);
                         echo   $this->formElementErrors($Element);
+                        echo ' </div>';
+                        $ckEditor[$elemId] = $elemCk;
 
                     }elseif($elemGrid == 'span3'){
 
@@ -135,46 +144,61 @@
                     <legend>
                         <span>Multiple files uploader</span>
                     </legend>
-                    <div class="PluploadLoad"><?=$this->QuPluploadHelpLoad($id,$route,$options)?></div>
-                    <div class="clear"></div>
-                    <div id="uploader"></div>
-                    <?=$this->QuPluploadHelp('uploader',$id,$options->getTableName(),$route)?>
+                    <div class="row-fluid">
+                        <div class="PluploadLoad"><?=$this->QuPluploadHelpLoad($id,$route,$options)?></div>
+                        <div class="clear"></div>
+                        <div id="uploader"></div>
+                        <?=$this->QuPluploadHelp('uploader',$id,$options->getTableName(),$route)?>
+                    </div>
                 </fieldset>
             <? } ?>
 
             <? /// FILE UPLOAD ///////////// ///////////// ?>
-
-
 
         </div>
     </div>
 
     <?php  echo $this->form()->closeTag($form) . PHP_EOL ?>
 
-<?php
+    <?php
 
-$this->QuCKEditor( 'editor', array(
-        'width' => "100%",
-        'height' => "150",
-        'uiColor'=> '#F4F4F4',
-        'toolbarGroups' => false,
-        'toolbar' => array(
-            array( 'name'=> 'basicstyles',
-                'groups' => array( 'basicstyles', 'cleanup' ),
-                'items' => array( 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ),
-            ),
-            array( 'name'=> 'paragraph',
-                'groups' => array( 'list', 'indent', 'blocks', 'align' ),
-                'items' => array( 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ),
-            ),
-        ),
-    ));
+    if(isset($ckEditor)){
 
-$this->QuCKEditor( 'editor2', array(
-        'width' => "100%",
-        'height' => "300",
-        'uiColor'=> '#F4F4F4',
-    ));
-?>
+        foreach($ckEditor as $id => $editor){
 
+            if(isset($editor['tools']) and $editor['tools'] == 'medium'){
+                $tools = array(
+                    'toolbarGroups' => false,
+                    'toolbar' => array(
+                    array( 'name'=> 'basicstyles',
+                        'groups' => array( 'basicstyles', 'cleanup' ),
+                        'items' => array( 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ),
+                    ),
+                    array( 'name'=> 'paragraph',
+                        'groups' => array( 'list', 'indent', 'blocks', 'align' ),
+                        'items' => array( 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ),
+                    )
+                ));
 
+            }else{
+                $tools = array();
+            }
+
+            if(isset($editor['height'])){
+                $height = $editor['height'];
+            }else{
+                $height = 150;
+            }
+
+            $options = array(
+                'width' => '100%',
+                'height' => $height,
+                'uiColor'=> '#F4F4F4'
+            );
+
+            $this->QuCKEditor($id,array_merge($options,$tools));
+
+        }
+    }
+
+    ?>

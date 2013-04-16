@@ -88,34 +88,39 @@ class AddController extends AbstractController
             if($this->KeyLevel)     $DataForm[$this->KeyLevel] = $breadCrumb->getLevel();
             if($this->KeyPath)      $DataForm[$this->KeyPath] =  $breadCrumb->getPath(1). Util::urlFilter(@$DataForm[$this->KeyTitle]);
 
-            $redirect_id = false;
 
             if(!isset($DataForm['error'])){
 
-               $redirect_id = $this->getModelAdd()->insert($DataForm);
+                $redirect_id = $this->getModelAdd()->insert($DataForm);
 
                 // @TODO improve!
                 if($this->getOptions()->getDocuments())
                 {
-                   $plupload = $this->Service('plupload_service');
-                   $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array(
-                       'id'      => $redirect_id,
-                       'options' => $this->getOptions(),
-                       'plupload'  =>  $plupload
-                   ));
+                    $plupload = $this->Service('plupload_service');
+                    $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array(
+                        'id'      => $redirect_id,
+                        'options' => $this->getOptions(),
+                        'plupload'  =>  $plupload
+                    ));
                 }
+
+                if($redirect_id){
+                    if($dataPost['save'] != ''){
+                        $this->getMessage(array('type'=>$this->getTranslate('AddSaveClassType'),'message' =>$this->getTranslate('AddSaveMessage')));
+                        return $this->getToRoute( $dataController['route'],array('action'=> 'edit','id' => $redirect_id,'lang' => $this->getLang()));
+                    }
+                    elseif($dataPost['saveandclose'] != ''){
+                        $this->getMessage(array('type'=>$this->getTranslate('AddSaveCloseClassType'), 'message'=>$this->getTranslate('AddSaveCloseMessage')));
+                        return $this->getToRoute($this->getRoute(),array( 'id' => $this->getId(), 'lang'=>$this->getLang()));
+                    }
+                }
+
+            }elseif(isset($DataForm['error']) and $DataForm['error']){
+
+                $dataController['error'] = $DataForm;
             }
 
-            if($redirect_id){
-                if($dataPost['save'] != ''){
-                    $this->getMessage(array('type'=>$this->getTranslate('AddSaveClassType'),'message' =>$this->getTranslate('AddSaveMessage')));
-                    return $this->getToRoute( $dataController['route'],array('action'=> 'edit','id' => $redirect_id,'lang' => $this->getLang()));
-                }
-                elseif($dataPost['saveandclose'] != ''){
-                    $this->getMessage(array('type'=>$this->getTranslate('AddSaveCloseClassType'), 'message'=>$this->getTranslate('AddSaveCloseMessage')));
-                    return $this->getToRoute($this->getRoute(),array( 'id' => $this->getId(), 'lang'=>$this->getLang()));
-                }
-            }
+
 
         }
         return $dataController;
