@@ -95,6 +95,9 @@ class Module implements BootstrapListenerInterface
                 'qu_admin_user_name' => function($sm) {
                     return new View\Helper\QuAdminUserName($sm->getServiceLocator());
                 },
+                'qu_admin_user_id' => function($sm) {
+                    return new View\Helper\QuAdminUserId($sm->getServiceLocator());
+                },
                 'qu_admin_documents' => function ($sm) {
                     return new View\Helper\QuAdminDocuments($sm->getServiceLocator());
                 },

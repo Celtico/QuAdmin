@@ -1,21 +1,19 @@
-<div class="chat-pos" data-name="<?php echo $this->zfcUserDisplayName() ?>">
+<div class="chat-pos" id="<?php echo $this->qu_admin_user_id() ?>" data-resource="" data-name="<?php echo $this->zfcUserDisplayName() ?>">
 
     <button type="button" class="close-chat">×</button>
     <h5 class="ui-widget-header">
         <span class='iconb' data-icon=&#xe1f0;></span>Chat
     </h5>
     <div class="mChat">
+
     </div>
     <label class="label-textChat">
         <input type="text" value="" class="textChat" style="float:left;">
         <a class="btn chat-btn"><span class="iconb" data-icon="&#xe241;"></span></a>
     </label>
-    <div class="list-chat">
-        <div></div>
-    </div>
+    <div id="userActive"></div>
+    <div class="list-chat"></div>
+
 </div>
-
-
-
 
 <?php  $this->inlineScript()->prependFile($this->basePath() . '/js/chat.js', 'text/javascript'); ?>

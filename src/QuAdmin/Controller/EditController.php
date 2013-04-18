@@ -56,11 +56,9 @@ class EditController extends AbstractController
             if($this->KeyLang)      $DataForm[$this->KeyLang]     = $this->getLang();
             $DataForm[$this->KeyId] = $this->getId();
 
-            $data = false;
-
             if(!isset($DataForm['error'])){
 
-                $data = $this->getModelEdit()->update($DataForm,$this->getLang());
+                $this->getModelEdit()->update($DataForm,$this->getLang());
 
                 if($dataPost['save'] != '')
                 {
