@@ -14,8 +14,21 @@ class DuplicateController extends AbstractController
 
     public function variables()
     {
+
+        $LinkerModels = $this->getQuAdminModelOptions()->getLinkerModels();
+        if(count($LinkerModels)){
+            foreach($LinkerModels as $LinkerModel){
+                if(isset($LinkerModel['model']) and $LinkerModel['model'] == 'qu_'.$this->getModel().'_model'){
+                    $this->setOptions($this->Service('qu_'.$this->getModel().'_model'));
+                    $this->setQuAdminModelOptions($this->getOptions());
+                }
+            }
+        }
+
         $this->getModelDuplicate()->setQuAdminModelOptions($this->getOptions());
-        $redirectBack =  array('action'=>'index','id'=>$this->getId(),'lang'=>$this->getLang());
+        $this->getField();
+
+        $redirectBack =  array('action'=>'index','id'=>$this->getId(),'model'=>$this->getModel(),'lang'=>$this->getLang());
         if($this->getIsPost()){
             $dataPost = $this->getPost();
             if($dataPost['checkRow'] == ''){
@@ -35,11 +48,14 @@ class DuplicateController extends AbstractController
                     'lang'=>$this->getLang(),
                     'route'=> $this->getRoute(),
                     'key' => $this->key,
+                    'model' => $this->getModel(),
                 );
             }elseif($dataPost['duplicate'] != ''){
+
                 foreach($dataPost['checkRow'] as $idCheck){
-                    $this->getModelDuplicate()->duplicate($idCheck);
+                    $this->getModelDuplicate()->duplicate($idCheck,$this->getOptions());
                 }
+
                 $this->getMessage(array('type' => $this->getTranslate('DuplicateClassType'), 'message' => $this->getTranslate('DuplicateMessage')));
                 return
                     $this->getToRoute($this->getRoute(), $redirectBack);
@@ -58,6 +74,7 @@ class DuplicateController extends AbstractController
                 'lang'=> $this->getLang(),
                 'route'=> $this->getRoute(),
                 'key' => $this->key,
+                'model' => $this->getModel(),
             );
         }else{
             $this->getMessage(array('type' =>$this->getTranslate('DuplicateNotCheckedClassType'), 'message'=>$this->getTranslate('DuplicateNotCheckedMessage')));

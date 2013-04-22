@@ -26,34 +26,66 @@ class QuAdminMap extends AbstractHelper
         $this->serviceLocator = $serviceLocator;
     }
 
-    public function __invoke($id,$options)
+    public function __invoke($id,$options,$model,$route,$lang)
     {
-        $mapperHelper = $this->serviceLocator->get('qu_admin_model_helper');
+        if(!$model){
+
+        $mapperHelper = $this->serviceLocator->get('qu_admin_model_form');
         $mapperHelper->setQuAdminModelOptions($options);
         $this->getField($options->getTableKeyFields());
-        $this->recursive($id,$mapperHelper);
+        $level = 0;
+        $this->recursive($level,$id,$mapperHelper,$model,$options,$route,$lang);
+
+        }
     }
 
-    public function recursive($id,$mapperHelper){
+    public function recursive($level,$id,$mapperHelper,$model,$options,$route,$lang){
 
-        $maps = $mapperHelper->findByParent($id);
+
+        $maps = $mapperHelper->findByParentRecursive($id);
         if($maps){
             echo '<ul class="map">';
             foreach($maps as $map){
-
                 if($map[$this->KeyTitle]){
                     $title = $map[$this->KeyTitle];
                 }else{
                     $title = '<span class="Unnamed">Unnamed</span>';
                 }
-
-                echo '<li>'.
+                echo '<li>
+                    <a href="'.$this->view->url($route,array('id'=>$map[$this->KeyIdParent],'model'=>null,'action'=>'index','lang'=>$lang)).'">
+                    <span class="iconb" data-icon=&#xe017;></span>'.
                         $title.
-                        $this->recursive($map[$this->KeyId],$mapperHelper)
-                   .'</li>';
-
+                        $this->recursive($level,$map[$this->KeyId],$mapperHelper,$model,$options,$route,$lang)
+                    .'</a>
+                    </li>';
             }
             echo '</ul>';
+        }
+
+
+        /**
+         * Load Model
+         */
+        foreach($options->getLinkerModels() as $LinkerModel){
+            $maps = $mapperHelper->findByParentRecursive($id,$LinkerModel['table'],$LinkerModel['key_id_parent'],$LinkerModel['key_id']);
+            if($maps){
+                echo '<ul class="map">';
+                foreach($maps as $map){
+                    if($map[$LinkerModel['key_title']]){
+                        $title = $map[$LinkerModel['key_title']];
+                    }else{
+                        $title = '<span class="Unnamed">Unnamed</span>';
+                    }
+                    $model = str_replace('qu_','', str_replace('_model','',$LinkerModel['model']));
+                    echo '<li>
+                            <a class="model" href="'.$this->view->url($route,array('id'=>$map[$LinkerModel['key_id_parent']],'model'=>$model,'action'=>'index','lang'=>$lang)).'">
+                            <span class="iconb" data-icon=&#xe014;></span>'.
+                                $LinkerModel['name']  .' | '.  $title .'
+                          </a>
+                          </li>';
+                }
+                echo '</ul>';
+            }
         }
     }
 

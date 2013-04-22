@@ -45,25 +45,53 @@
                 <td  width="47"><div>Status<span></span></div></td>
             <?php } ?>
 
-            <td width="110">Actions</td>
+            <td width="70">Actions</td>
 
-            <?php if($options->getLinkerParent()){  $cols += 1; ?>
-                <td  width="55"><div>Children<span></span></div></td>
+
+            <?php if($options->getLinkerParent() > $level){ $cols += 1; ?>
+
+                <td  width="80">
+                    <div>Children<span></span></div>
+                </td>
+
             <?php } ?>
+
+            <?php
+
+                $LinkerModels = $options->getLinkerModels();
+
+                if(count($LinkerModels)){
+                    foreach($LinkerModels as $LinkerModel){  $cols += 1;
+
+                        if($LinkerModel['level'] === true){
+                            $cols += 1;?>
+                            <td  width="80">
+                                <div><?php echo $LinkerModel['name'] ?><span></span></div>
+                            </td>
+
+            <?php      }elseif($LinkerModel['level'] == $level){  $cols += 1; ?>
+
+                            <td  width="80">
+                                <div><?php echo $LinkerModel['name'] ?><span></span></div>
+                            </td>
+           <?php        }
+                    }
+                }
+            ?>
 
         </tr>
         </thead>
         <tfoot>
         <tr>
-            <td colspan="13">
+            <td colspan="<?php echo  $cols; ?>">
                 <div class="pull-left">
-                    <select  name="action" class="btn AjaxOptions" style="width:130px;" id="action" onchange="this.form.submit($('form').attr('action', '<?=$this->url($route,array('lang'=>$lang));?>/' + $(this).val() + '/<?php echo $id?>'))">
+                    <select  name="action" class="btn AjaxOptions" style="width:130px;" id="action" onchange="this.form.submit($('form').attr('action', '<? echo $this->url($route,array('lang'=>$lang));  ?>/' + $(this).val() + '/<?php echo $model?>/<?php echo $id?>'))">
                         <option value="">Select option</option>
                         <option value="duplicate">Duplicate</option>
                         <option value="delete">Delete</option>
                     </select>
                 </div>
-                <? $this->placeholder('urlPage')->set($this->url($route,array('action'=>'qu_admin_table_ajax','lang'=>$lang,'id' => $id))); ?>
+                <? $this->placeholder('urlPage')->set($this->url($route,array('action'=>'qu_admin_table_ajax','model'=>$model,'lang'=>$lang,'id' => $id))); ?>
                 <?php echo $this->paginationControl($this->list, 'Sliding', 'qu-admin/layout/pagination'); ?>
 
             </td>
@@ -73,16 +101,15 @@
         <?php
         if(!0 == count($this->list)){
             foreach($this->list as $list){
-
                 if($key['IdLang'] and $key['Lang']){
 
                     $id_list = $list[$key['IdLang']];
-                    $qu_admin_lang_nav_table = $this->qu_admin_lang_nav_table($id_list,$list[$key['Lang']],$options,$route);
+                    $qu_admin_lang_nav_table = $this->qu_admin_lang_nav_table($id_list,$list[$key['Lang']],$options,$route,$model,$id);
 
                 }else{
 
                     $id_list = $list[$key['Id']];
-                    $qu_admin_lang_nav_table = $this->qu_admin_lang_nav_table($id_list,null,$options,$route);
+                    $qu_admin_lang_nav_table = $this->qu_admin_lang_nav_table($id_list,null,$options,$route,$model,$id);
                 }
 
                 ?>
@@ -150,7 +177,7 @@
 
                     <?php if($key['Status']){ ?>
                         <td class="center">
-                            <a href="<?php echo $this->url($route,array('lang'=>$lang,'action'=>'edit', 'id' => $id_list ));?>">
+                            <a href="<?php echo $this->url($route,array('lang'=>$lang,'action'=>'edit','model'=>$model, 'id' => $id_list ));?>">
                                 <?php echo $this->qu_admin_status($list[$key['Status']]); ?>
                             </a>
                         </td>
@@ -165,24 +192,22 @@
                             </button>
                             <ul class="dropdown-menu pull-right">
                                 <?php echo $qu_admin_lang_nav_table->getNavMenuLi(); ?>
-                                <li><a href="<?php echo $this->url($route,array('lang'=>$lang,'action'=>'duplicate','id'=>$list[$key['IdParent']],'id_parent'=>$list[$key['Id']]));?>"><span class="icon-copy"></span>Duplicate</a></li>
-                                <li><a href="<?php echo $this->url($route,array('lang'=>$lang,'action'=>'delete','id'=>$list[$key['IdParent']],'id_parent'=>$list[$key['Id']]));?>"><span class="icon-remove-2"></span>Delete</a></li>
+                                <li><a href="<?php echo $this->url($route,array('lang'=>$lang,'model'=>$model,'action'=>'duplicate','id'=>$list[$key['IdParent']],'id_parent'=>$list[$key['Id']]));?>"><span class="icon-copy"></span>Duplicate</a></li>
+                                <li><a href="<?php echo $this->url($route,array('lang'=>$lang,'model'=>$model,'action'=>'delete','id'=>$list[$key['IdParent']],'id_parent'=>$list[$key['Id']]));?>"><span class="icon-remove-2"></span>Delete</a></li>
                             </ul>
                        </div>
-                            <a href="<?php echo $this->url($route,array('lang'=>$lang,'action'=>'edit', 'id' => $id_list ));?>" class="btn btn-small" title="Edit"><span class="iconb" data-icon="&#xe1db;"></span></a>
-                            <?php if($options->getLinkerParent()){ ?>
-                                <a href="<?php echo $this->url($route,array('lang'=>$lang,'action'=>'add','id' => $id_list ));?>" class="btn btn-small" title="Add"><span class="iconb" data-icon="&#xe14a;"></span></a>
-                            <?php } ?>
+                            <a href="<?php echo $this->url($route,array('lang'=>$lang,'model'=>$model,'action'=>'edit', 'id' => $id_list ));?>" class="btn btn-small" title="Edit"><span class="iconb" data-icon="&#xe1db;"></span></a>
 
                         </div>
-
                     </td>
 
-                    <?php if($options->getLinkerParent()){ ?>
-                        <td class="center td-child">
-                          <?php echo $qu_admin_lang_nav_table->getCountChild();?>
-                        </td>
-                    <?php } ?>
+
+                  <?php if($options->getLinkerParent() > $level){ ?>
+                      <?php echo $qu_admin_lang_nav_table->getCountChild();?>
+                  <?php } ?>
+
+                    <?php echo $qu_admin_lang_nav_table->getLinkModel();?>
+
 
                 </tr>
             <? } } ?>
@@ -197,7 +222,7 @@
 <script type="text/javascript">
 
 
-    var UrlAdmin = '<?php echo $this->url($route,array('action'=>'qu_admin_table_ajax', 'id' => $id,'lang'=>$lang));?>';
+    var UrlAdmin = '<?php echo $this->url($route,array('action'=>'qu_admin_table_ajax', 'model'=>$model, 'id' => $id,'lang'=>$lang));?>';
     var NumPerPage = '<?php echo $npp; ?>';
     var Search = encodeURIComponent('<?php echo $q?>');
     var Page = '<?php echo $page ?>';

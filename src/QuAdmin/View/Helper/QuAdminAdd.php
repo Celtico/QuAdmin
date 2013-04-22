@@ -12,21 +12,49 @@ use Zend\View\Helper\AbstractHelper;
 class QuAdminAdd extends AbstractHelper
 {
 
-    protected $serviceLocator;
+    protected $service;
 
-    public function __construct($serviceLocator){
+    public function __construct($service){
 
-        $this->serviceLocator = $serviceLocator;
+        $this->service = $service;
     }
 
-    public function __invoke($route,$id,$lang,$options,$action)
+    public function __invoke($route,$id,$lang,$options,$action,$model)
     {
+
+
         if($action == ''){
 
-            $url = $this->view->url($route, array('action'=>'add','id'=>$id,'lang'=>$lang));
-            $btn = '
-            <a href="'.$url.'" title="Add" class="btn btn-inverse" style="margin:3px 3px 0 0;"> Add </a>
-            ';
+            $btn = '<a href="'.$this->view->url($route, array('action'=>'add','model'=>$model,'id'=>$id,'lang'=>$lang)).'" title="Add" class="btn btn-inverse" style="margin:3px 3px 0 0;">
+             <span class="iconb" data-icon="&#xe14a;"></span> Add   '.$options->getTableLabel().'
+             </a>';
+
+            if($model){
+                $LinkerModels = $options->getLinkerModels();
+                if(count($LinkerModels)){
+                    $mapperBreadCrumb  = $this->service->get('qu_admin_model_bread_crumb');
+                    $mapperBreadCrumb->setQuAdminModelOptions($options);
+                    foreach($LinkerModels as $LinkerModel)
+                    {
+                        if($LinkerModel['level'] === true){
+                            $model = str_replace('qu_','', str_replace('_model','',$LinkerModel['model']));
+                            $btn .= '
+                            <a href="'.$this->view->url($route,array('lang'=>$lang,'action'=>'add','model'=> $model,'id' => $id)).'"  title="Add" class="btn btn-inverse" style="margin:3px 3px 0 0;">
+                                <span class="iconb" data-icon="&#xe14a;"></span>  Add  '.$LinkerModel['name'].'
+                            </a>
+                        ';
+                        }elseif($LinkerModel['level'] != 1 and $LinkerModel['level'] == (1-$mapperBreadCrumb->getLevel())){
+                            $model = str_replace('qu_','', str_replace('_model','',$LinkerModel['model']));
+                            $btn .= '
+                            <a href="'.$this->view->url($route,array('lang'=>$lang,'action'=>'add','model'=> $model,'id' => $id)).'"  title="Add" class="btn btn-inverse" style="margin:3px 3px 0 0;">
+                                <span class="iconb" data-icon="&#xe14a;"></span>  Add  '.$LinkerModel['name'].'
+                            </a>
+                        ';
+                        }
+                    }
+                }
+            }
+
 
         }else{
 

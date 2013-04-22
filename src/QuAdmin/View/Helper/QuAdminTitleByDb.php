@@ -21,9 +21,9 @@ class QuAdminTitleByDb extends AbstractHelper
         $this->serviceLocator = $serviceLocator;
     }
 
-    public function __invoke($options,$key,$route){
+    public function __invoke($options,$key,$route,$model){
 
-        $mapperHelper = $this->serviceLocator->get('qu_admin_model_helper');
+        $mapperHelper = $this->serviceLocator->get('qu_admin_model_bread_crumb');
         $mapperHelper->setQuAdminModelOptions($options);
         $endBreadCrumb = $mapperHelper->endBreadCrumb();
 
@@ -31,18 +31,20 @@ class QuAdminTitleByDb extends AbstractHelper
 
             return '
             <div class="title-nav">
-                <a href="'.$this->view->url($route, array('action'=>'index','id'=>@$endBreadCrumb[@$key['IdParent']])).'">
+                <a href="'.$this->view->url($route, array('action'=>'index','model'=>null,'id'=>@$endBreadCrumb[@$key['IdParent']])).'">
                     <span class="iconb" data-icon="&#xe032;"></span>'
                     .$endBreadCrumb['title'].
                 '</a>
+            </div>
+            <div class="nav-back">
+                <a class="btn" href="'.$this->view->url($route, array('action'=>'index','model'=>null,'id'=>@$endBreadCrumb[@$key['IdParent']])).'"><span class="iconb" data-icon=&#xe0a8;></span></a>
             </div>';
 
         }else{
 
-            return '
-            <div class="title-nav">'
-                .$endBreadCrumb['title'].
-            '</div>';
+            return '<div class="title-nav">'.$endBreadCrumb['title'].'</div>';
         }
+
+
     }
 }

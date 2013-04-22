@@ -63,6 +63,7 @@ class QuAdminNavigation extends  Menu {
         // does page have a href?
         $href = $page->getHref();
         if ($href) {
+
             $element = 'a';
             $attribs['href'] = $href;
             $attribs['target'] = $page->getTarget();

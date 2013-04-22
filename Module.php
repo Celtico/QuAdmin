@@ -63,7 +63,7 @@ class Module implements BootstrapListenerInterface
                 'qu_admin_model_delete'       => 'QuAdmin\Model\DeleteMapper',
                 'qu_admin_model_duplicate'    => 'QuAdmin\Model\DuplicateMapper',
                 'qu_admin_model_edit'         => 'QuAdmin\Model\EditMapper',
-                'qu_admin_model_helper'       => 'QuAdmin\Model\HelperMapper',
+                'qu_admin_model_bread_crumb'  => 'QuAdmin\Model\BreadCrumb',
                 'qu_admin_model_index'        => 'QuAdmin\Model\IndexMapper',
                 'qu_admin_model_index_ajax'   => 'QuAdmin\Model\IndexAjaxMapper',
                 'qu_admin_model_languages'    => 'QuAdmin\Model\LanguagesMapper',

@@ -1,8 +1,8 @@
 <?php
 
-    echo $this->qu_admin_bread_crumb($options,$id,$route,$lang);
+    echo $this->qu_admin_bread_crumb($options,$id,$route,$lang,$model,$this->mergeBreadCrumbModels);
     $form = $this->form;
-    $form->setAttribute('action',$this->url($route ,array('action' => $action,'id'=>$id,'lang'=>$lang)));
+    $form->setAttribute('action',$this->url($route ,array('action' => $action,'model' => $model,'id'=>$id,'lang'=>$lang)));
     $form->setAttribute('enctype', 'multipart/form-data');
     $form->setAttribute('id', $action);
     $form->prepare();
@@ -14,9 +14,9 @@
 
 <div class="nav-actions-absolute">
     <div class="nav-actions">
-        <?php echo $this->qu_admin_title_by_db($options,$key,$route); ?>
-        <?php echo $this->qu_admin_add($route,$id,$lang,$options,$action); ?>
-        <?php echo $this->qu_admin_languages($options,$route,$lang,$action,$id); ?>
+        <?php echo $this->qu_admin_title_by_db($options,$key,$route,$model); ?>
+        <?php echo $this->qu_admin_add($route,$id,$lang,$options,$action,$model); ?>
+        <?php echo $this->qu_admin_languages($options,$route,$lang,$action,$id,$model); ?>
         <div class="clearfix"></div>
     </div>
 </div>
@@ -30,9 +30,9 @@
         </div>
     <?php } ?>
 
-    <?php /* if(isset($error)){ ?>
-        <pre> <?php $t = "var_dump($error)"; ?>  </pre>
-    <?php } */ ?>
+    <?php if(isset($error)){ ?>
+        <pre> <?php var_dump($error); ?>  </pre>
+    <?php }  ?>
 
     <?php echo $this->qu_admin_messages(); ?>
 

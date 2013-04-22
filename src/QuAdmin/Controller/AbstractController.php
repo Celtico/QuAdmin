@@ -30,7 +30,10 @@ class AbstractController extends AbstractActionController
     protected $options;
     protected $translate;
     protected $form;
+    protected $level;
+    protected $model;
     protected $modelAdd;
+    protected $modelBreadCrumb;
     protected $modelDelete;
     protected $modelDuplicate;
     protected $modelEdit;
@@ -41,6 +44,7 @@ class AbstractController extends AbstractActionController
     protected $numberPage;
     protected $page;
     protected $search;
+    protected $field;
 
     public $KeyIdParent;
     public $KeyId;
@@ -160,6 +164,8 @@ class AbstractController extends AbstractActionController
     {
         return $this->app()->getMvcEvent()->getRouteMatch();
     }
+
+
     protected function app()
     {
         return $this->getServiceLocator()->get('application');
@@ -167,6 +173,10 @@ class AbstractController extends AbstractActionController
     protected function plug()
     {
         return $this->getServiceLocator()->get('ControllerPluginManager');
+    }
+    protected function serviceLocal()
+    {
+        return $this->getServiceLocator();
     }
     protected function Service($s)
     {
@@ -185,7 +195,20 @@ class AbstractController extends AbstractActionController
         return $this->date;
     }
 
+    protected function setModel($model)
+    {
+        $this->model = $model;
+    }
 
+    protected function getModel()
+    {
+        if(!$this->model){
+            $this->setModel(
+                $this->match()->getParam('model')
+            );
+        }
+        return $this->model;
+    }
     protected function setId($id)
     {
         $this->id = $id;
@@ -215,6 +238,8 @@ class AbstractController extends AbstractActionController
         }
         return $this->id_parent;
     }
+
+
 
     protected function setIsPost($isPost)
     {
@@ -254,10 +279,12 @@ class AbstractController extends AbstractActionController
         return $this->message;
     }
 
+
     protected function setModelAdd($modelAdd)
     {
         $this->modelAdd = $modelAdd;
     }
+
 
     protected function getModelAdd()
     {
@@ -267,6 +294,20 @@ class AbstractController extends AbstractActionController
             );
         }
         return $this->modelAdd;
+    }
+    protected function setModelBreadCrumb($modelBreadCrumb)
+    {
+        $this->modelBreadCrumb = $modelBreadCrumb;
+    }
+
+    protected function getModelBreadCrumb()
+    {
+        if(!$this->modelBreadCrumb){
+            $this->setModelBreadCrumb(
+                $this->Service('qu_admin_model_bread_crumb')
+            );
+        }
+        return $this->modelBreadCrumb;
     }
 
     protected function setModelDelete($modelDelete)
@@ -457,6 +498,23 @@ class AbstractController extends AbstractActionController
 
     /* INSERT QuAdminModelOptions  */
 
+    public function getLevel()
+    {
+        if(!$this->level)
+        {
+            $this->getModelBreadCrumb()->setQuAdminModelOptions($this->getOptions());
+            $breadCrumb = $this->getModelBreadCrumb()->breadCrumb($this->getId(),false,$this->getModel());
+            $this->setLevel( $breadCrumb->getLevel());
+        }
+        return $this->level;
+    }
+
+    public function setLevel($level)
+    {
+        $this->level = $level;
+        return $this->level;
+    }
+
 
 
     public function getQuAdminModelOptions()
@@ -469,22 +527,25 @@ class AbstractController extends AbstractActionController
     public function setQuAdminModelOptions($quAdminModelOptions)
     {
         $this->quAdminModelOptions = $quAdminModelOptions;
-        $this->getField();
         return $this;
     }
     public function getField()
     {
-        $TableFields    = $this->getQuAdminModelOptions()->getTableKeyFields();
-
-        $fil = new \Zend\Filter\Word\UnderscoreToCamelCase();
-
-
-        foreach($TableFields as $k => $e){
-            $k = $fil->filter($k);
-            $this->$k = $e;
-            $kView  = str_replace('Key','',$k);
-            $this->key[$kView]  =  $e;
+        if(!$this->field){
+            $TableFields    = $this->getQuAdminModelOptions()->getTableKeyFields();
+            $fil = new \Zend\Filter\Word\UnderscoreToCamelCase();
+            foreach($TableFields as $k => $e){
+                $k = $fil->filter($k);
+                $this->$k = $e;
+                $kView  = str_replace('Key','',$k);
+                $this->key[$kView]  =  $e;
+            }
         }
+        return $this;
+    }
+    public function setField($field)
+    {
+        $this->field = $field;
         return $this;
     }
 

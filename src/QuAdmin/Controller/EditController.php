@@ -15,25 +15,65 @@ class EditController extends AbstractController
 
     public function variables()
     {
+
+        /**
+         * Conserve Local Model
+         */
+        $this->getModelBreadCrumb()->setQuAdminModelOptions($this->getOptions());
+
+
+        /**
+         * Reference Url Model
+         */
+        $model = false;
+        $LinkerModels = $this->getQuAdminModelOptions()->getLinkerModels();
+        if(count($LinkerModels)){
+            foreach($LinkerModels as $LinkerModel){
+                if(isset($LinkerModel['model']) and $LinkerModel['model'] == 'qu_'.$this->getModel().'_model'){
+                    $this->setOptions($this->Service('qu_'.$this->getModel().'_model'));
+                    $this->setQuAdminModelOptions($this->getOptions());
+                    $this->setIdParent($this->getId());
+                    $model = true;
+                }
+            }
+        }
+
+        /**
+         * get Field Keys
+         */
+        $this->getField();
+
+
+        /**
+         * Local Model
+         */
+        $this->getModelEdit()->setQuAdminModelOptions($this->getOptions());
+        $dataDb = $this->getModelEdit()->findByLangIdByLang($this->getLang(),$this->getId());
+
+        if(isset($dataDb[$this->KeyIdParent])){
+            $mergeBreadCrumbModels = $this->getModelBreadCrumb()->breadCrumb($dataDb[$this->KeyIdParent],false,$this->getModel())->get();
+        }else{
+            $mergeBreadCrumbModels = null;
+        }
+
+
+
+
         $dataController = array(
-            'action'        => 'edit',
-            'id_parent'     => $this->getIdParent(),
-            'id'            => $this->getId(),
-            'lang'          => $this->getLang(),
-            'route'         => $this->getRoute(),
-            'options'       => $this->getOptions(),
-            'key'           => $this->key,
-            'PathTemplateRender' => $this->getPathTemplateRender()
+            'action'                 => 'edit',
+            'id_parent'              => $this->getIdParent(),
+            'id'                     => $this->getId(),
+            'lang'                   => $this->getLang(),
+            'route'                  => $this->getRoute(),
+            'options'                => $this->getOptions(),
+            'key'                    => $this->key,
+            'PathTemplateRender'     => $this->getPathTemplateRender(),
+            'model'                  => $this->getModel(),
+            'mergeBreadCrumbModels'  => $mergeBreadCrumbModels,
         );
 
 
-
-        $this->getModelEdit()->setQuAdminModelOptions($this->getOptions());
-
-        $dataDb = $this->getModelEdit()->findByLangIdByLang($this->getLang(),$this->getId());
-
         $this->getForm()->setOptionsForm($this->getOptions());
-
         $this->getForm()->addQuFormOptions($dataDb,$this->getModelForm(),$this->getServiceLocator());
 
         $dataController += array('form' => $this->getForm());
@@ -44,7 +84,12 @@ class EditController extends AbstractController
 
             if($dataPost['close'] != '')
             {
-                return $this->getToRoute($this->getRoute(),array('id'=> $this->check($dataDb),'lang'=>$this->getLang()));
+                return $this->getToRoute($this->getRoute(),array(
+                    'action'=>'index',
+                    'model'=>$this->getModel(),
+                    'id'=> $this->check($dataDb),
+                    'lang'=>$this->getLang()
+                ));
             }
             /**
              * Process by Data
@@ -56,6 +101,13 @@ class EditController extends AbstractController
             if($this->KeyLang)      $DataForm[$this->KeyLang]     = $this->getLang();
             $DataForm[$this->KeyId] = $this->getId();
 
+            /*
+             * Add model
+             * */
+            if($model){
+                if($this->KeyIdParent)  $DataForm[$this->KeyIdParent] =  $dataDb[$this->KeyIdParent];
+            }
+
             if(!isset($DataForm['error'])){
 
                 $this->getModelEdit()->update($DataForm,$this->getLang());
@@ -63,12 +115,22 @@ class EditController extends AbstractController
                 if($dataPost['save'] != '')
                 {
                     $this->getMessage(array('type'=>$this->getTranslate('EditSaveClassType'),'message' =>$this->getTranslate('EditSaveMessage')));
-                    return $this->getToRoute($this->getRoute(),array('action'=>'edit','id'=>$this->getId(),'lang'=>$this->getLang()));
+                    return $this->getToRoute($this->getRoute(),array(
+                        'action'=>'edit',
+                        'model'=>$this->getModel(),
+                        'id'=>$this->getId(),
+                        'lang'=>$this->getLang()
+                    ));
                 }
                 elseif($dataPost['saveandclose'] != '')
                 {
                     $this->getMessage(array('type'=>$this->getTranslate('EditSaveCloseClassType'),'message'=>$this->getTranslate('EditSaveCloseMessage')));
-                    return $this->getToRoute($this->getRoute(),array('id' =>  $this->check($dataDb),'lang'=>$this->getLang()));
+                    return $this->getToRoute($this->getRoute(),array(
+                        'action'=>'index',
+                        'model'=>$this->getModel(),
+                        'id' =>  $this->check($dataDb),
+                        'lang'=>$this->getLang()
+                    ));
                 }
 
             }elseif(isset($DataForm['error']) and $DataForm['error']){

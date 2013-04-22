@@ -34,4 +34,23 @@ class FormMapper extends AbstractMapper implements Interfaces\FormMapperInterfac
 
         return $selector;
     }
+
+    public function findByParentRecursive($id_parent,$tableName = null,$KeyIdParent = null,$KeyId = null)
+    {
+        if($KeyIdParent)
+        {
+            $this->where(array($KeyIdParent=> $id_parent));
+            $this->toArray();
+            $this->Order($KeyId.' desc');
+            return $this->all($tableName);
+        }
+        elseif($this->KeyIdParent)
+        {
+            $this->where(array($this->KeyIdParent=> $id_parent));
+            $this->toArray();
+            $this->Order($this->KeyId.' desc');
+            return $this->all($tableName);
+        }
+        return false;
+    }
 }

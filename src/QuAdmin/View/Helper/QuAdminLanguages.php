@@ -21,7 +21,7 @@ class QuAdminLanguages extends AbstractHelper
         $this->service = $service;
     }
 
-    public function __invoke($options,$route,$lang,$action,$id)
+    public function __invoke($options,$route,$lang,$action,$id,$model)
     {
         $mHelp = $this->service->get('qu_admin_model_languages');
         $o     = $this->service->get('qu_languages_model');
@@ -39,8 +39,8 @@ class QuAdminLanguages extends AbstractHelper
             foreach( $mHelp->languages() as $key => $language ){
                 $menu .= '
             <li>
-                <a href="'.$this->view->url($route,array('lang'=>$key,'action'=>$action,'id'=>$id)).'" style="margin:3px 3px 0 0;" class="btn'.$this->Active($key,$lang,' active').'">
-                    <i class="icos-flag"></i><span>'.$language.'</span>
+                <a href="'.$this->view->url($route,array('lang'=>$key,'model'=>$model,'action'=>$action,'id'=>$id)).'" style="margin:3px 3px 0 0;" class="btn'.$this->Active($key,$lang,' active').'">
+                    <span class="iconb" data-icon=&#xe07e;></span> <span>'.$language.'</span>
                 </a>
 
             </li>' ;

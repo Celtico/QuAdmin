@@ -16,4 +16,5 @@ class LanguagesMapper extends AbstractMapper implements  Interfaces\LanguagesMap
         }
         return $selector;
     }
+
 }

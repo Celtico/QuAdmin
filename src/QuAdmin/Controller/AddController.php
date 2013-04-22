@@ -18,6 +18,32 @@ class AddController extends AbstractController
 
     public function variables()
     {
+        /**
+         * Conserve Local Model
+         */
+        $this->getModelBreadCrumb()->setQuAdminModelOptions($this->getOptions());
+        $this->getModelBreadCrumb()->breadCrumb($this->getId(),false,$this->getModel());
+
+        $LinkerModels = $this->getQuAdminModelOptions()->getLinkerModels();
+        if(count($LinkerModels)){
+            foreach($LinkerModels as $LinkerModel){
+                if(isset($LinkerModel['model']) and $LinkerModel['model'] == 'qu_'.$this->getModel().'_model'){
+                    $this->setOptions($this->Service('qu_'.$this->getModel().'_model'));
+                    $this->setQuAdminModelOptions($this->getOptions());
+                }
+            }
+        }
+
+
+
+        $this->match('qu_admin_navigation')->setParam('model',null);
+        $this->match('qu_admin_navigation')->setParam('id',0);
+        $this->match('qu_admin_navigation')->setParam('action',null);
+
+
+        $this->getModelAdd()->setQuAdminModelOptions($this->getOptions());
+        $this->getField();
+
         $dataController = array(
             'action'        => 'add',
             'id'            => $this->getId(),
@@ -25,32 +51,13 @@ class AddController extends AbstractController
             'route'         => $this->getRoute(),
             'options'       => $this->getOptions(),
             'id_parent'     => $this->getIdParent(),
+            'model'         => $this->getModel(),
             'key'           => $this->key,
             'PathTemplateRender' => $this->getPathTemplateRender(),
-            'controller'=>$this
         );
 
 
-
-        $this->getModelAdd()->setQuAdminModelOptions($this->getOptions());
-        $breadCrumb = $this->getModelAdd()->breadCrumb($this->getId());
-
-        if($breadCrumb->getLevel() == 1){
-
-          /*
-           * @TODO
-          */
-
-        }elseif($breadCrumb->getLevel() == 2){
-
-            /*
-            * @TODO
-           */
-
-        }
-
         $this->getForm()->setOptionsForm($this->getOptions());
-
         $this->getForm()->addQuFormOptions($dataController,$this->getModelForm(),$this->getServiceLocator());
 
         $dataController += array('form' => $this->getForm());
@@ -71,7 +78,12 @@ class AddController extends AbstractController
                     ));
                 }
 
-                return $this->getToRoute($this->getRoute(),array('id' => @$dataController['id_parent'],'lang'=>$this->getLang()));
+                return $this->getToRoute($this->getRoute(),array(
+                    'action'    => 'index',
+                    'id'        => $this->getId(),
+                    'lang'      => $this->getLang(),
+                    'model'     => $this->getModel(),
+                ));
 
             }
             /**
@@ -98,8 +110,8 @@ class AddController extends AbstractController
                 {
                     $plupload = $this->Service('plupload_service');
                     $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array(
-                        'id'      => $redirect_id,
-                        'options' => $this->getOptions(),
+                        'id'        => $redirect_id,
+                        'options'   => $this->getOptions(),
                         'plupload'  =>  $plupload
                     ));
                 }
@@ -107,11 +119,21 @@ class AddController extends AbstractController
                 if($redirect_id){
                     if($dataPost['save'] != ''){
                         $this->getMessage(array('type'=>$this->getTranslate('AddSaveClassType'),'message' =>$this->getTranslate('AddSaveMessage')));
-                        return $this->getToRoute( $dataController['route'],array('action'=> 'edit','id' => $redirect_id,'lang' => $this->getLang()));
+                        return $this->getToRoute($dataController['route'],array(
+                            'action'        => 'edit',
+                            'id'            => $redirect_id,
+                            'lang'          => $this->getLang(),
+                            'model'         => $this->getModel(),
+                        ));
                     }
                     elseif($dataPost['saveandclose'] != ''){
                         $this->getMessage(array('type'=>$this->getTranslate('AddSaveCloseClassType'), 'message'=>$this->getTranslate('AddSaveCloseMessage')));
-                        return $this->getToRoute($this->getRoute(),array( 'id' => $this->getId(), 'lang'=>$this->getLang()));
+                        return $this->getToRoute($this->getRoute(),array(
+                            'id'        => $this->getId(),
+                            'lang'      =>$this->getLang(),
+                            'model'     => $this->getModel(),
+                            'action'    => 'index',
+                        ));
                     }
                 }
 

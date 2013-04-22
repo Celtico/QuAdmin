@@ -12,11 +12,23 @@ class IndexAjaxController extends AbstractController
 {
     public function variables()
     {
-        $this->getModelIndex()->setQuAdminModelOptions($this->getOptions());
 
+        $LinkerModels = $this->getQuAdminModelOptions()->getLinkerModels();
+        if(count($LinkerModels)){
+            foreach($LinkerModels as $LinkerModel){
+                if(isset($LinkerModel['model']) and $LinkerModel['model'] == 'qu_'.$this->getModel().'_model'){
+                    $this->setOptions($this->Service('qu_'.$this->getModel().'_model'));
+                    $this->setQuAdminModelOptions($this->getOptions());
+                }
+            }
+        }
+
+
+        $this->getModelIndex()->setQuAdminModelOptions($this->getOptions());
         if($this->getNewOrder() != '')
             $this->getModelIndex()->newOrder($this->getNewOrder(),$this->getPageOrder(),$this->getPage(),$this->getNumberPage());
 
+        $this->getField();
 
         return array(
             'id'        => $this->getId(),
@@ -35,7 +47,9 @@ class IndexAjaxController extends AbstractController
                            $this->getNumberPage()),
             'ajax'      => 1,
             'key'       => $this->key,
-            'PathTemplateRender' => $this->getPathTemplateRender()
+            'level'     => $this->getLevel(),
+            'PathTemplateRender' => $this->getPathTemplateRender(),
+            'model'     => $this->getModel(),
         );
     }
 

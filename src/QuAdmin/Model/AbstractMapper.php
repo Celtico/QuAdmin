@@ -66,19 +66,19 @@ class AbstractMapper  implements DbAdapterAwareInterface
     protected $objectEntity;
 
 
-    protected function entity()
+    public function entity()
     {
         $entity =  $this->getEntity();
         $entity =   new $entity;
         return   $entity;
     }
 
-    protected function sql()
+    public function sql()
     {
         return  new Sql($this->getDbAdapter());
     }
 
-    protected function getSelect()
+    public function getSelect()
     {
         if(!$this->select){
             $this->setSelect($this->getTableName());
@@ -86,13 +86,13 @@ class AbstractMapper  implements DbAdapterAwareInterface
        return $this->select;
     }
 
-    protected function setSelect($TableName)
+    public function setSelect($TableName)
     {
         $this->select = $this->sql()->select($TableName);
         return $this;
     }
 
-    protected function resultSet()
+    public function resultSet()
     {
         if($this->array and !$this->objectEntity){
             //return new ResultSet(ResultSet::TYPE_ARRAYOBJECT);
@@ -102,30 +102,30 @@ class AbstractMapper  implements DbAdapterAwareInterface
         }
     }
 
-    protected function toArray()
+    public function toArray()
     {
         $this->array = true;
         return $this;
     }
-    protected function toObjectEntity()
+    public function toObjectEntity()
     {
         $this->objectEntity = true;
         return $this;
     }
 
-    protected function Order($Order)
+    public function Order($Order)
     {
         $this->Order = $Order;
         return $this;
     }
 
-    protected function where(array $where)
+    public function where(array $where)
     {
         $this->where = $where;
         return $this;
     }
 
-    protected function selectByWhereByOrder($TableName)
+    public function selectByWhereByOrder($TableName)
     {
         $select = $this->sql()->select($TableName ?: $this->getTableName());
         $sel =  $select;
@@ -134,7 +134,7 @@ class AbstractMapper  implements DbAdapterAwareInterface
         if($this->where and $this->Order) $sel = $select->where($this->where)->order($this->Order);
         return $sel;
     }
-    protected function all($TableName = null)
+    public function all($TableName = null)
     {
         $select = $this->selectByWhereByOrder($TableName);
         $stmt   = $this->sql()->prepareStatementForSqlObject($select);
@@ -142,7 +142,7 @@ class AbstractMapper  implements DbAdapterAwareInterface
 
         return  $result;
     }
-    protected function row($TableName = null)
+    public function row($TableName = null)
     {
         $select = $this->selectByWhereByOrder($TableName);
         $stmt = $this->sql()->prepareStatementForSqlObject($select);
@@ -153,7 +153,7 @@ class AbstractMapper  implements DbAdapterAwareInterface
 
 
 
-    protected function mapperAll($TableName = null)
+    public function mapperAll($TableName = null)
     {
         $select = $this->selectByWhereByOrder($TableName);
         $stmt   = $this->sql()->prepareStatementForSqlObject($select);
@@ -167,7 +167,7 @@ class AbstractMapper  implements DbAdapterAwareInterface
 
     }
 
-    protected function mapperRow($TableName = null)
+    public function mapperRow($TableName = null)
     {
         $select = $this->selectByWhereByOrder($TableName);
         $stmt   = $this->sql()->prepareStatementForSqlObject($select);
@@ -177,7 +177,7 @@ class AbstractMapper  implements DbAdapterAwareInterface
     }
 
 
-    protected function mapperPage($numberPage,$page,$TableName = null)
+    public function mapperPage($numberPage,$page,$TableName = null)
     {
         $select = $this->selectByWhereByOrder($TableName);
         $paginator = new Paginator(new DbSelect($select, $this->getDbAdapter(), $this->resultSet()));
@@ -197,7 +197,7 @@ class AbstractMapper  implements DbAdapterAwareInterface
 
     }
 
-    protected function page($numberPage,$page,$TableName = null)
+    public function page($numberPage,$page,$TableName = null)
     {
         $select = $this->selectByWhereByOrder($TableName);
         $paginator = new Paginator(new DbSelect($select, $this->getDbAdapter(), $this->resultSet()));
@@ -207,31 +207,44 @@ class AbstractMapper  implements DbAdapterAwareInterface
 
     }
 
-    protected function onInsert($data)
+    public function onInsert($data,$tableName = null)
     {
-        $data      = $this->cleanData($data);
+
+        if(!$tableName){
+            $tableName = $this->getTableName();
+        }
+        $data = $this->cleanData($data);
         $sql       = new Sql($this->getDbAdapter());
-        $insert    = $sql->insert($this->getTableName());
+        $insert    = $sql->insert($tableName);
         $insert->values($data);
         $statement = $sql->prepareStatementForSqlObject($insert);
         $result    = $statement->execute();
         return $result->getGeneratedValue();
     }
 
-    protected function onUpdate($data,$where = null)
+    public function onUpdate($data,$where = null,$tableName = null)
     {
-        $data   = $this->cleanData($data);
+
+        if(!$tableName){
+            $tableName = $this->getTableName();
+        }
+        $data = $this->cleanData($data);
         $sql    =  new Sql($this->getDbAdapter());
-        $update = $sql->update($this->getTableName());
+        $update = $sql->update($tableName);
         $update->set($data)->where($where);
         $statement = $sql->prepareStatementForSqlObject($update);
         return $statement->execute();
     }
 
-    protected function onRemove($where = null)
+    public function onRemove($where = null,$tableName = null)
     {
+
+        if(!$tableName){
+            $tableName = $this->getTableName();
+        }
+
         $sql       = new Sql($this->getDbAdapter());
-        $delete = $sql->delete($this->getTableName());
+        $delete = $sql->delete($tableName);
         $delete->where($where);
         $statement = $sql->prepareStatementForSqlObject($delete);
         return $statement->execute();

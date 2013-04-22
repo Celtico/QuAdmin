@@ -28,19 +28,31 @@ class DeleteMapper extends AbstractMapper implements Interfaces\DeleteMapperInte
         }
     }
 
+
     /**
-     * Remove
-     *
      * @param $id
+     * @param null $options
      */
-    public function remove($id)
+    public function remove($id,$options = null)
     {
         $findByParent = $this->findByParentRemove($id);
         if($findByParent) {
             foreach($findByParent as $Parent){
-                $this->remove($Parent[$this->KeyId]);
+                $this->remove($Parent[$this->KeyId],$options);
             }
         }
+
+        /*
+         * SubModel*/
+        foreach($options->getLinkerModels() as $model){
+            $this->findByParentRemoveSubModels(
+                $id,
+                $model['table'],
+                $model['key_id_parent'],
+                $model['key_id']
+            );
+        }
+
         $this->removeById($id);
     }
 
@@ -70,6 +82,42 @@ class DeleteMapper extends AbstractMapper implements Interfaces\DeleteMapperInte
         }
         return false;
     }
+
+    /**
+     * @param $id
+     * @param $tableName
+     * @param $KeyId
+     * @return \Zend\Db\Adapter\Driver\ResultInterface
+     */
+    public function removeByIdSubModels($id,$tableName,$KeyId)
+    {
+        $remove = $this->onRemove(array($KeyId => $id),$tableName);
+
+        $this->postEventRemove($id);
+
+        return $remove;
+    }
+
+
+    /**
+     * @param $id
+     * @param $tableName
+     * @param $KeyIdParent
+     * @param $KeyId
+     */
+    public function findByParentRemoveSubModels($id,$tableName,$KeyIdParent,$KeyId)
+    {
+        if($KeyIdParent){
+
+            $this->where(array($KeyIdParent=> $id));
+            $this->toArray();
+
+            foreach($this->all($tableName) as $rowModel){
+                $this->removeByIdSubModels($rowModel[$KeyId],$tableName,$KeyId);
+            }
+        }
+    }
+
 
     /**
      * @param $id
