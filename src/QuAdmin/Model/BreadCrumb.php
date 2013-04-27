@@ -119,7 +119,7 @@ class BreadCrumb extends AbstractMapper implements Interfaces\BreadCrumbInterfac
 
         }
 
-
+        $where = array();
 
         if($KeyIdParent){
             $where = array($KeyIdParent => $id);
