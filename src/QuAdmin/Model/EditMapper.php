@@ -9,7 +9,6 @@ class EditMapper extends AbstractMapper implements Interfaces\EditMapperInterfac
     {
         $id = $data[$this->KeyId];
         unset($data[$this->KeyId]);
-        $id_parent = null;
 
         if($this->KeyIdLang){
 
@@ -20,11 +19,7 @@ class EditMapper extends AbstractMapper implements Interfaces\EditMapperInterfac
             if ($find) {
                 $this->onUpdate($data,array($this->KeyId => $find[$this->KeyId]));
             } else {
-
-                if(isset($data[$this->KeyIdParent])){
-                    $id_parent = $data[$this->KeyIdParent];
-                }
-                $data = $this->saveAddLang($data,$id,$id_parent);
+                $data = $this->saveAddLang($data,$id);
             }
 
         }else{
@@ -34,15 +29,9 @@ class EditMapper extends AbstractMapper implements Interfaces\EditMapperInterfac
         return $data;
     }
 
-    public function saveAddLang($data,$id,$id_parent = null)
+    public function saveAddLang($data,$id)
     {
-        unset($data[$this->KeyId]);
         $data[$this->KeyIdLang] = $id;
-
-        if($id_parent){
-            $data[$this->KeyIdParent] = $id_parent;
-        }
-
         $this->onInsert($data);
         return $data;
     }

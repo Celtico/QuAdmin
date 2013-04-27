@@ -58,14 +58,15 @@ class QuPluploadStrategy implements ListenerAggregateInterface
 
             $params    = $e->getParams();
 
-            $id_parent = $params['id'];
+            $id_parent = $params['id_parent'];
+            $id        = $params['id'];
             $options   = $params['options'];
             $plupload  = $params['plupload'];
 
             $model     = $options->getTableName();
             $docs      = $options->getDocuments();
 
-            $plupload->pluploadUpdate($model,$id_parent);
+            $plupload->pluploadUpdate($model,$id_parent,$id);
 
 
         }, 1);

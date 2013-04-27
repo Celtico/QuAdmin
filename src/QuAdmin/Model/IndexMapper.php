@@ -32,6 +32,8 @@ class IndexMapper extends AbstractMapper implements Interfaces\IndexMapperInterf
             if($this->KeyLang and $lang) {
                 $where += array( $this->KeyLang => $lang);
             }
+
+
         }
 
         $this->where($where);

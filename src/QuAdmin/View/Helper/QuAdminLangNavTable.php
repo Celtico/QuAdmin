@@ -122,13 +122,15 @@ class QuAdminLangNavTable extends AbstractHelper
                     $model = str_replace('qu_','', str_replace('_model','',$LinkerModel['model']));
 
                     $options->setTableName($LinkerModel['table']);
-                    $count = $mapperBreadCrumb->countChild($id,$options->getTableName());
+                    $count = $mapperBreadCrumb->countChild($id,$options->getTableName(),$LinkerModel['key_id_parent']);
+
 
                     $link_model .= '
                      <td class="add">
                         <a href="'.$this->view->url($route,array('lang'=>$lang,'action'=>'add','model'=> $model,'id' => $id)).'" class="btn td-child-add btn-small" title="Add">
                             <span class="iconb" data-icon="&#xe14a;"></span>
                             </a>';
+
 
                     if($count){
 
@@ -139,12 +141,14 @@ class QuAdminLangNavTable extends AbstractHelper
                          </td>
                         ';
                     }
+
+
                 }elseif($LinkerModel['level'] == $mapperBreadCrumb->getLevel()){
 
                     $model = str_replace('qu_','', str_replace('_model','',$LinkerModel['model']));
 
                     $options->setTableName($LinkerModel['table']);
-                    $count = $mapperBreadCrumb->countChild($id,$options->getTableName());
+                    $count = $mapperBreadCrumb->countChild($id,$options->getTableName(),$LinkerModel['key_id_parent']);
 
                     $link_model .= '
                      <td class="add">

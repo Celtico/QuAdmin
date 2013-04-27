@@ -22,7 +22,7 @@ class AddController extends AbstractController
          * Conserve Local Model
          */
         $this->getModelBreadCrumb()->setQuAdminModelOptions($this->getOptions());
-        $this->getModelBreadCrumb()->breadCrumb($this->getId(),false,$this->getModel());
+        $breadCrumb = $this->getModelBreadCrumb()->breadCrumb($this->getId(),false,$this->getModel());
 
         $LinkerModels = $this->getQuAdminModelOptions()->getLinkerModels();
         if(count($LinkerModels)){
@@ -30,15 +30,20 @@ class AddController extends AbstractController
                 if(isset($LinkerModel['model']) and $LinkerModel['model'] == 'qu_'.$this->getModel().'_model'){
                     $this->setOptions($this->Service('qu_'.$this->getModel().'_model'));
                     $this->setQuAdminModelOptions($this->getOptions());
+
+                    //Id Parent Linker
+                    $TableKeyFields = $this->getQuAdminModelOptions()->getTableKeyFields();
+                    $TableKeyFields['key_id_parent'] = $LinkerModel['key_id_parent'];
+                    $this->getQuAdminModelOptions()->setTableKeyFields($TableKeyFields);
                 }
             }
         }
 
 
 
-        $this->match('qu_admin_navigation')->setParam('model',null);
-        $this->match('qu_admin_navigation')->setParam('id',0);
-        $this->match('qu_admin_navigation')->setParam('action',null);
+        //$this->match('qu_admin_navigation')->setParam('model',null);
+        //$this->match('qu_admin_navigation')->setParam('id',0);
+        //$this->match('qu_admin_navigation')->setParam('action',null);
 
 
         $this->getModelAdd()->setQuAdminModelOptions($this->getOptions());
@@ -72,9 +77,9 @@ class AddController extends AbstractController
                 {
                     $plupload = $this->Service('plupload_service');
                     $this->getEventManager()->trigger(__FUNCTION__.'.pre', $this, array(
-                        'id'      => $this->getId(),
-                        'options' => $this->getOptions(),
-                        'plupload'  =>  $plupload
+                        'id'        => $this->getId(),
+                        'options'   => $this->getOptions(),
+                        'plupload'  => $plupload
                     ));
                 }
 
@@ -111,6 +116,7 @@ class AddController extends AbstractController
                     $plupload = $this->Service('plupload_service');
                     $this->getEventManager()->trigger(__FUNCTION__.'.post', $this, array(
                         'id'        => $redirect_id,
+                        'id_parent' => 0,
                         'options'   => $this->getOptions(),
                         'plupload'  =>  $plupload
                     ));

@@ -19,7 +19,6 @@ class IndexController extends AbstractController
          */
         $this->getModelBreadCrumb()->setQuAdminModelOptions($this->getOptions());
         $this->getModelBreadCrumb()->breadCrumb($this->getId(),false,$this->getModel());
-
         /**
          * Reference Url Model
          */
@@ -29,11 +28,19 @@ class IndexController extends AbstractController
                 if(isset($LinkerModel['model']) and $LinkerModel['model'] == 'qu_'.$this->getModel().'_model'){
                     $this->setOptions($this->Service('qu_'.$this->getModel().'_model'));
                     $this->setQuAdminModelOptions($this->getOptions());
+
+                    //Id Parent Linker
+                    $TableKeyFields = $this->getQuAdminModelOptions()->getTableKeyFields();
+                    $TableKeyFields['key_id_parent'] = $LinkerModel['key_id_parent'];
+                    $this->getQuAdminModelOptions()->setTableKeyFields($TableKeyFields);
                 }
             }
         }
 
-
+        /**
+         * get Field Keys
+         */
+        $this->getField();
 
         /**
          * Local Model
@@ -44,10 +51,7 @@ class IndexController extends AbstractController
         $this->setNumberPage($PagOptions['n']);
         $model = $this->getModelIndex()->findByParent(null,$this->getId(),$this->getLang(),$this->getPage(),$this->getNumberPage());
 
-        /**
-         * get Field Keys
-         */
-        $this->getField();
+
 
 
         $dataController = array(

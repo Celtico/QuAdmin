@@ -29,11 +29,16 @@ class QuPluploadHelp extends AbstractHelper
     /**
      * @param $name
      * @param int $id
-     * @param $model
+     * @param $options
      * @param $route
+     * @param $model
      */
-    public function __invoke($name,$id = 0,$model,$route)
+    public function __invoke($name,$id = 0,$options,$route,$model)
     {
+
+        if($model != ''){
+            $model = $model.'/';
+        }
 
         $this->view->inlineScript()
         ->prependFile($this->view->basePath($this->Config['DirJs']) . '/js/i18n/es.js', 'text/javascript')
@@ -48,7 +53,7 @@ class QuPluploadHelp extends AbstractHelper
                 $("#<?=$name?>").pluploadQueue({
 
                     runtimes: 'html5,gears,browserplus,html4',
-                    url: '<?php echo  $this->view->Url($route) ; ?>/upload/<?php echo $id ?>',
+                    url: '<?php echo  $this->view->Url($route) ; ?>/upload/<?php echo $model ?><?php echo $id ?>',
                     max_file_size: '20mb',
                     chunk_size: '1mb',
                     unique_names: false,
@@ -62,7 +67,7 @@ class QuPluploadHelp extends AbstractHelper
                                     if(up.state == plupload.STARTED){
                                         console.log('STARTED"');
                                     } else{
-                                        $('.PluploadLoad').load('<?php echo  $this->view->Url($route) ; ?>/load/<?php echo $id ?>');
+                                        $('.PluploadLoad').load('<?php echo  $this->view->Url($route) ; ?>/load/<?php echo $model ?><?php echo $id ?>');
                                     }
 
                                 },

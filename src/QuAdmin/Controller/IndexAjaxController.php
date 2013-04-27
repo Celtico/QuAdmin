@@ -13,12 +13,23 @@ class IndexAjaxController extends AbstractController
     public function variables()
     {
 
+        /**
+         * Conserve Local Model
+         */
+        $this->getModelBreadCrumb()->setQuAdminModelOptions($this->getOptions());
+        $this->getModelBreadCrumb()->breadCrumb($this->getId(),false,$this->getModel());
+
         $LinkerModels = $this->getQuAdminModelOptions()->getLinkerModels();
         if(count($LinkerModels)){
             foreach($LinkerModels as $LinkerModel){
                 if(isset($LinkerModel['model']) and $LinkerModel['model'] == 'qu_'.$this->getModel().'_model'){
                     $this->setOptions($this->Service('qu_'.$this->getModel().'_model'));
                     $this->setQuAdminModelOptions($this->getOptions());
+
+                    //Id Parent Linker
+                    $TableKeyFields = $this->getQuAdminModelOptions()->getTableKeyFields();
+                    $TableKeyFields['key_id_parent'] = $LinkerModel['key_id_parent'];
+                    $this->getQuAdminModelOptions()->setTableKeyFields($TableKeyFields);
                 }
             }
         }

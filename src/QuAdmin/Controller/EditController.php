@@ -25,7 +25,6 @@ class EditController extends AbstractController
         /**
          * Reference Url Model
          */
-        $model = false;
         $LinkerModels = $this->getQuAdminModelOptions()->getLinkerModels();
         if(count($LinkerModels)){
             foreach($LinkerModels as $LinkerModel){
@@ -33,7 +32,11 @@ class EditController extends AbstractController
                     $this->setOptions($this->Service('qu_'.$this->getModel().'_model'));
                     $this->setQuAdminModelOptions($this->getOptions());
                     $this->setIdParent($this->getId());
-                    $model = true;
+
+                    //Id Parent Linker
+                    $TableKeyFields = $this->getQuAdminModelOptions()->getTableKeyFields();
+                    $TableKeyFields['key_id_parent'] = $LinkerModel['key_id_parent'];
+                    $this->getQuAdminModelOptions()->setTableKeyFields($TableKeyFields);
                 }
             }
         }
@@ -55,8 +58,6 @@ class EditController extends AbstractController
         }else{
             $mergeBreadCrumbModels = null;
         }
-
-
 
 
         $dataController = array(
@@ -99,14 +100,9 @@ class EditController extends AbstractController
             if($this->KeyModified)  $DataForm[$this->KeyModified] = $this->getDate();
             if($this->KeyIdAuthor)  $DataForm[$this->KeyIdAuthor] = $this->getUser();
             if($this->KeyLang)      $DataForm[$this->KeyLang]     = $this->getLang();
-            $DataForm[$this->KeyId] = $this->getId();
+            if($this->KeyIdParent)  $DataForm[$this->KeyIdParent] = $dataDb[$this->KeyIdParent];
 
-            /*
-             * Add model
-             * */
-            if($model){
-                if($this->KeyIdParent)  $DataForm[$this->KeyIdParent] =  $dataDb[$this->KeyIdParent];
-            }
+            $DataForm[$this->KeyId] = $this->getId();
 
             if(!isset($DataForm['error'])){
 

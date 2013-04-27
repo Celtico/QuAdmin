@@ -139,16 +139,16 @@
 
             <? /// FILE UPLOAD ///////////// ///////////// ?>
 
-            <?php if($options->getDocuments()){   ?>
+            <?php if($options->getDocuments()){  if($action == 'add'){ $id = 0; }  ?>
                 <fieldset class="formBlock">
                     <legend>
                         <span>Multiple files uploader</span>
                     </legend>
                     <div class="row-fluid">
-                        <div class="PluploadLoad"><?=$this->QuPluploadHelpLoad($id,$route,$options)?></div>
+                        <div class="PluploadLoad"><?=$this->QuPluploadHelpLoad($id,$route,$options,$model)?></div>
                         <div class="clear"></div>
                         <div id="uploader"></div>
-                        <?=$this->QuPluploadHelp('uploader',$id,$options->getTableName(),$route)?>
+                        <?php echo $this->QuPluploadHelp('uploader',$id,$options,$route,$model); ?>
                     </div>
                 </fieldset>
             <? } ?>

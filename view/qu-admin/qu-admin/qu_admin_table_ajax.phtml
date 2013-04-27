@@ -85,7 +85,7 @@
         <tr>
             <td colspan="<?php echo  $cols; ?>">
                 <div class="pull-left">
-                    <select  name="action" class="btn AjaxOptions" style="width:130px;" id="action" onchange="this.form.submit($('form').attr('action', '<? echo $this->url($route,array('lang'=>$lang));  ?>/' + $(this).val() + '/<?php echo $model?>/<?php echo $id?>'))">
+                    <select  name="action" class="btn AjaxOptions" style="width:130px;" id="action" onchange="this.form.submit($('form').attr('action', '<? echo $this->url($route,array('lang'=>$lang));  ?>/' + $(this).val() + '/<?php if($model) echo $model.'/'; ?><?php echo $id?>'))">
                         <option value="">Select option</option>
                         <option value="duplicate">Duplicate</option>
                         <option value="delete">Delete</option>

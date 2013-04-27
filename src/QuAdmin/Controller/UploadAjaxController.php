@@ -15,6 +15,18 @@ class UploadAjaxController extends AbstractController
 
     public function variables()
     {
+
+        $LinkerModels = $this->getQuAdminModelOptions()->getLinkerModels();
+        if(count($LinkerModels)){
+            foreach($LinkerModels as $LinkerModel){
+                if(isset($LinkerModel['model']) and $LinkerModel['model'] == 'qu_'.$this->getModel().'_model'){
+                    $this->setOptions($this->Service('qu_'.$this->getModel().'_model'));
+                    $this->setQuAdminModelOptions($this->getOptions());
+                }
+            }
+        }
+
+
         $options = $this->getOptions();
         $docs    = $options->getDocuments();
 
@@ -43,16 +55,41 @@ class UploadAjaxController extends AbstractController
 
     public function loadAction()
     {
+
+        $LinkerModels = $this->getQuAdminModelOptions()->getLinkerModels();
+        if(count($LinkerModels)){
+            foreach($LinkerModels as $LinkerModel){
+                if(isset($LinkerModel['model']) and $LinkerModel['model'] == 'qu_'.$this->getModel().'_model'){
+                    $this->setOptions($this->Service('qu_'.$this->getModel().'_model'));
+                    $this->setQuAdminModelOptions($this->getOptions());
+                }
+            }
+        }
+
         $view        = new ViewModel();
+
         $view->id    = $this->getId();
         $view->options = $this->getOptions();
         $view->route = $this->getRoute();
+        $view->model = $this->getModel();
+
         $view->setTemplate('qu-admin/qu-plupload/load');
         return $view->setTerminal(true);
     }
 
     public function removeAction()
     {
+
+
+        $LinkerModels = $this->getQuAdminModelOptions()->getLinkerModels();
+        if(count($LinkerModels)){
+            foreach($LinkerModels as $LinkerModel){
+                if(isset($LinkerModel['model']) and $LinkerModel['model'] == 'qu_'.$this->getModel().'_model'){
+                    $this->setOptions($this->Service('qu_'.$this->getModel().'_model'));
+                    $this->setQuAdminModelOptions($this->getOptions());
+                }
+            }
+        }
 
         $options = $this->getOptions();
         $docs    = $options->getDocuments();
@@ -69,9 +106,12 @@ class UploadAjaxController extends AbstractController
         $PluploadService->PluploadRemove($this->getId());
 
         $view          = new ViewModel();
+
         $view->id      = $this->getIdParent();
         $view->options = $this->getOptions();
         $view->route = $this->getRoute();
+        $view->model = $this->getModel();
+
         $view->setTemplate('qu-admin/qu-plupload/remove');
         return $view->setTerminal(true);
     }

@@ -41,12 +41,15 @@ class QuPluploadHelpLoad extends AbstractHelper
      * @param $options
      * @return bool|string
      */
-    public function __invoke($id,$route,$options)
+    public function __invoke($id,$route,$options,$model)
     {
 
         $this->pluploadService->setPluploadIdAndModelList($id,$options->getTableName());
         $docs = $options->getDocuments();
 
+        if($model != ''){
+            $model = $model.'/';
+        }
 
         $listDb  = $this->pluploadService->getPluploadIdAndModelList();
         $Util    = new Util();
@@ -103,7 +106,7 @@ class QuPluploadHelpLoad extends AbstractHelper
             <script type=\"text/javascript\">
 
                 $('.action').click(function(){
-                    $('.PluploadLoad').load('". $this->view->Url($route) ."/remove/' + $(this).attr('id') + '/". $id  ."');
+                    $('.PluploadLoad').load('". $this->view->Url($route) ."/remove/".$model."' + $(this).attr('id') + '/". $id  ."');
                 });
 
             </script>";

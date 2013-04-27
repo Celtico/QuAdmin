@@ -112,20 +112,35 @@ class BreadCrumb extends AbstractMapper implements Interfaces\BreadCrumbInterfac
     }
 
 
-    public function countChild($id,$tableName = false)
+    public function countChild($id,$tableName = false,$KeyIdParent = false,$Lang = false)
     {
-        if($this->KeyIdParent){
-            $this->toArray();
+        if($tableName){
+            $this->setTableName($tableName);
 
-            if($tableName){
-                $this->setTableName($tableName);
-
-            }
-
-            $this->where(array($this->KeyIdParent => $id));
-            return  count($this->all());
         }
-        return false;
+
+
+
+        if($KeyIdParent){
+            $where = array($KeyIdParent => $id);
+        }elseif($this->KeyIdParent){
+            $where = array($this->KeyIdParent => $id);
+        }
+
+        if($Lang){
+            $where += array($this->KeyLang => $Lang);
+        }
+
+
+        $this->toArray();
+        $this->where($where);
+        $count = count($this->all());
+
+        if($count){
+            return $count ;
+        }else{
+            return false;
+        }
     }
 
     public function getLevel($id = false)

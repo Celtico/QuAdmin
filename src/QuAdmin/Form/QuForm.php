@@ -130,6 +130,7 @@ class QuForm extends Form
                 $data = $this->getData($dataPost);
                 $data = $this->dataFilterPost($data);
                 $data = $this->postEventFormFilter($data);
+               //var_dump($data);
                 return $data;
 
             } else{
@@ -188,7 +189,7 @@ class QuForm extends Form
             }
         }
 
-        if($Key['key_title']){
+        if(isset($Key['key_title']) and $Key['key_title'] and isset($dataPost[$Key['key_title']])){
             $dataPost[$Key['key_title']] = stripslashes($dataPost[$Key['key_title']]);
         }
 

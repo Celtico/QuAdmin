@@ -139,7 +139,6 @@ class AbstractMapper  implements DbAdapterAwareInterface
         $select = $this->selectByWhereByOrder($TableName);
         $stmt   = $this->sql()->prepareStatementForSqlObject($select);
         $result = $this->resultSet()->initialize($stmt->execute());
-
         return  $result;
     }
     public function row($TableName = null)
@@ -147,20 +146,19 @@ class AbstractMapper  implements DbAdapterAwareInterface
         $select = $this->selectByWhereByOrder($TableName);
         $stmt = $this->sql()->prepareStatementForSqlObject($select);
         $result = $this->resultSet()->initialize($stmt->execute())->current();
-
         return $result;
     }
 
-
-
     public function mapperAll($TableName = null)
     {
-        $select = $this->selectByWhereByOrder($TableName);
-        $stmt   = $this->sql()->prepareStatementForSqlObject($select);
-        $result = $this->resultSet()->initialize($stmt->execute());
-        $return = array();
+        $select     = $this->selectByWhereByOrder($TableName);
+        $stmt       = $this->sql()->prepareStatementForSqlObject($select);
+        $resultSet  = new ResultSet(ResultSet::TYPE_ARRAY);
+        $result     = $resultSet->initialize($stmt->execute());
+        $return     = array();
         foreach ($result as $row) {
             $Mapper = Mapper::accumulateByMap($row,$row,array_flip($this->getTableKeyFields()));
+            $Mapper = (array)$Mapper;
                 $return[] = $this->entity()->addData($Mapper);
         }
         return $return;
@@ -169,10 +167,12 @@ class AbstractMapper  implements DbAdapterAwareInterface
 
     public function mapperRow($TableName = null)
     {
-        $select = $this->selectByWhereByOrder($TableName);
-        $stmt   = $this->sql()->prepareStatementForSqlObject($select);
-        $row    = $this->resultSet()->initialize($stmt->execute())->current();
-        $Mapper = Mapper::accumulateByMap($row,$row,array_flip($this->getTableKeyFields()));
+        $select    = $this->selectByWhereByOrder($TableName);
+        $stmt      = $this->sql()->prepareStatementForSqlObject($select);
+        $resultSet = new ResultSet(ResultSet::TYPE_ARRAY);
+        $row       = $resultSet->initialize($stmt->execute())->current();
+        $Mapper    = Mapper::accumulateByMap($row,$row,array_flip($this->getTableKeyFields()));
+        $Mapper    = (array)$Mapper;
         return $this->entity()->addData($Mapper);
     }
 
