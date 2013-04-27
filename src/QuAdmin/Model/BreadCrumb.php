@@ -7,6 +7,7 @@ class BreadCrumb extends AbstractMapper implements Interfaces\BreadCrumbInterfac
 
     protected $path;
     protected $level;
+    protected $lang;
     protected $breadCrumb;
 
     public function breadCrumb($id,$lang = false,$model = false,$tableName = false)
@@ -112,7 +113,7 @@ class BreadCrumb extends AbstractMapper implements Interfaces\BreadCrumbInterfac
     }
 
 
-    public function countChild($id,$tableName = false,$KeyIdParent = false,$Lang = false)
+    public function countChild($id,$tableName = false,$KeyIdParent = false)
     {
         if($tableName){
             $this->setTableName($tableName);
@@ -127,8 +128,9 @@ class BreadCrumb extends AbstractMapper implements Interfaces\BreadCrumbInterfac
             $where = array($this->KeyIdParent => $id);
         }
 
-        if($Lang){
-            $where += array($this->KeyLang => $Lang);
+
+        if($this->getLang() and $this->KeyLang){
+           $where += array($this->KeyLang => $this->getLang());
         }
 
 
@@ -142,6 +144,18 @@ class BreadCrumb extends AbstractMapper implements Interfaces\BreadCrumbInterfac
             return false;
         }
     }
+
+    public function getLang()
+    {
+        return $this->lang;
+    }
+
+    public function setLang($lang)
+    {
+        $this->lang = $lang;
+        return $this;
+    }
+
 
     public function getLevel($id = false)
     {

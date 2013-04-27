@@ -66,6 +66,7 @@ class QuAdminLangNavTable extends AbstractHelper
         $mapperBreadCrumb  = $this->service->get('qu_admin_model_bread_crumb');
         $mapperBreadCrumb->setQuAdminModelOptions($options);
 
+
         $languages = $this->service->get('qu_admin_model_languages');
         $languages->setQuAdminModelOptions($langOptions);
 
@@ -108,6 +109,7 @@ class QuAdminLangNavTable extends AbstractHelper
         }
 
 
+        $mapperBreadCrumb->setLang($lang);
         /*
          * Load model
          * */
