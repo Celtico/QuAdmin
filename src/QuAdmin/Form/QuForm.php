@@ -57,7 +57,10 @@ class QuForm extends Form
 
         if(isset($forms['serialized']) and $forms['serialized']){
             if(isset($data[$forms['fieldset']['name']])){
-                $data = unserialize($data[$forms['fieldset']['name']]);
+                $data['unSerialize'] = unserialize($data[$forms['fieldset']['name']]);
+                if($data['unSerialize']){
+                    $data = $data['unSerialize'];
+                }
             }
         }
         if(isset($forms['explode']) and $forms['explode']){

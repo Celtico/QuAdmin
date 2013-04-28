@@ -28,7 +28,7 @@ class AddMapper extends AbstractMapper implements Interfaces\AddMapperInterface
             $last = $this->onInsert($data);
         }
 
-        return $last;
+       return $last;
     }
 
     public function getNextOrder($data)
