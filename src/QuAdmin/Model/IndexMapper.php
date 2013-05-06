@@ -24,6 +24,10 @@ class IndexMapper extends AbstractMapper implements Interfaces\IndexMapperInterf
             }
             $where = array(new Predicate\PredicateSet($likeField,Predicate\PredicateSet::OP_OR));
 
+            if($this->KeyLang and $lang) {
+                $where += array( $this->KeyLang => $lang);
+            }
+
         }else{
 
             if($this->KeyIdParent){

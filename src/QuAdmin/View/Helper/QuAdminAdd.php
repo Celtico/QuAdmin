@@ -63,6 +63,11 @@ class QuAdminAdd extends AbstractHelper
             <input class="btn btn-success"  data-icon="&#xe0c8;" style="margin:3px 3px 0 0;" value="Save" name="save" type="submit">
             <input class="btn btn-inverse"  style="margin:3px 3px 0 0;" value="Save & Close" name="saveandclose" type="submit">
             ';
+
+            if($action == 'config'){
+                $btn = '<input class="btn btn-success"  data-icon="&#xe0c8;" style="margin:3px 3px 0 0;" value="Save" name="save" type="submit">';
+            }
+
         }
 
         return '<div class="buttons-nav">'.$btn.'</div>';

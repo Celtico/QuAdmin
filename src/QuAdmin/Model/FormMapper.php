@@ -28,12 +28,27 @@ class FormMapper extends AbstractMapper implements Interfaces\FormMapperInterfac
         $this->toArray();
         foreach($this->all($this->getQuAdminModelOptions()->getTableName()) as  $sel){
             if(isset($sel[$fieldKeyName]) and isset($sel[$fieldKeyLabel])){
-                $selector[$sel[$fieldKeyName]] =  $sel[$fieldKeyLabel];
+
+                if(isset($sel['element'])){
+
+                    $selector[$sel[$fieldKeyName]] = array(
+                        'label'=>$sel[$fieldKeyLabel],
+                        'element'=>$sel['element'],
+                        'filter'=>$sel['filter']
+                    );
+
+                }else{
+
+                    $selector[$sel[$fieldKeyName]] = $sel[$fieldKeyLabel];
+
+                }
+
             }
         }
 
         return $selector;
     }
+
 
     public function findByParentRecursive($id_parent,$tableName = null,$KeyIdParent = null,$KeyId = null)
     {
@@ -53,4 +68,6 @@ class FormMapper extends AbstractMapper implements Interfaces\FormMapperInterfac
         }
         return false;
     }
+
+
 }

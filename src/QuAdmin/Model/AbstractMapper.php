@@ -179,17 +179,18 @@ class AbstractMapper  implements DbAdapterAwareInterface
 
     public function mapperPage($numberPage,$page,$TableName = null)
     {
-        $select = $this->selectByWhereByOrder($TableName);
-        $paginator = new Paginator(new DbSelect($select, $this->getDbAdapter(), $this->resultSet()));
-
-
-        $return = array();
-        foreach ($paginator as $row) {
-          $Mapper   = Mapper::accumulateByMap($row,$row,array_flip($this->getTableKeyFields()));
-           $return[] = $this->entity()->addData($Mapper);
+        $select     = $this->selectByWhereByOrder($TableName);
+        $stmt       = $this->sql()->prepareStatementForSqlObject($select);
+        $resultSet  = new ResultSet(ResultSet::TYPE_ARRAY);
+        $result     = $resultSet->initialize($stmt->execute());
+        $return     = array();
+        foreach ($result as $row) {
+            $Mapper = Mapper::accumulateByMap($row,$row,array_flip($this->getTableKeyFields()));
+            $Mapper = (array)$Mapper;
+            $return[] = $this->entity()->addData($Mapper);
         }
-
-      //  $paginator = new Paginator(new ArrayAdapter($return));
+        $return = (array) $return;
+        $paginator = new Paginator(new ArrayAdapter($return));
         $paginator->setCurrentPageNumber($page);
         $paginator->setItemCountPerPage($numberPage);
         //$paginator->setPageRange(5);

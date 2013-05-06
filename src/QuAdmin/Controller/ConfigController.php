@@ -8,7 +8,7 @@ namespace QuAdmin\Controller;
 
 use Zend\View\Model\ViewModel;
 
-class EditController extends AbstractController
+class ConfigController extends AbstractController
 {
     protected $events = null;
     protected $quProsesDataForm;
@@ -61,7 +61,7 @@ class EditController extends AbstractController
 
 
         $dataController = array(
-            'action'                 => 'edit',
+            'action'                 => 'config',
             'id_parent'              => $this->getIdParent(),
             'id'                     => $this->getId(),
             'lang'                   => $this->getLang(),
@@ -112,7 +112,7 @@ class EditController extends AbstractController
                 {
                     $this->getMessage(array('type'=>$this->getTranslate('EditSaveClassType'),'message' =>$this->getTranslate('EditSaveMessage')));
                     return $this->getToRoute($this->getRoute(),array(
-                        'action'=>'edit',
+                        'action'=>'config',
                         'model'=>$this->getModel(),
                         'id'=>$this->getId(),
                         'lang'=>$this->getLang()
@@ -135,7 +135,6 @@ class EditController extends AbstractController
             }
 
         }
-
         return $dataController;
     }
 

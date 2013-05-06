@@ -55,6 +55,7 @@ class Module implements BootstrapListenerInterface
                 'qu_admin_controller_delete'       => 'QuAdmin\Controller\DeleteController',
                 'qu_admin_controller_duplicate'    => 'QuAdmin\Controller\DuplicateController',
                 'qu_admin_controller_edit'         => 'QuAdmin\Controller\EditController',
+                'qu_admin_controller_config'       => 'QuAdmin\Controller\ConfigController',
                 'qu_admin_controller_index'        => 'QuAdmin\Controller\IndexController',
                 'qu_admin_controller_index_ajax'   => 'QuAdmin\Controller\IndexAjaxController',
                 'qu_admin_controller_upload_ajax'  => 'QuAdmin\Controller\UploadAjaxController',

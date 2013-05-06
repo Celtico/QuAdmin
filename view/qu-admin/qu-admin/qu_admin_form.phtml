@@ -14,7 +14,7 @@
 
 <div class="nav-actions-absolute">
     <div class="nav-actions">
-        <?php echo $this->qu_admin_title_by_db($options,$key,$route,$model); ?>
+        <?php echo $this->qu_admin_title_by_db($options,$key,$route,$model,$action); ?>
         <?php echo $this->qu_admin_add($route,$id,$lang,$options,$action,$model); ?>
         <?php echo $this->qu_admin_languages($options,$route,$lang,$action,$id,$model); ?>
         <div class="clearfix"></div>
@@ -36,8 +36,17 @@
 
     <?php echo $this->qu_admin_messages(); ?>
 
+    <?php
+            //@Todo
+            if($action == 'config'){
+                $span = 12;
+            } else{
+                $span = 9;
+            }
+    ?>
+
     <div class="form row-fluid">
-        <div class="span9 fromIn">
+        <div class="span<?php echo $span ?> fromIn">
             <?php
 
             $grid3         = array();

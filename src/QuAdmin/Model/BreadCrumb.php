@@ -39,7 +39,7 @@ class BreadCrumb extends AbstractMapper implements Interfaces\BreadCrumbInterfac
 
                     $values = array(
                         'id' => $row[$this->KeyId],
-                        'title' => $row[$this->KeyTitle],
+                        'title' => @$row[$this->KeyTitle],
                         'level'=> $this->level
                     );
 
@@ -66,7 +66,7 @@ class BreadCrumb extends AbstractMapper implements Interfaces\BreadCrumbInterfac
 
                     $values = array(
                         'id' => $row[$this->KeyId],
-                        'title' => $row[$this->KeyTitle],
+                        'title' => @$row[$this->KeyTitle],
                         'level'=> $this->level
                     );
 
@@ -83,7 +83,7 @@ class BreadCrumb extends AbstractMapper implements Interfaces\BreadCrumbInterfac
             $row = $this->row($tableName);
             $values = array(
                 'id' => $row[$this->KeyId],
-                'title' => $row[$this->KeyTitle],
+                'title' => @$row[$this->KeyTitle],
                 'level'=> $this->level
             );
 

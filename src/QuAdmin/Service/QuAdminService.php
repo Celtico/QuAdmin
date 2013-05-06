@@ -19,6 +19,7 @@ class QuAdminService implements ServiceLocatorAwareInterface
     protected $edit;
     protected $delete;
     protected $duplicate;
+    protected $config;
     protected $ajax;
     protected $quAdminModelOptions;
     protected $modelAdd;
@@ -53,6 +54,22 @@ class QuAdminService implements ServiceLocatorAwareInterface
         $this->edit = $edit;
         return $this;
     }
+
+    public function getConfig()
+    {
+        if (!$this->config) {
+            $this->setConfig(
+                $this->getServiceLocator()->get('qu_admin_controller_config')
+            );
+        }
+        return $this->config;
+    }
+    public function setConfig($config)
+    {
+        $this->config = $config;
+        return $this;
+    }
+
 
     public function getDelete()
     {

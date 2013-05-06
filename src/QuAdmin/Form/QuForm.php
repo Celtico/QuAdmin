@@ -9,6 +9,7 @@ namespace QuAdmin\Form;
 
 use QuAdmin\Util;
 
+use Zend\Form\Element\Checkbox;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\Factory as InputFactory;
@@ -90,10 +91,62 @@ class QuForm extends Form
 
             foreach($formDatabase as $name => $label)
             {
-                $forms['form']['name']  = $name;
-                $forms['form']['options']['label'] = $label;
-                $subForm->add($forms['form']);
-                $subFilter->add($factory->createInput($forms['filter']));
+                if(isset($label['element'])){
+
+                    if($label['element'] == 'checkbox'){
+
+                        $subForm->add(array(
+                            'type' => 'Zend\Form\Element\Checkbox',
+                            'name' => $name,
+                            'options' => array(
+                                'label' => $label['label'],
+                                'use_hidden_element' => true,
+                                'checked_value' => '1',
+                                'unchecked_value' => '0'
+                            ),
+                            'attributes' => array(
+                                'class' => 'check',
+                            )
+                        ));
+
+                    }elseif($label['element'] == 'ckeditor'){
+
+                        $subForm->add(array(
+                            'name'     => $name,
+                            'options' => array(
+                                'label' => $label['label']
+                            ),
+                            'attributes' => array(
+                                'type' => 'textarea',
+                                'id'=>'editor2',
+                                'ck-editor'=>array(
+                                    'tools'=>'large',
+                                    'height'=>'250',
+                                ),
+                            ),
+                        ));
+
+                    }else{
+
+                        $subForm->add(array(
+                            'name'     => $name,
+                            'options' => array(
+                                'label' => $label['label']
+                            ),
+                            'attributes' => array(
+                                'type' => $label['element'],
+                                'class' => $forms['form']['attributes']['class'],
+                            ),
+                        ));
+                    }
+
+                }else{
+
+                    $forms['form']['name']  = $name;
+                    $forms['form']['options']['label'] = $label;
+                    $subForm->add($forms['form']);
+                    $subFilter->add($factory->createInput($forms['filter']));
+                }
             }
 
         }else{
@@ -133,11 +186,12 @@ class QuForm extends Form
                 $data = $this->getData($dataPost);
                 $data = $this->dataFilterPost($data);
                 $data = $this->postEventFormFilter($data);
-               //var_dump($data);
+                //var_dump($data);
                 return $data;
 
             } else{
 
+                //var_dump($dataPost);
                 return  array(
                     'error'=>$this->subForm->getMessages(),
                     'filter'=>$this->subForm->filter->getMessages()

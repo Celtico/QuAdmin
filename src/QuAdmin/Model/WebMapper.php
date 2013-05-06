@@ -18,4 +18,11 @@ class WebMapper extends AbstractMapper implements  Interfaces\WebMapperInterface
         $this->where($array);
         return $this->all();
     }
+
+    public function getMapperPage($array = array(),$order = null,$numberPage,$page,$TableName = null)
+    {
+        $this->Order($order);
+        $this->where($array);
+        return $this->mapperPage($numberPage,$page,$TableName = null);
+    }
 }

@@ -21,7 +21,7 @@ class QuAdminTitleByDb extends AbstractHelper
         $this->serviceLocator = $serviceLocator;
     }
 
-    public function __invoke($options,$key,$route,$model){
+    public function __invoke($options,$key,$route,$model,$action = null){
 
         $mapperHelper = $this->serviceLocator->get('qu_admin_model_bread_crumb');
         $mapperHelper->setQuAdminModelOptions($options);
@@ -29,7 +29,7 @@ class QuAdminTitleByDb extends AbstractHelper
 
         if($endBreadCrumb['level']){
 
-            return '
+            $title =  '
             <div class="title-nav">
                 <a href="'.$this->view->url($route, array('action'=>'index','model'=>null,'id'=>@$endBreadCrumb[@$key['IdParent']])).'">
                     <span class="iconb" data-icon="&#xe032;"></span>'
@@ -42,9 +42,14 @@ class QuAdminTitleByDb extends AbstractHelper
 
         }else{
 
-            return '<div class="title-nav">'.$endBreadCrumb['title'].'</div>';
+            $title = '<div class="title-nav">'.$endBreadCrumb['title'].'</div>';
         }
 
+        if($action == 'config'){
+            $title = '<div class="title-nav">Config</div>';
+        }
+
+        return $title;
 
     }
 }
