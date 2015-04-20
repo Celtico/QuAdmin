@@ -73,6 +73,53 @@ class QuAdminStrategy implements ListenerAggregateInterface
             if(isset($QuAdmConfig['QuRedirectLogin'][$Namespace]))
             {
 
+
+                //BIPOLAR
+                $zfcUser = $auth->getIdentity();
+                if(method_exists($zfcUser,'getId')){
+                    if($zfcUser->getId() != 1 and $zfcUser->getId() != 2  and $zfcUser->getId() != 3  and $zfcUser->getId() != 21   and $zfcUser->getId() != 7  and $zfcUser->getId() != 4 and $zfcUser->getId() != 20){
+
+                        if(isset($config['QuAdminConfig']['qu_admin_layout_login'])){
+                            $controller->layout($config['QuAdminConfig']['qu_admin_layout_login']);
+                        }
+
+                        // In ZfcUser login return
+                        if($match->getMatchedRouteName() == 'zfcuser/login')
+                        {
+                            return;
+                        }
+                        else
+                        {
+
+                            // $controller->layout($QuAdmConfig['QuLayout'][$Namespace]);
+
+                            // Do nothing if the result is a response object
+                            if ($result instanceof Response) { return; }
+
+                            // get url to the zfcuser/login route
+                            $router = $eve->getRouter();
+                            $options['name'] = 'zfcuser/login';
+                            $url = $router->assemble(array(), $options);
+
+                            // Work out where were we trying to get to
+                            $options['name'] = $match->getMatchedRouteName();
+                            $redirect = $router->assemble($match->getParams(), $options);
+
+                            // set up response to redirect to login page
+                            $response = $eve->getResponse();
+                            if (!$response)
+                            {
+                                $response = new HttpResponse();
+                                $eve->setResponse($response);
+                            }
+                            $response->getHeaders()->addHeaderLine('Location', $url . '?redirect=' . $redirect);
+                            $response->setStatusCode(302);
+                        }
+                    }
+                }
+                //BIPOLAR
+
+
                 if(!$auth->hasIdentity())
                 {
                     $controller->layout($config['QuAdminConfig']['qu_admin_layout_login']);

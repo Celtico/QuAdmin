@@ -61,6 +61,8 @@ class AbstractMapper  implements DbAdapterAwareInterface
     protected $dbAdapter;
     protected $Order;
     protected $where;
+    protected $group;
+    protected $limit;
     protected $array;
     protected $select;
     protected $objectEntity;
@@ -91,6 +93,9 @@ class AbstractMapper  implements DbAdapterAwareInterface
         $this->select = $this->sql()->select($TableName);
         return $this;
     }
+
+    // HAVING qu-taller < $range
+    // ORDER BY qu-taller ASC
 
     public function resultSet()
     {
@@ -124,6 +129,16 @@ class AbstractMapper  implements DbAdapterAwareInterface
         $this->where = $where;
         return $this;
     }
+    public function limit($limit)
+    {
+        $this->limit = $limit;
+        return $this;
+    }
+    public function group(array $group)
+    {
+        $this->group = $group;
+        return $this;
+    }
 
     public function selectByWhereByOrder($TableName)
     {
@@ -131,6 +146,8 @@ class AbstractMapper  implements DbAdapterAwareInterface
         $sel =  $select;
         if($this->Order) $sel = $select->order($this->Order);
         if($this->where) $sel = $select->where($this->where);
+        if($this->group) $sel = $select->group($this->group);
+        if($this->limit) $sel = $select->limit($this->limit);
         if($this->where and $this->Order) $sel = $select->where($this->where)->order($this->Order);
         return $sel;
     }
@@ -193,9 +210,8 @@ class AbstractMapper  implements DbAdapterAwareInterface
         $paginator = new Paginator(new ArrayAdapter($return));
         $paginator->setCurrentPageNumber($page);
         $paginator->setItemCountPerPage($numberPage);
-        //$paginator->setPageRange(5);
+        $paginator->setPageRange(4);
         return $paginator;
-
     }
 
     public function page($numberPage,$page,$TableName = null)
@@ -204,17 +220,17 @@ class AbstractMapper  implements DbAdapterAwareInterface
         $paginator = new Paginator(new DbSelect($select, $this->getDbAdapter(), $this->resultSet()));
         $paginator->setItemCountPerPage($numberPage);
         $paginator->setCurrentPageNumber($page);
+        $paginator->setPageRange(4);
         return $paginator;
-
     }
 
     public function onInsert($data,$tableName = null)
     {
-
         if(!$tableName){
             $tableName = $this->getTableName();
         }
         $data = $this->cleanData($data);
+        //var_dump($data);
         $sql       = new Sql($this->getDbAdapter());
         $insert    = $sql->insert($tableName);
         $insert->values($data);
@@ -225,7 +241,6 @@ class AbstractMapper  implements DbAdapterAwareInterface
 
     public function onUpdate($data,$where = null,$tableName = null)
     {
-
         if(!$tableName){
             $tableName = $this->getTableName();
         }
@@ -239,7 +254,6 @@ class AbstractMapper  implements DbAdapterAwareInterface
 
     public function onRemove($where = null,$tableName = null)
     {
-
         if(!$tableName){
             $tableName = $this->getTableName();
         }
@@ -260,7 +274,6 @@ class AbstractMapper  implements DbAdapterAwareInterface
            if (!in_array($key, $this->getTableFieldsCleanData())) {
                unset($data[$key]);
            }
-
         }
         return $data;
     }

@@ -27,6 +27,9 @@ class QuAdminAdd extends AbstractHelper
 
             $btn = '<a href="'.$this->view->url($route, array('action'=>'add','model'=>$model,'id'=>$id,'lang'=>$lang)).'" title="Add" class="btn btn-inverse" style="margin:3px 3px 0 0;">
              <span class="iconb" data-icon="&#xe14a;"></span> Add   '.$options->getTableLabel().'
+             </a>
+               <a href="'.$this->view->url($route, array('action'=>'csv','model'=>$model,'id'=>$id,'lang'=>$lang)).'" title="Add" class="btn btn-inverse" style="margin:3px 3px 0 0;">
+             <span class=\'iconb\' data-icon=&#xe078;></span> Exel   '.$options->getTableLabel().'
              </a>';
 
             if($model){

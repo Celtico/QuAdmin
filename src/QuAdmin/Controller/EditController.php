@@ -70,6 +70,7 @@ class EditController extends AbstractController
             'key'                    => $this->key,
             'PathTemplateRender'     => $this->getPathTemplateRender(),
             'model'                  => $this->getModel(),
+            'dataDb'                 => $dataDb,
             'mergeBreadCrumbModels'  => $mergeBreadCrumbModels,
         );
 
@@ -92,6 +93,7 @@ class EditController extends AbstractController
                     'lang'=>$this->getLang()
                 ));
             }
+           // var_dump($this->KeyIdParent);
             /**
              * Process by Data
              */
@@ -100,7 +102,7 @@ class EditController extends AbstractController
             if($this->KeyModified)  $DataForm[$this->KeyModified] = $this->getDate();
             if($this->KeyIdAuthor)  $DataForm[$this->KeyIdAuthor] = $this->getUser();
             if($this->KeyLang)      $DataForm[$this->KeyLang]     = $this->getLang();
-            if($this->KeyIdParent)  $DataForm[$this->KeyIdParent] = $dataDb[$this->KeyIdParent];
+            //if($this->KeyIdParent)  $DataForm[$this->KeyIdParent] = $dataPost[$this->KeyIdParent];
 
             $DataForm[$this->KeyId] = $this->getId();
 

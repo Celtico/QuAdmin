@@ -36,21 +36,30 @@ class DeleteMapper extends AbstractMapper implements Interfaces\DeleteMapperInte
     public function remove($id,$options = null)
     {
         $findByParent = $this->findByParentRemove($id);
+
+
+        //
         if($findByParent) {
             foreach($findByParent as $Parent){
-                $this->remove($Parent[$this->KeyId],$options);
+                if($Parent[$this->KeyId] != $id){
+                    $this->remove($Parent[$this->KeyId],$options);
+                }
             }
         }
 
         /*
-         * SubModel*/
-        foreach($options->getLinkerModels() as $model){
-            $this->findByParentRemoveSubModels(
-                $id,
-                $model['table'],
-                $model['key_id_parent'],
-                $model['key_id']
-            );
+         * SubModel
+         */
+        $LinkerModel = $options->getLinkerModels();
+        if(isset($LinkerModel[0])){
+            foreach($LinkerModel as $model){
+                $this->findByParentRemoveSubModels(
+                    $id,
+                    $model['table'],
+                    $model['key_id_parent'],
+                    $model['key_id']
+                );
+            }
         }
 
         $this->removeById($id);
@@ -63,16 +72,17 @@ class DeleteMapper extends AbstractMapper implements Interfaces\DeleteMapperInte
     public function removeById($id)
     {
         $remove = $this->onRemove(array($this->KeyId => $id));
+        /*
+        $remove = $this->onUpdate(array('remove'=>1),array($this->KeyId => $id));
+        */
+       $this->postEventRemove($id);
+       return $remove;
+   }
 
-        $this->postEventRemove($id);
-
-        return $remove;
-    }
-
-    /**
-     * @param $id
-     * @return bool|\Zend\Db\ResultSet\ResultSet
-     */
+   /**
+    * @param $id
+    * @return bool|\Zend\Db\ResultSet\ResultSet
+    */
     public function findByParentRemove($id)
     {
         if($this->KeyIdParent){
@@ -92,9 +102,10 @@ class DeleteMapper extends AbstractMapper implements Interfaces\DeleteMapperInte
     public function removeByIdSubModels($id,$tableName,$KeyId)
     {
         $remove = $this->onRemove(array($KeyId => $id),$tableName);
-
+        /*
+        $remove = $this->onUpdate(array('remove'=>1),array($KeyId => $id),$tableName);
+        */
         $this->postEventRemove($id);
-
         return $remove;
     }
 
@@ -124,12 +135,15 @@ class DeleteMapper extends AbstractMapper implements Interfaces\DeleteMapperInte
      */
     public function postEventRemove($id)
     {
+
         //print_r($this->events()->getIdentifiers());
+        /*
         $this->events()->trigger(__FUNCTION__, $this, array(
             'id' => $id,
             'options' => $this->getQuAdminModelOptions(),
             'plupload'  =>  $this->plupload
         ));
+        */
     }
 
     /**

@@ -2,6 +2,9 @@
 
 namespace QuAdmin\Model;
 
+use Zend\Db\ResultSet\ResultSet;
+
+
 class WebMapper extends AbstractMapper implements  Interfaces\WebMapperInterface
 {
 
@@ -25,4 +28,7 @@ class WebMapper extends AbstractMapper implements  Interfaces\WebMapperInterface
         $this->where($array);
         return $this->mapperPage($numberPage,$page,$TableName = null);
     }
+
+
+
 }

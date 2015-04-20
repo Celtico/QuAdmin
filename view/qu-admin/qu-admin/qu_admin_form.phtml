@@ -1,49 +1,188 @@
 <?php
 
-    echo $this->qu_admin_bread_crumb($options,$id,$route,$lang,$model,$this->mergeBreadCrumbModels);
-    $form = $this->form;
-    $form->setAttribute('action',$this->url($route ,array('action' => $action,'model' => $model,'id'=>$id,'lang'=>$lang)));
-    $form->setAttribute('enctype', 'multipart/form-data');
-    $form->setAttribute('id', $action);
-    $form->prepare();
-    echo $this->form()->openTag($form) . PHP_EOL;
-    echo $this->formElement($form->get('csrf'));
+echo $this->qu_admin_bread_crumb($options,$id,$route,$lang,$model,$this->mergeBreadCrumbModels);
+$form = $this->form;
+$form->setAttribute('action',$this->url($route ,array('action' => $action,'model' => $model,'id'=>$id,'lang'=>$lang)));
+$form->setAttribute('enctype', 'multipart/form-data');
+$form->setAttribute('id', $action);
+$form->prepare();
+echo $this->form()->openTag($form) . PHP_EOL;
+//echo $this->formElement($form->get('csrf'));
 
 ?>
 
 
-<div class="nav-actions-absolute">
-    <div class="nav-actions">
-        <?php echo $this->qu_admin_title_by_db($options,$key,$route,$model,$action); ?>
-        <?php echo $this->qu_admin_add($route,$id,$lang,$options,$action,$model); ?>
-        <?php echo $this->qu_admin_languages($options,$route,$lang,$action,$id,$model); ?>
-        <div class="clearfix"></div>
+    <div class="nav-actions-absolute">
+        <div class="nav-actions">
+            <?php echo $this->qu_admin_title_by_db($options,$key,$route,$model,$action); ?>
+            <?php echo $this->qu_admin_add($route,$id,$lang,$options,$action,$model); ?>
+            <?php echo $this->qu_admin_languages($options,$route,$lang,$action,$id,$model); ?>
+            <div class="clearfix"></div>
+        </div>
     </div>
-</div>
-<div class="nav-actions-height"></div>
+    <div class="nav-actions-height"></div>
+
+<?php if(isset($dataDb['numero_sortida'])){ ?>
 
 
-    <?php if($this->formElementErrors($form->get('csrf'))){ ?>
+    <style>
+        .table-striped tbody>tr:nth-child(odd)>td, .table-striped tbody>tr:nth-child(odd)>th {
+            background-color: #E4E4E4;
+        }
+
+        .title-nav,
+        .sidebar,
+        .crumb,
+        .breadcrumbs,
+        .contentTop {
+            display:none!important;
+        }
+        .content {;
+            margin-left:0!important;
+        }
+        fieldset {
+            position: relative;
+            background: #EEE;
+            border-radius: 0;
+        }
+        .form legend {
+            font-size: 12px;
+            line-height: 20px;
+            background: #000;
+            color: #fff;
+            padding: 0 0 0;
+            margin: 0;
+        }
+        legend:before{
+            content:' ';
+            padding:3px;
+            float:left;
+        }
+        #content {
+            padding:20px  5px  5px  5px;
+        }
+    </style>
+
+    <table style="
+    position: absolute;
+    top:5px;
+    left:5px;
+    ">
+        <tr>
+            <td  style="background-color: #000; color:#fff;  padding:0 10px;  font-size:10px;  text-align:center">Nom</td>
+            <td  style="background-color: #333; color:#fff;  padding:0 10px;  font-size:10px;  text-align:center">Talla</td>
+
+            <?php if($dataDb['a_camiseta'] != '-') { ?>
+                <td  style="background-color: #000; color:#fff;  padding:0 10px;  font-size:10px;  text-align:center">A. Nom</td>
+                <td  style="background-color:#333; color:#fff;  padding:0 10px;  font-size:10px;  text-align:center">A. Talla</td>
+            <?php } ?>
+
+            <td  style="background-color:#000; color:#fff;  padding:0 10px;  font-size:10px;  text-align:center">€</td>
+
+
+            <td  style="background-color:#FFCC00; color:#fff;  padding:0 10px;  font-size:10px;  text-align:center">N. sortida</td>
+            <td  style="background-color: #000; color:#fff; padding:0 10px;  font-size:10px; text-align:center">Hora</td>
+            <td  style="background-color:#FFCC00<?php // if($dataDb['check'] == '1') { echo '#0d9000;'; }else{ echo '#bc1e00;'; } ?>; color:#fff;  padding:0 10px;  font-size:10px;  text-align:center">Check</td>
+
+        </tr>
+        <tr>
+            <td style="background-color:#FFCC00;  text-align:center; padding:5px 10px; vertical-align:middle; font-size:20px; color:#000; border-color:#FFF"><?php  echo $dataDb['nombre']; ?> <?php  echo $dataDb['apellido1']; ?></td>
+            <td style="background-color:#FFE063;  text-align:center;  padding:5px 10px; vertical-align:middle; font-size:20px;  color:#000"><?php  echo $dataDb['camiseta']; ?></td>
+
+            <?php if($dataDb['a_camiseta'] != '-') { ?>
+                <td style="background-color:#FFCC00;  text-align:center; padding:5px 10px; vertical-align:middle; font-size:20px; color:#000; border-color:#FFF"><?php  echo $dataDb['a_nombre']; ?> <?php  echo $dataDb['a_apellido1']; ?></td>
+                <td style="background-color:#FFE063;  text-align:center;  padding:5px 10px; vertical-align:middle; font-size:20px;  color:#000"><?php  echo $dataDb['a_camiseta']; ?></td>
+            <?php } ?>
+
+            <td style="background-color:#FFCC00;  text-align:center;  padding:5px 10px; vertical-align:middle; font-size:20px;  color:#000">
+
+                    <?php
+
+                    if($dataDb['acompanante'] == '1'){
+
+                        $amount = 120.00;
+
+                    }elseif( $dataDb['acompanante'] == '2'){
+
+                        $amount = 65.00 + ( $dataDb['num_acompanante'] * 25.00);
+
+                    }else {
+
+                        $amount = 65.00;
+
+                    }
+
+
+                    echo  $amount;
+
+                    ?>
+            </td>
+
+            <td style="background-color: #000;  text-align:center; padding:5px 10px; vertical-align:middle; font-size:20px; color:#fff; border-color:#FFF"><?php  echo $dataDb['numero_sortida']; ?></td>
+            <td style="background-color: #FFCC00;  text-align:center;  padding:5px 10px; vertical-align:middle; font-size:20px;  color:#000"><?php  echo $dataDb['hora_sortida']; ?></td>
+<?php
+
+if($dataDb['check'] == '1') {
+
+    echo '
+    <td  style="
+background-color: #0d9000;
+font-size:30px;
+line-height:20px;
+position: relative;
+padding:3px 7px;
+color:#fff;
+text-align:center;
+    ">
+    <span class=\'iconb\' data-icon=&#xe097;></span>
+    </td>';
+
+} else {
+
+    echo '
+    <td  style="
+background-color: #bc1e00;
+font-size:20px;
+line-height:20px;
+color:#fff;
+padding:7px 7px;
+text-align:center;
+    ">
+    <span class=\'iconb\' data-icon=&#xe095;></span>
+    </td>';
+
+}
+
+?>
+
+
+        </tr>
+    </table>
+
+<? } ?>
+
+
+<?php /* if($this->formElementErrors($form->get('csrf'))){ ?>
         <div class="alert alert-info">
             <button type="button" class="close" data-dismiss="alert">×</button>
             <p><?php echo $this->formElementErrors($form->get('csrf')); ?></p>
         </div>
-    <?php } ?>
+    <?php } */?>
 
-    <?php if(isset($error)){ ?>
-        <pre> <?php var_dump($error); ?>  </pre>
-    <?php }  ?>
+<?php if(isset($error)){ ?>
+    <pre> <?php var_dump($error); ?>  </pre>
+<?php }  ?>
 
-    <?php echo $this->qu_admin_messages(); ?>
+<?php echo $this->qu_admin_messages(); ?>
 
-    <?php
-            //@Todo
-            if($action == 'config'){
-                $span = 12;
-            } else{
-                $span = 9;
-            }
-    ?>
+<?php
+//@Todo
+if($action == 'config'){
+    $span = 12;
+} else{
+    $span = 9;
+}
+?>
 
     <div class="form row-fluid">
         <div class="span<?php echo $span ?> fromIn">
@@ -62,16 +201,16 @@
                 if($FieldSets->getLabel()){
                     if($FieldGrid != 'span3'){
 
-                            echo   '<fieldset class="formBlock '.$FieldClass.' '.$FieldSets->getName().'"><legend><span>';
-                            echo   $FieldSets->getLabel();
-                            echo   '</span></legend>';
+                        echo   '<fieldset class="formBlock '.$FieldClass.' '.$FieldSets->getName().'"><legend><span>';
+                        echo   $FieldSets->getLabel();
+                        echo   '</span></legend>';
 
                     } else{
 
-                            $n  = $FieldSets->getName();
-                            $grid  = '<fieldset class="formBlock '.$FieldClass.' '.$FieldSets->getName().'"><legend><span>';
-                            $grid .= $FieldSets->getLabel();
-                            $grid .= '</span></legend>';
+                        $n  = $FieldSets->getName();
+                        $grid  = '<fieldset class="formBlock '.$FieldClass.' '.$FieldSets->getName().'"><legend><span>';
+                        $grid .= $FieldSets->getLabel();
+                        $grid .= '</span></legend>';
 
                     }
                 }
@@ -128,12 +267,12 @@
                     {
                         if($elemGrid == 'span3')
                         {
-                           $grid  .= ' </fieldset>';
+                            $grid  .= ' </fieldset>';
                             $grid3[$n] =  $grid;
                         }
                         else
                         {
-                           echo '</fieldset>';
+                            echo '</fieldset>';
                         }
                     }
 
@@ -155,6 +294,8 @@
                     </legend>
                     <div class="row-fluid">
                         <div class="PluploadLoad"><?=$this->QuPluploadHelpLoad($id,$route,$options,$model)?></div>
+                    </div>
+                    <div class="row-fluid">
                         <div class="clear"></div>
                         <div id="uploader"></div>
                         <?php echo $this->QuPluploadHelp('uploader',$id,$options,$route,$model); ?>
@@ -167,47 +308,34 @@
         </div>
     </div>
 
-    <?php  echo $this->form()->closeTag($form) . PHP_EOL ?>
+<?php  echo $this->form()->closeTag($form) . PHP_EOL ?>
 
-    <?php
+<?php
 
-    if(isset($ckEditor)){
+if(isset($ckEditor)){
 
-        foreach($ckEditor as $id => $editor){
+    foreach($ckEditor as $id => $editor){
 
-            if(isset($editor['tools']) and $editor['tools'] == 'medium'){
-                $tools = array(
-                    'toolbarGroups' => false,
-                    'toolbar' => array(
-                    array( 'name'=> 'basicstyles',
-                        'groups' => array( 'basicstyles', 'cleanup' ),
-                        'items' => array( 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ),
-                    ),
-                    array( 'name'=> 'paragraph',
-                        'groups' => array( 'list', 'indent', 'blocks', 'align' ),
-                        'items' => array( 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ),
-                    )
-                ));
 
-            }else{
-                $tools = array();
-            }
+            $tools = array();
 
-            if(isset($editor['height'])){
-                $height = $editor['height'];
-            }else{
-                $height = 150;
-            }
 
-            $options = array(
-                'width' => '100%',
-                'height' => $height,
-                'uiColor'=> '#F4F4F4'
-            );
-
-            $this->QuCKEditor($id,array_merge($options,$tools));
-
+        if(isset($editor['height'])){
+            $height = $editor['height'];
+        }else{
+            $height = 150;
         }
-    }
 
-    ?>
+        $options = array(
+            'width' => '100%',
+            'height' => $height,
+            'uiColor'=> '#FFFFFF',
+
+        );
+
+        $this->QuCKEditor($id,array_merge($options,$tools));
+
+    }
+}
+
+?>

@@ -10,6 +10,8 @@ class EditMapper extends AbstractMapper implements Interfaces\EditMapperInterfac
         $id = $data[$this->KeyId];
         unset($data[$this->KeyId]);
 
+        //var_dump($data);
+
         if($this->KeyIdLang){
 
             $this->where(array($this->KeyIdLang => $id,$this->KeyLang => $lang));

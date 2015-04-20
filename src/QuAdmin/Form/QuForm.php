@@ -29,9 +29,9 @@ class QuForm extends Form
     {
         parent::__construct();
         $this->filter   = new InputFilter;
-        $csrf = new CsrfElement('csrf');
-        $csrf->setCsrfValidatorOptions(array('timeout' => null));
-        $this->add($csrf);
+        //$csrf = new CsrfElement('csrf');
+        //$csrf->setCsrfValidatorOptions(array('timeout' => null));
+        //$this->add($csrf);
     }
 
     public function addQuFormOptions($data,$model,$sl)
@@ -58,7 +58,7 @@ class QuForm extends Form
 
         if(isset($forms['serialized']) and $forms['serialized']){
             if(isset($data[$forms['fieldset']['name']])){
-                $data['unSerialize'] = unserialize($data[$forms['fieldset']['name']]);
+                $data['unSerialize'] = @unserialize($data[$forms['fieldset']['name']]);
                 if($data['unSerialize']){
                     $data = $data['unSerialize'];
                 }
@@ -238,22 +238,32 @@ class QuForm extends Form
             }
         }
 
+
+
         $Key = $this->getOptions()->getTableKeyFields();
 
-        if($Key['key_name']){
-            if($dataPost[$Key['key_name']] == ''){
-                $dataPost[$Key['key_name']] = $dataPost[$Key['key_title']];
+        if( isset($Key['key_name']) and isset($Key['key_title']) ){
+            if($Key['key_name']){
+                if($dataPost[$Key['key_name']] == ''){
+                    $dataPost[$Key['key_name']] = $dataPost[$Key['key_title']];
+                }
             }
         }
+
 
         if(isset($Key['key_title']) and $Key['key_title'] and isset($dataPost[$Key['key_title']])){
             $dataPost[$Key['key_title']] = stripslashes($dataPost[$Key['key_title']]);
         }
 
-        if($Key['key_name']){
-            $dataPost[$Key['key_name']] = Util::urlFilter($dataPost[$Key['key_name']]);
-        }
 
+        $table = $this->getOptions()->getTableName();
+
+
+        if($table != 'qu-user-plupload'){
+            if($Key['key_name']){
+                $dataPost[$Key['key_name']] = Util::urlFilter($dataPost[$Key['key_name']]);
+            }
+        }
         return  $dataPost;
     }
 

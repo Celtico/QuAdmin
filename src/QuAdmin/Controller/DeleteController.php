@@ -30,8 +30,8 @@ class DeleteController extends AbstractController
         // @TODO improve!
         if($this->getOptions()->getDocuments())
         {
-            $plupload = $this->Service('plupload_service');
-            $this->getModelDelete()->setPlupload($plupload);
+            //$plupload = $this->Service('plupload_service');
+            //$this->getModelDelete()->setPlupload($plupload);
         }
 
         $redirectBack =  array('action'=>'index','id'=>$this->getId(),'model'=>$this->getModel(),'lang'=>$this->getLang());
@@ -80,7 +80,7 @@ class DeleteController extends AbstractController
                'key' => $this->key,
            );
        }else{
-           $this->getMessage(array('type'=> $this->getTranslate('DeleteNotCheckedClassType'),'message' => $this->getTranslate('DeleteNotCheckedMessage')));
+          // $this->getMessage(array('type'=> $this->getTranslate('DeleteNotCheckedClassType'),'message' => $this->getTranslate('DeleteNotCheckedMessage')));
            return   $this->getToRoute($this->getRoute(),$redirectBack);
 
         }

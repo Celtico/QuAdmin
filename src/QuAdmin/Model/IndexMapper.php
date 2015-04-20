@@ -75,4 +75,28 @@ class IndexMapper extends AbstractMapper implements Interfaces\IndexMapperInterf
         }
         return $result;
     }
+
+/*
+    public function SELECT_ROW($select){
+        $statement = $this->getDbAdapter()->query($select);
+        $result    = $statement->execute();
+        $row       = $result->current();
+        $array     = array();
+        foreach($row as $key => $a){
+            $array[$key] = $a;
+        }
+        return   $array;
+    }
+
+    public function SELECT_ALL($select){
+        $statement = $this->getDbAdapter()->query($select);
+        $result    = $statement->execute();
+        $array     = array();
+        foreach($result as $a){
+            $array[] = $a;
+        }
+        return   $array;
+    }
+*/
+
 }

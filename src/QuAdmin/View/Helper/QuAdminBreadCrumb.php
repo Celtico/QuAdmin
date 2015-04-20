@@ -58,10 +58,14 @@ class QuAdminBreadCrumb extends AbstractHelper
 
                 $idParent        =  $link['id'];
                 $this->id_parent =  $link["id_parent"];
+                $title = $link['title'];
+                if($title == ''){
+                    $title = '---';
+                }
                 $menu .= '
                 <li '.Util::Active($link['id'],$id,'class="current active"').'>
                     <a href="'.$this->view->url($route,array('id'=>$idParent,'model'=>null,'action'=>'index','lang'=>$lang)).'">
-                        '.$link['title'].'
+                        '.$title.'
                         <span class="arrow-r"></span>
                     </a>
                 </li>';
@@ -113,10 +117,15 @@ class QuAdminBreadCrumb extends AbstractHelper
 
                 }else{
 
+                    $title = $link['title'];
+                    if($title == ''){
+                        $title = '---';
+                    }
+
                     $menu .= '
                     <li '.Util::Active($link['id'],$id,'class="current active"').'>
                         <a href="'.$this->view->url($route,array('id'=>$idParent,'model'=>null,'action'=>'index','lang'=>$lang)).'">
-                            '.$link['title'].'
+                            '.$title.'
                             <span class="arrow-r"></span>
                         </a>
                     </li>';

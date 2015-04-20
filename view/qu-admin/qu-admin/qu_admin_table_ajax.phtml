@@ -21,8 +21,18 @@
                 <td><div>Title<span></span></div></td>
             <?php } ?>
 
+
+
             <?php if($key['Name']){   $cols += 1; ?>
                 <td width="100"><div>Name<span></span></div></td>
+            <?php } ?>
+
+            <?php if($options->getTableName() == 'user'){   $cols += 1; ?>
+                <td width="100"><div>Name<span></span></div></td>
+            <?php } ?>
+
+            <?php if(isset($key['Parameters']) and $key['Parameters']){  $cols += 1; ?>
+                <td width="100"><div>Parameters<span></span></div></td>
             <?php } ?>
 
             <?php if($key['Modified']){   $cols += 1; ?>
@@ -101,19 +111,37 @@
         <?php
         if(!0 == count($this->list)){
             foreach($this->list as $list){
+
+                $id = $list[$key['Id']];
+
+                if(isset($parent[$id])){
+                    $count = count($parent[$id]);
+                } else {
+                    $count = 0;
+                }
+
+                if(isset($parentModel[$id])){
+                    $countModel = count($parentModel[$id]);
+                } else {
+                    $countModel = 0;
+                }
+
                 if($key['IdLang'] and $key['Lang']){
 
                     $id_list = $list[$key['IdLang']];
-                    $qu_admin_lang_nav_table = $this->qu_admin_lang_nav_table($id_list,$list[$key['Lang']],$options,$route,$model,$id);
+                    $qu_admin_lang_nav_table = $this->qu_admin_lang_nav_table($id_list,$list[$key['Lang']],$options,$route,$model,$id,$count,$countModel);
 
                 }else{
 
                     $id_list = $list[$key['Id']];
-                    $qu_admin_lang_nav_table = $this->qu_admin_lang_nav_table($id_list,null,$options,$route,$model,$id);
+                    $qu_admin_lang_nav_table = $this->qu_admin_lang_nav_table($id_list,null,$options,$route,$model,$id,$count,$countModel);
                 }
 
+
+
+
                 ?>
-                <tr id="item_<?php echo $list[$key['Id']]; ?>" char="<?php echo $list[$key['Order']]; ?>">
+                <tr id="item_<?php echo $list[$key['Id']]; ?>" char="<?php if(isset($list[$key['Order']])){ echo $list[$key['Order']]; } ?>">
 
                     <td class="center">
                         <input type="checkbox" name="checkRow[]" value="<?php echo $id_list?>"/>
@@ -148,8 +176,23 @@
                     <?php if($key['Name']){ ?>
                         <td>
                             <div  style="height:20px; overflow:hidden;">
-                                <?php echo $list[$key['Name']];?>
+                                    <?php echo $list[$key['Name']];?>
                             </div>
+                        </td>
+                    <?php } ?>
+
+                    <?php if($options->getTableName() == 'user'){   ?>
+                    <td>
+                        <div  style="height:20px; overflow:hidden;"> <?php echo $list['username'];?></div>
+                    </td>
+                    <?php } ?>
+
+                    <?php if(isset($key['Parameters']) and $key['Parameters']){  ?>
+                        <td><a href="<?php echo $this->url($route,array('lang'=>$lang,'model'=>$model,'action'=>'edit', 'id' => $id_list ));?>">
+                            <div  style="height:20px; overflow:hidden; background-color:#5c5c5c; color:#b1b1b1; font-weight:bold; border-radius:3px; text-align:center; overflow:hidden; padding-left:5px; padding-right:5px">
+                                <?php echo $list[$key['Parameters']];?>
+                            </div>
+                            </a>
                         </td>
                     <?php } ?>
 
@@ -192,8 +235,21 @@
                             </button>
                             <ul class="dropdown-menu pull-right">
                                 <?php echo $qu_admin_lang_nav_table->getNavMenuLi(); ?>
-                                <li><a href="<?php echo $this->url($route,array('lang'=>$lang,'model'=>$model,'action'=>'duplicate','id'=>$list[$key['IdParent']],'id_parent'=>$list[$key['Id']]));?>"><span class="icon-copy"></span>Duplicate</a></li>
-                                <li><a href="<?php echo $this->url($route,array('lang'=>$lang,'model'=>$model,'action'=>'delete','id'=>$list[$key['IdParent']],'id_parent'=>$list[$key['Id']]));?>"><span class="icon-remove-2"></span>Delete</a></li>
+                             <?
+                                if(isset($list[$key['Id']])){
+                                    $idDDD = $list[$key['Id']];
+                                }else{
+                                    $idDDD = 0;
+                                }
+                                if(isset($list[$key['IdParent']])){
+                                    $idDDDLLL = $list[$key['IdParent']];
+                                }else{
+                                    $idDDDLLL = 0;
+                                }
+                            ?>
+
+                                <li><a href="<?php echo $this->url($route,array('lang'=>$lang,'model'=>$model,'action'=>'duplicate','id'=> $idDDDLLL,'id_parent'=> $idDDD));?>"><span class="icon-copy"></span>Duplicate</a></li>
+                                <li><a href="<?php echo $this->url($route,array('lang'=>$lang,'model'=>$model,'action'=>'delete','id'=> $idDDDLLL,'id_parent'=> $idDDD));?>"><span class="icon-remove-2"></span>Delete</a></li>
                             </ul>
                        </div>
                             <a href="<?php echo $this->url($route,array('lang'=>$lang,'model'=>$model,'action'=>'edit', 'id' => $id_list ));?>" class="btn btn-small" title="Edit"><span class="iconb" data-icon="&#xe1db;"></span></a>
@@ -202,8 +258,13 @@
                     </td>
 
 
-                  <?php if($options->getLinkerParent() > $level){ ?>
-                      <?php echo $qu_admin_lang_nav_table->getCountChild();?>
+                  <?php  if($options->getLinkerParent() > $level){ ?>
+                      <?php
+
+
+                      echo $qu_admin_lang_nav_table->getCountChild();
+
+                      ?>
                   <?php } ?>
 
                     <?php echo $qu_admin_lang_nav_table->getLinkModel();?>

@@ -31,7 +31,8 @@ class QuAdminUserName extends AbstractHelper
 
         $zfcUser =  $this->serviceLocator->get('zfcuser_user_service')->getUserMapper();
         if($zfcUser->findById($id)){
-        return  $zfcUser->findById($id)->getUsername();
+            // $zfcUser->findById($id)->getDisplayName() . ' / ' . $zfcUser->findById($id)->getUserName();
+        return  $zfcUser->findById($id)->getDisplayName();
         }else{
             return false;
         }

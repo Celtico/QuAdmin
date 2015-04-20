@@ -67,9 +67,9 @@ class QuPluploadHelpLoad extends AbstractHelper
                 $id_in     = $a->getIdPlupload();
                 $size      = $Util->formatBytes($a->getSize());
                 $ex        = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-                $Exists    = new File\NotExists($file);
 
-                if($Exists->isValid($file)){
+
+                if(is_file($file)){
 
 
                     if($ex == 'jpg' or $ex == 'jpeg' or $ex == 'gif' or $ex == 'png'){

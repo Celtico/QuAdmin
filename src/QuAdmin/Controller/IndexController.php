@@ -26,6 +26,7 @@ class IndexController extends AbstractController
         if(count($LinkerModels)){
             foreach($LinkerModels as $LinkerModel){
                 if(isset($LinkerModel['model']) and $LinkerModel['model'] == 'qu_'.$this->getModel().'_model'){
+
                     $this->setOptions($this->Service('qu_'.$this->getModel().'_model'));
                     $this->setQuAdminModelOptions($this->getOptions());
 
@@ -33,9 +34,15 @@ class IndexController extends AbstractController
                     $TableKeyFields = $this->getQuAdminModelOptions()->getTableKeyFields();
                     $TableKeyFields['key_id_parent'] = $LinkerModel['key_id_parent'];
                     $this->getQuAdminModelOptions()->setTableKeyFields($TableKeyFields);
+
                 }
             }
         }
+
+
+
+
+
 
         /**
          * get Field Keys
@@ -53,6 +60,72 @@ class IndexController extends AbstractController
 
 
 
+        /**
+         * PARENT
+         */
+        $row = array();
+        $rowModel = array();
+        /*
+        if($this->KeyIdParent != '')
+        {
+            $modelParent = $this->getModelIndex();
+            $table       =  '`'.$modelParent->getTableName().'`';
+            $parentAll   = $modelParent->SELECT_ALL("SELECT * FROM  ".$table." ");
+
+            if(isset($LinkerModels[0]['table'])){
+
+                $table       =  '`'.$LinkerModels[0]['table'].'`';
+                $parentModel = $modelParent->SELECT_ALL("SELECT * FROM  ".$table." ");
+
+            }
+            foreach($parentAll as $row_all){
+                $id_parent = $row_all[$this->KeyId];
+                foreach($parentAll as $ll){
+                    if($id_parent == $ll[$this->KeyIdParent]){
+                        $row[$id_parent][] = array();
+                    }
+                }
+
+                if(isset($parentModel)){
+                    foreach($parentModel as $allM){
+                        if($id_parent == $allM[$this->KeyIdParent]){
+                            $rowModel[$id_parent][] = array();
+                        }
+                    }
+                }
+            }
+
+        }
+
+
+        else if($this->KeyIdParent == ''){
+
+            $modelParent = $this->getModelIndex();
+            $table       =  '`'.$modelParent->getTableName().'`';
+            $parentAll   = $modelParent->SELECT_ALL("SELECT * FROM  ".$table." ");
+
+            if(isset($LinkerModels[0]['table'])){
+
+                $table       =  '`'.$LinkerModels[0]['table'].'`';
+                $parentModel = $modelParent->SELECT_ALL("SELECT * FROM  ".$table." ");
+
+            }
+
+
+            foreach($parentAll as $row_all){
+                $id_parent = $row_all[$this->KeyId];
+                if(isset($parentModel)){
+                    foreach($parentModel as $allM){
+                        if($id_parent == $allM[$LinkerModels[0]['key_id_parent']]){
+                            //$rowModel[$id_parent][] = array();
+                        }
+                    }
+                }
+            }
+
+        }
+*/
+
 
         $dataController = array(
             'id'                    => $this->getId(),
@@ -68,6 +141,8 @@ class IndexController extends AbstractController
             'level'                 => $this->getLevel(),
             'PathTemplateRender'    => $this->getPathTemplateRender(),
             'model'                 => $this->getModel(),
+            'parent'                => $row,
+            'parentModel'           => $rowModel,
         );
 
         return  $dataController;
@@ -83,6 +158,91 @@ class IndexController extends AbstractController
         $model = new ViewModel();
         $model->setTemplate('qu-admin/qu-admin/index');
         return  $model->setVariables($this->getVariables());
+
+    }
+
+    public function getCsv() {
+
+        /**
+         * Local Model
+         */
+        $modelIndex = $this->getModelIndex()->setQuAdminModelOptions($this->getOptions());
+        $PagOptions = $modelIndex->getOptionsPaginator();
+        $this->setPage($PagOptions['p']);
+        $this->setNumberPage($PagOptions['n']);
+        $model = $this->getModelIndex()->findByParent(null,$this->getId(),$this->getLang(),1,0);
+        $fields = $this->getModelIndex()->getTableFieldsCleanData();
+        $name = $this->getModelIndex()->getTableName();
+
+        $tabla = '
+        <%response.ContentType="application/vnd.ms-excel"%>
+        <html>
+        <head>
+            <style type="text/css">
+                td { border:1px dotted #ccc;}
+            </style>
+        </head>
+        <body>';
+
+        $tabla .= '<table>';
+
+        $tabla .= '<tr>';
+        foreach($fields as $f){
+            $tabla .= '<td>'.$f.'</td>';
+        }
+
+
+        if($name == 'qu-inscripcions'){
+            $tabla .= '<td>Aco.</td>';
+            $tabla .= '<td>PVP</td>';
+        }
+
+
+        $tabla .= "</tr>";
+
+        foreach($model  as $d){
+            $tabla .= '<tr>';
+            foreach($fields as $f){
+                $tabla .= '<td>'.$d[$f].'</td>';
+            }
+
+            if($name == 'qu-inscripcions'){
+
+
+
+                if( $d['acompanante'] == '1'){
+
+                    $amount = 120.00;
+                    $aco = 'M - 1';
+
+                }elseif($d['acompanante'] == '2'){
+
+                    $aco = 'C' . ' - '.$d['num_acompanante'].'';
+                    $amount = 65.00 + ( $d['num_acompanante'] * 25.00);
+
+                }else {
+
+                    $aco = 'S';
+                    $amount = 65.00;
+
+                }
+
+
+
+                $tabla .= '<td>'. $aco.'</td>';
+                $tabla .= '<td>'.$amount.' €</td>';
+            }
+
+            $tabla .= "</tr>";
+        }
+
+        $tabla .= "</table>";
+        $tabla .= "</body></html>";
+
+        $model = new ViewModel();
+        $model->setTemplate('qu-admin/qu-admin/csv');
+        $model->setVariables(array('tabla'=>$tabla,'name'=>$name));
+        return  $model->setTerminal(true);
 
     }
 }

@@ -11,7 +11,9 @@
         ->appendName('viewport', 'width=device-width, initial-scale=1.0');
 
     echo $this->headScript()
+        ->prependFile($this->basePath() . '/js/plugins/ui/i18n/jquery.ui.datepicker-ca.js', 'text/javascript')
         ->prependFile($this->basePath() . '/js/plugins/chosen/chosen/chosen.jquery.min.js', 'text/javascript')
+        ->prependFile($this->basePath() . '/js/plugins/jscolor/jscolor.js', 'text/javascript')
         ->prependFile($this->basePath() . '/js/plugins/DataTables/media/js/jquery.dataTables.min.js', 'text/javascript')
         ->prependFile($this->basePath() . '/js/plugins/pixelmatrix/jquery.uniform.min.js', 'text/javascript')
         ->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
@@ -34,7 +36,7 @@
         <div class="span12">
             <header>
                 <a href="<?php echo $this->url('quadmin') ?>"  class="logo">
-                    <span class="iconb" data-icon="&#xe055;"></span>QuAdmin
+                    <span class='iconb' data-icon=&#xe1e6;></span> RodiBook
                 </a>
                 <?php echo $this->qu_admin_navigation('qu_admin_navigation');  ?>
             </header>
@@ -59,13 +61,7 @@
             <?php echo $this->zfcUserDisplayName() ?>
         </div>
         <ul class="tooltip-user">
-            <li>
-                <a class="chat"  data-toggle="tooltip" data-placement="top" title="Chat">
-                    <span class="numConnect" data-target="0">0</span>
-                    <span class="iconb" data-icon="&#xe1f0;"></span>
-                    <!-- Chat -->
-                </a>
-            </li>
+
             <li><a href="<?=$this->url('zfcuser/profile')?>" class="sProfile"  data-toggle="tooltip" data-placement="top" title="Profile" >
                     <span class="iconb" data-icon="&#xe1e0;"></span>
                    <!-- Profile -->
@@ -87,7 +83,7 @@
 
 
 </div>
-    <?php  echo $this->render('qu-admin/layout/chat.phtml'); ?>
+
     <div class="container-fluid content">
         <div class="row-fluid">
             <div class="span12">
